@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 
 import java.security.SecureRandom;
 import java.time.LocalDate;
+import java.util.UUID;
+
 @Entity
 @Table(name = "abbonamenti")
 public class Abbonamento extends TitoloViaggio {
@@ -14,9 +16,8 @@ public class Abbonamento extends TitoloViaggio {
     @Column(name = "numero_abbonamento")
     private String numero_abbonamento;
 
-    @OneToMany
+    @OneToOne
     @JoinColumn(name = "numero_tessera")
-    @Column(name = "numero_tessera_associata", nullable = false)
     private Tessera tessera_id;
 
     @Column(name = "data_scadenza", nullable = false)

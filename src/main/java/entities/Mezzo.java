@@ -22,6 +22,7 @@ public class Mezzo {
     @Column(name = "data_emissione_mezzo")
     private LocalDate data_emissione_mezzo;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "tipo_mezzo")
     private TipoMezzo tipo_mezzo;
 

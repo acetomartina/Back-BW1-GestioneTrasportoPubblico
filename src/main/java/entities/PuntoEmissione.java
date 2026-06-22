@@ -14,6 +14,7 @@ public class PuntoEmissione {
     @GeneratedValue
     private UUID punto_emissione;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "tipo_punto_emissione")
     private TipoPuntoEmissione tipo_punto_emissione;
 
