@@ -1,14 +1,12 @@
 package entities;
 
 import enom.PeriodicitàAbbonamento;
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.PrePersist;
+import jakarta.persistence.*;
 
 import java.security.SecureRandom;
 import java.time.LocalDate;
-
+@Entity
+@Table(name = "abbonamenti")
 public class Abbonamento extends TitoloViaggio {
 
     private static int counter = 0;
