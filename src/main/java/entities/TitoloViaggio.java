@@ -49,12 +49,4 @@ public abstract class TitoloViaggio {
         return dataEmissione;
     }
 
-
-    public boolean isValidita() {
-        return validita;
-    }
-
-    public void setValidita(boolean validita) {
-        this.validita = validita;
-    }
 }

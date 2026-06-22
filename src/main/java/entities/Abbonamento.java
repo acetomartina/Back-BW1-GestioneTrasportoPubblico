@@ -21,10 +21,4 @@ public class Abbonamento extends TitoloViaggio {
     @Column(name = "validità", nullable = false)
     private boolean valido;
 
-
-    public Abbonamento(){}
-
-    public Abbonamento(){
-
-    }
 }
