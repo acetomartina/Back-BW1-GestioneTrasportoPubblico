@@ -1,9 +1,7 @@
 package entities;
 
 import enom.TipoBiglietto;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -24,6 +22,10 @@ public class Biglietto extends TitoloViaggio {
     @Column(name = "orario-Partenza")
     private LocalTime orarioPartenza;
 
+    @ManyToOne
+    @JoinColumn(name = "Tratta_id")
+    private Tratta tratta;
+
     @Column(name = "Validità", nullable = false)
     private boolean validita;
 
@@ -31,11 +33,12 @@ public class Biglietto extends TitoloViaggio {
     public Biglietto() {
     }
 
-    public Biglietto(LocalDate dataEmissione, TipoBiglietto tipoBiglietto, LocalDate dataPartenza, LocalTime orarioPartenza) {
+    public Biglietto(LocalDate dataEmissione, TipoBiglietto tipoBiglietto, LocalDate dataPartenza, LocalTime orarioPartenza, Tratta tratta) {
         super(dataEmissione);
         this.tipoBiglietto = tipoBiglietto;
         this.dataPartenza = dataPartenza;
         this.orarioPartenza = orarioPartenza;
+        this.tratta = tratta;
     }
 
     public boolean isValido() {
