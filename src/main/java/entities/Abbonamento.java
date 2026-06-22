@@ -4,15 +4,20 @@ import enom.PeriodicitàAbbonamento;
 import jakarta.persistence.Column;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
 
+import java.security.SecureRandom;
 import java.time.LocalDate;
 
 public class Abbonamento extends TitoloViaggio {
 
     private static int counter = 0;
 
+    @Column(name = "numero_abbonamento")
+    private String numero_abbonamento;
+
     @OneToMany
-    @JoinColumn(name = "")
+    @JoinColumn(name = "numero_tessera")
     @Column(name = "numero_tessera_associata", nullable = false)
     private Tessera tessera_id;
 
@@ -23,13 +28,34 @@ public class Abbonamento extends TitoloViaggio {
     private PeriodicitàAbbonamento periodicita;
 
     @Column(name = "validità", nullable = false)
-    private boolean valido;
+    private boolean validità;
 
 
     protected Abbonamento(){}
 
-    public Abbonamento(){
+    public Abbonamento(Tessera tessera_id,LocalDate dataScadenza,PeriodicitàAbbonamento periodicita,boolean validità){
+        this.tessera_id= tessera_id;
+        this.dataScadenza= dataScadenza;
+        this.periodicita = periodicita;
+        this.validità = validità;
+        counter++;
+    }
+    @PrePersist
+    public void generaNumeroAbbonamento() {
+        if (this.numero_abbonamento == null) {
+            SecureRandom random = new SecureRandom();
+            long numeroCasuale = random.nextLong(900_000_000_000L);
+            long ISBN = 100_000_000_000L + numeroCasuale;
+            this.numero_abbonamento = ISBN + "AB";
+        }
+    }
 
+    public String getNumero_abbonamento() {
+        return numero_abbonamento;
+    }
+
+    public void setNumero_abbonamento(String numero_abbonamento) {
+        this.numero_abbonamento = numero_abbonamento;
     }
 
     public static int getCounter() {
@@ -38,5 +64,37 @@ public class Abbonamento extends TitoloViaggio {
 
     public static void setCounter(int counter) {
         Abbonamento.counter = counter;
+    }
+
+    public Tessera getTessera_id() {
+        return tessera_id;
+    }
+
+    public void setTessera_id(Tessera tessera_id) {
+        this.tessera_id = tessera_id;
+    }
+
+    public LocalDate getDataScadenza() {
+        return dataScadenza;
+    }
+
+    public void setDataScadenza(LocalDate dataScadenza) {
+        this.dataScadenza = dataScadenza;
+    }
+
+    public PeriodicitàAbbonamento getPeriodicita() {
+        return periodicita;
+    }
+
+    public void setPeriodicita(PeriodicitàAbbonamento periodicita) {
+        this.periodicita = periodicita;
+    }
+
+    public boolean isValidità() {
+        return validità;
+    }
+
+    public void setValidità(boolean validità) {
+        this.validità = validità;
     }
 }
