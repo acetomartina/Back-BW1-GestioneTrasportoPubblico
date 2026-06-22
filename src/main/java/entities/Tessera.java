@@ -12,6 +12,9 @@ public class Tessera {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "numero_tessera",unique = true)
+    private int numeroTessera;
+
     @Column(name = "data_emissione", nullable = false)
     private LocalDate dataEmissione;
 
