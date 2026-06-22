@@ -20,8 +20,9 @@ public abstract class TitoloViaggio {
     @Column(name = "data_emissione", nullable = false)
     private LocalDate dataEmissione;
 
-//    @Column(name = "punto_emissione_id" , nullable = false)
-//    private PuntoEmissione puntoEmissione;
+    @OneToOne
+    @JoinColumn(name = "punto_emissione_id", nullable = false)
+    private PuntoEmissione puntoEmissione;
 
 
     public TitoloViaggio() {
@@ -50,11 +51,4 @@ public abstract class TitoloViaggio {
     }
 
 
-    public boolean isValidita() {
-        return validita;
-    }
-
-    public void setValidita(boolean validita) {
-        this.validita = validita;
-    }
 }
