@@ -146,9 +146,7 @@ public class Tratta {
                 ", zonaPartenza='" + zonaPartenza + '\'' +
                 ", capolinea='" + capolinea + '\'' +
                 ", tempoPrevisto=" + tempoPrevisto + " min" +
-                ", orarioPartenza=" + orarioPartenza +
-                ", orarioArrivo=" + orarioArrivo +
-                ", numeroBigliettiObliterati=" + numeroBigliettiObliterati +
+                ", mezzo=" + (mezzo != null ? mezzo.getMezzo_di_trasporto() : "nessuno") +
                 '}';
     }
 }
