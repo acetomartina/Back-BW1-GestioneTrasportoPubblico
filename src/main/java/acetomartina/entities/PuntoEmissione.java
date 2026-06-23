@@ -3,6 +3,8 @@ package acetomartina.entities;
 import acetomartina.enom.TipoPuntoEmissione;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -21,10 +23,17 @@ public class PuntoEmissione {
     @Column(name = "in_attività")
     private boolean in_attività;
 
+    @OneToMany(mappedBy = "puntoEmissione")
+    private List<TitoloViaggio> lista_vendite = new ArrayList<>();
+
     protected PuntoEmissione(){}
     public PuntoEmissione(TipoPuntoEmissione tipo_punto_emissione,boolean in_attività){
         this.tipo_punto_emissione = tipo_punto_emissione;
         this.in_attività= in_attività;
+    }
+
+    public List<TitoloViaggio> getLista_vendite() {
+        return lista_vendite;
     }
 
     public UUID getPunto_emissione() {

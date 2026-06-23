@@ -30,6 +30,9 @@ public class Utente {
   @Column(name = "luogo_nascita")
     private String luogo_nascita;
 
+   @OneToOne(mappedBy = "tessera")
+    private Tessera tessera;
+
   protected Utente(){}
     public Utente(TipoUtente tipo_utente,String nome_utente,String cognome_utente,LocalDate data_nascita, String luogo_nascita){
       this.tipo_utente= tipo_utente;
@@ -38,6 +41,7 @@ public class Utente {
       this.data_nascita= data_nascita;
       this.luogo_nascita= luogo_nascita;
     }
+
 
     public TipoUtente getTipo_utente() {
         return tipo_utente;
@@ -81,5 +85,18 @@ public class Utente {
 
     public void setLuogo_nascita(String luogo_nascita) {
         this.luogo_nascita = luogo_nascita;
+    }
+
+    @Override
+    public String toString() {
+        return "Utente{" +
+                "utente_id=" + utente_id +
+                ", tipo_utente=" + tipo_utente +
+                ", nome_utente='" + nome_utente + '\'' +
+                ", cognome_utente='" + cognome_utente + '\'' +
+                ", data_nascita=" + data_nascita +
+                ", luogo_nascita='" + luogo_nascita + '\'' +
+                ", tessera=" + tessera +
+                '}';
     }
 }

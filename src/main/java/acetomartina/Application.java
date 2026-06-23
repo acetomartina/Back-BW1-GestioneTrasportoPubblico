@@ -111,6 +111,8 @@ public class Application {
 
         //listaCorsa3.forEach(biglietto -> System.out.println(biglietto));
 
+        System.out.println("ciao belli ");
+
 
 
 
