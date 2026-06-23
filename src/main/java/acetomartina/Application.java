@@ -1,10 +1,16 @@
 package acetomartina;
 
 import acetomartina.DAO.*;
+import acetomartina.entities.Tessera;
+import acetomartina.entities.Utente;
+import acetomartina.enums.TipoPuntoEmissione;
+import acetomartina.enums.TipoUtente;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
-import utils.DataSeeder;
+import acetomartina.utils.DataSeeder;
+
+import java.time.LocalDate;
 
 public class Application {
     private static final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("gestione-trasporto-pubblico-pu");
@@ -32,14 +38,28 @@ public class Application {
         TitoloViaggioDao TitoloViaggioDao = new TitoloViaggioDao(entityManager);
         TrattaDao TrattaDao = new TrattaDao(entityManager);
 
-        DataSeeder.popolaPuntiEmissione(puntoEmissioneDao);
 
-        entityManager.close();
-        entityManagerFactory.close();
+        System.out.println("Distributori");
+        puntoEmissioneDao.findByTipo(TipoPuntoEmissione.RIVENDITORE).forEach(System.out::println);
+
+
+
 
         //TEST UTENTE!!!! OK
-        //Utente alessia = new Utente(TipoUtente.UTENTE, "Alessia","Cotini", LocalDate.of(1997,12,29), "Roma");
-        //utenteDAO.save(alessia);
+        Utente alessia = new Utente(TipoUtente.UTENTE, "Alessia","Cotini", LocalDate.of(1997,12,29), "Roma");
+        utenteDAO.save(alessia);
+
+        Tessera tessera = new Tessera(LocalDate.now(),
+                alessia,
+                true);
+
+        puntoEmissioneDao.emettiTessera(tessera);
+        System.out.println("Tessera emessa: ");
+        System.out.println(tessera);
+
+        puntoEmissioneDao.rinnovaTessera(tessera.getId());
+        System.out.println("Tessera rinnovata: ");
+        System.out.println(tessera);
 
 
         //TEST CORSA!!! OK
