@@ -30,6 +30,7 @@ public class Biglietto extends TitoloViaggio {
         super(dataEmissione, puntoEmissione);
         this.tipoBiglietto = corsa.getMezzo().getTipo_mezzo().getTipoBiglietto();
         this.corsa = corsa;
+        counter++;
     }
 
 
