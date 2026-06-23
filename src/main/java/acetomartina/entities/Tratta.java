@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -23,7 +24,7 @@ public class Tratta {
 
     @Column(name = "durata", nullable = false)
     private Duration durata;
-
+    
 
     public Tratta() {
 

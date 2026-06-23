@@ -55,4 +55,14 @@ public abstract class TitoloViaggio {
     public PuntoEmissione getPuntoEmissione() {
         return puntoEmissione;
     }
+
+    @Override
+    public String toString() {
+        return "TitoloViaggio{" +
+                "id=" + id +
+                ", codiceUnivoco='" + codiceUnivoco + '\'' +
+                ", dataEmissione=" + dataEmissione +
+                ", puntoEmissione=" + puntoEmissione +
+                '}';
+    }
 }
