@@ -33,8 +33,11 @@ public class Mezzo {
     @Column(name = "stato_mezzo")
     private StatoMezzo stato_mezzo;
 
-    @OneToMany(mappedBy = "corsa")
+    @OneToMany(mappedBy = "mezzo")
     private List<Corsa> corse;
+
+    @OneToMany(mappedBy = "mezzo")
+    private List<Manutenzione> manutanzioni;
 
     @PrePersist
     public void generaNumeroMezzo() {
@@ -49,11 +52,10 @@ public class Mezzo {
     protected Mezzo() {
     }
 
-    public Mezzo(LocalDate data_emissione_mezzo, TipoMezzo tipo_mezzo, StatoMezzo stato_mezzo) {
-        this.data_emissione_mezzo = data_emissione_mezzo;
+    public Mezzo(TipoMezzo tipo_mezzo) {
         this.tipo_mezzo = tipo_mezzo;
         this.passeggeri_max = tipo_mezzo.getCapienzaMassima();
-        this.stato_mezzo = stato_mezzo;
+        this.stato_mezzo = StatoMezzo.ATTIVO;
     }
 
     public UUID getMezzo_di_trasporto() {
@@ -63,7 +65,6 @@ public class Mezzo {
     public String getNumero_mezzo() {
         return numero_mezzo;
     }
-
 
 
     public TipoMezzo getTipo_mezzo() {
@@ -100,10 +101,10 @@ public class Mezzo {
         return "Mezzo{" +
                 "mezzo_di_trasporto=" + mezzo_di_trasporto +
                 ", numero_mezzo='" + numero_mezzo + '\'' +
-                ", data_emissione_mezzo=" + data_emissione_mezzo +
                 ", tipo_mezzo=" + tipo_mezzo +
                 ", passeggeri_max=" + passeggeri_max +
                 ", stato_mezzo=" + stato_mezzo +
+                ", corse=" + corse +
                 '}';
     }
 }

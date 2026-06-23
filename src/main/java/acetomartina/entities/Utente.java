@@ -30,7 +30,7 @@ public class Utente {
   @Column(name = "luogo_nascita")
     private String luogo_nascita;
 
-   @OneToOne(mappedBy = "tessera")
+   @OneToOne(mappedBy = "utente")
     private Tessera tessera;
 
   protected Utente(){}
