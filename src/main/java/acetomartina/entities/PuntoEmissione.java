@@ -3,6 +3,7 @@ package acetomartina.entities;
 import acetomartina.enums.TipoPuntoEmissione;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -11,8 +12,13 @@ import java.util.UUID;
 @Table(name = "punto_emissione")
 public class PuntoEmissione {
 
+    @Transient
+    private int counterBiglietti;
+    @Transient
+    private int counterAbbonamenti;
+
     @Id
-    @Column(name= "punto_emissione")
+    @Column(name = "punto_emissione")
     @GeneratedValue
     private UUID id;
 
@@ -26,10 +32,22 @@ public class PuntoEmissione {
     @OneToMany(mappedBy = "puntoEmissione")
     private List<TitoloViaggio> listaVendite = new ArrayList<>();
 
-    protected PuntoEmissione(){}
-    public PuntoEmissione(TipoPuntoEmissione tipo_punto_emissione,boolean in_attività){
+    protected PuntoEmissione() {
+    }
+
+    public PuntoEmissione(TipoPuntoEmissione tipo_punto_emissione, boolean in_attività) {
         this.tipoPuntoEmissione = tipo_punto_emissione;
-        this.inAttivita= in_attività;
+        this.inAttivita = in_attività;
+        this.counterAbbonamenti = 0;
+        this.counterBiglietti = 0;
+    }
+
+
+    public Biglietto creaBiglietto(Corsa corsa) {
+        Biglietto nuovoBiglietto = new Biglietto(LocalDate.now(), corsa, this);
+        this.listaVendite.add(nuovoBiglietto);
+        counterBiglietti++;
+        return nuovoBiglietto;
     }
 
     public List<TitoloViaggio> getLista_vendite() {

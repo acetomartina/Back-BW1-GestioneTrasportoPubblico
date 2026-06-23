@@ -1,10 +1,11 @@
 package acetomartina;
 
 import acetomartina.DAO.*;
-import acetomartina.enom.*;
+import acetomartina.enums.*;
 import acetomartina.entities.*;
 import acetomartina.entities.Tessera;
 import acetomartina.entities.Utente;
+import acetomartina.enums.TipoMezzo;
 import acetomartina.enums.TipoPuntoEmissione;
 import acetomartina.enums.TipoUtente;
 import jakarta.persistence.EntityManager;
@@ -12,7 +13,11 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import acetomartina.utils.DataSeeder;
 
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Application {
     private static final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("gestione-trasporto-pubblico-pu");
@@ -44,10 +49,8 @@ public class Application {
         puntoEmissioneDao.findByTipo(TipoPuntoEmissione.RIVENDITORE).forEach(System.out::println);
 
 
-
-
         //TEST UTENTE!!!! OK
-        Utente alessia = new Utente(TipoUtente.UTENTE, "Alessia","Cotini", LocalDate.of(1997,12,29), "Roma");
+        Utente alessia = new Utente(TipoUtente.UTENTE, "Alessia", "Cotini", LocalDate.of(1997, 12, 29), "Roma");
         utenteDAO.save(alessia);
 
         Tessera tessera = new Tessera(LocalDate.now(),
@@ -178,16 +181,16 @@ public class Application {
         salvaLista(biglietti);
 
 
-        Manutenzione manutenzione1 = new Manutenzione(LocalDate.now().plusDays(20), LocalDate.now().plusDays(27), autobus1, StatoManutenzione.PROGRAMMATA);
-        Manutenzione manutenzione2 = new Manutenzione(LocalDate.now().minusDays(5), LocalDate.now().plusDays(2), autobus2, StatoManutenzione.IN_CORSO);
-        Manutenzione manutenzione3 = new Manutenzione(LocalDate.now().minusDays(30), LocalDate.now().minusDays(25), autobus3, StatoManutenzione.ESEGUITA);
-        Manutenzione manutenzione4 = new Manutenzione(LocalDate.now().plusDays(10), LocalDate.now().plusDays(15), autobus1, StatoManutenzione.PROGRAMMATA);
-        Manutenzione manutenzione5 = new Manutenzione(LocalDate.now().minusDays(60), LocalDate.now().minusDays(52), autobus3, StatoManutenzione.ESEGUITA);
-        Manutenzione manutenzione6 = new Manutenzione(LocalDate.now().minusDays(3), LocalDate.now().plusDays(4), tram2, StatoManutenzione.IN_CORSO);
-        Manutenzione manutenzione7 = new Manutenzione(LocalDate.now().plusDays(30), LocalDate.now().plusDays(38), tram1, StatoManutenzione.PROGRAMMATA);
-        Manutenzione manutenzione8 = new Manutenzione(LocalDate.now().minusDays(45), LocalDate.now().minusDays(40), tram3, StatoManutenzione.ESEGUITA);
-        Manutenzione manutenzione9 = new Manutenzione(LocalDate.now().plusDays(5), LocalDate.now().plusDays(9), tram1, StatoManutenzione.PROGRAMMATA);
-        Manutenzione manutenzione10 = new Manutenzione(LocalDate.now().minusDays(15), LocalDate.now().minusDays(10), tram3, StatoManutenzione.ESEGUITA);
+        Manutenzione manutenzione1 = new Manutenzione(LocalDate.now().plusDays(20), LocalDate.now().plusDays(27), autobus1, acetomartina.enom.StatoManutenzione.PROGRAMMATA);
+        Manutenzione manutenzione2 = new Manutenzione(LocalDate.now().minusDays(5), LocalDate.now().plusDays(2), autobus2, acetomartina.enom.StatoManutenzione.IN_CORSO);
+        Manutenzione manutenzione3 = new Manutenzione(LocalDate.now().minusDays(30), LocalDate.now().minusDays(25), autobus3, acetomartina.enom.StatoManutenzione.ESEGUITA);
+        Manutenzione manutenzione4 = new Manutenzione(LocalDate.now().plusDays(10), LocalDate.now().plusDays(15), autobus1, acetomartina.enom.StatoManutenzione.PROGRAMMATA);
+        Manutenzione manutenzione5 = new Manutenzione(LocalDate.now().minusDays(60), LocalDate.now().minusDays(52), autobus3, acetomartina.enom.StatoManutenzione.ESEGUITA);
+        Manutenzione manutenzione6 = new Manutenzione(LocalDate.now().minusDays(3), LocalDate.now().plusDays(4), tram2, acetomartina.enom.StatoManutenzione.IN_CORSO);
+        Manutenzione manutenzione7 = new Manutenzione(LocalDate.now().plusDays(30), LocalDate.now().plusDays(38), tram1, acetomartina.enom.StatoManutenzione.PROGRAMMATA);
+        Manutenzione manutenzione8 = new Manutenzione(LocalDate.now().minusDays(45), LocalDate.now().minusDays(40), tram3, acetomartina.enom.StatoManutenzione.ESEGUITA);
+        Manutenzione manutenzione9 = new Manutenzione(LocalDate.now().plusDays(5), LocalDate.now().plusDays(9), tram1, acetomartina.enom.StatoManutenzione.PROGRAMMATA);
+        Manutenzione manutenzione10 = new Manutenzione(LocalDate.now().minusDays(15), LocalDate.now().minusDays(10), tram3, acetomartina.enom.StatoManutenzione.ESEGUITA);
 
         List<Manutenzione> manutenzioni = new ArrayList<>();
         manutenzioni.add(manutenzione1);
@@ -202,6 +205,12 @@ public class Application {
         manutenzioni.add(manutenzione10);
 
         salvaLista(manutenzioni);
+
+        BigliettoDAO bigliettoDAO = new BigliettoDAO(entityManager);
+
+        bigliettoDAO.obliteraBiglietto(biglietto3);
+
+        bigliettoDAO.obliteraBiglietto(biglietto3);
 
 
         System.out.println("Siamo connessi!");

@@ -1,6 +1,6 @@
 package acetomartina.DAO;
 
-import acetomartina.enom.StatoMezzo;
+import acetomartina.enums.StatoMezzo;
 import acetomartina.entities.Manutenzione;
 import acetomartina.entities.Mezzo;
 
