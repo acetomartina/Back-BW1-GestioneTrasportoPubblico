@@ -3,6 +3,7 @@ package acetomartina.entities;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "tessere")
@@ -10,7 +11,7 @@ public class Tessera {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long tessera_id;
 
     @Column(name = "numero_tessera",unique = true)
     private int numeroTessera;
@@ -25,22 +26,33 @@ public class Tessera {
     @JoinColumn(name = "utente_id", unique = true)
     private Utente utente;
 
+    @OneToMany(mappedBy = "tessera_id")
+    private List<Abbonamento> abbonamenti;
+
+    @Column(name = "tessera_attiva")
+    private boolean tessera_attiva;
+
     public Tessera(){
 
     }
 
-    public Tessera(LocalDate dataEmissione, LocalDate dataScadenza, Utente utente){
+    public Tessera(LocalDate dataEmissione, LocalDate dataScadenza, Utente utente, boolean tessera_attiva){
         this.dataEmissione = dataEmissione;
         this.dataScadenza = dataEmissione.plusYears(1);
         this.utente = utente;
+        this.tessera_attiva = tessera_attiva;
     }
 
     public Long getId() {
-        return id;
+        return tessera_id;
     }
 
     public int getNumeroTessera() {
         return numeroTessera;
+    }
+
+    public List<Abbonamento> getAbbonamenti() {
+        return abbonamenti;
     }
 
     public LocalDate getDataEmissione() {
@@ -56,7 +68,7 @@ public class Tessera {
     }
 
     public void setId(Long id) {
-        this.id = id;
+        this.tessera_id = tessera_id;
     }
 
     public void setDataEmissione(LocalDate dataEmissione) {
@@ -71,12 +83,24 @@ public class Tessera {
         this.utente = utente;
     }
 
+    public boolean isTessera_attiva() {
+        return tessera_attiva;
+    }
+
+    public void setTessera_attiva(boolean tessera_attiva) {
+        this.tessera_attiva = tessera_attiva;
+    }
+
     @Override
-    public String toString(){
+    public String toString() {
         return "Tessera{" +
-                "id= " + id +
-                ", dataEmissione= " + dataEmissione +
-                ", dataScadenza= " + dataScadenza +
-                "}" ;
+                "tessera_id=" + tessera_id +
+                ", numeroTessera=" + numeroTessera +
+                ", dataEmissione=" + dataEmissione +
+                ", dataScadenza=" + dataScadenza +
+                ", utente=" + utente +
+                ", abbonamenti=" + abbonamenti +
+                ", tessera_attiva=" + tessera_attiva +
+                '}';
     }
 }

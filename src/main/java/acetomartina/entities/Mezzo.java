@@ -1,10 +1,12 @@
 package acetomartina.entities;
 
+import acetomartina.enom.StatoMezzo;
 import acetomartina.enom.TipoMezzo;
 import jakarta.persistence.*;
 
 import java.security.SecureRandom;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -29,8 +31,12 @@ public class Mezzo {
     @Column(name = "passeggeri_max")
     private int passeggeri_max;
 
-    @Column(name = "in_servizio")
-    private boolean in_servizio;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "stato_mezzo")
+    private StatoMezzo stato_mezzo;
+
+    @OneToMany(mappedBy = "corsa")
+    private List<Corsa> corse;
 
     @PrePersist
     public void generaNumeroMezzo() {
@@ -45,11 +51,11 @@ public class Mezzo {
     protected Mezzo() {
     }
 
-    public Mezzo(LocalDate data_emissione_mezzo, TipoMezzo tipo_mezzo, boolean in_servizio) {
+    public Mezzo(LocalDate data_emissione_mezzo, TipoMezzo tipo_mezzo, StatoMezzo stato_mezzo) {
         this.data_emissione_mezzo = data_emissione_mezzo;
         this.tipo_mezzo = tipo_mezzo;
         this.passeggeri_max = tipo_mezzo.getCapienzaMassima();
-        this.in_servizio = in_servizio;
+        this.stato_mezzo = stato_mezzo;
     }
 
     public UUID getMezzo_di_trasporto() {
@@ -72,10 +78,6 @@ public class Mezzo {
         return passeggeri_max;
     }
 
-    public boolean isIn_servizio() {
-        return in_servizio;
-    }
-
     public void setNumero_mezzo(String numero_mezzo) {
         this.numero_mezzo = numero_mezzo;
     }
@@ -92,8 +94,12 @@ public class Mezzo {
         this.passeggeri_max = passeggeri_max;
     }
 
-    public void setIn_servizio(boolean in_servizio) {
-        this.in_servizio = in_servizio;
+    public StatoMezzo getStato_mezzo() {
+        return stato_mezzo;
+    }
+
+    public void setStato_mezzo(StatoMezzo stato_mezzo) {
+        this.stato_mezzo = stato_mezzo;
     }
 
     @Override
@@ -104,7 +110,7 @@ public class Mezzo {
                 ", data_emissione_mezzo=" + data_emissione_mezzo +
                 ", tipo_mezzo=" + tipo_mezzo +
                 ", passeggeri_max=" + passeggeri_max +
-                ", in_servizio=" + in_servizio +
+                ", stato_mezzo=" + stato_mezzo +
                 '}';
     }
 }

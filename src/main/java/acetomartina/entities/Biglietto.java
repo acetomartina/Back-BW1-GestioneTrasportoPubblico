@@ -22,6 +22,9 @@ public class Biglietto extends TitoloViaggio {
     @Column(name = "Validità", nullable = false)
     private boolean validita;
 
+    @Column(name = "obliterato")
+    private boolean obliterato;
+
 
     public Biglietto() {
     }
@@ -30,8 +33,16 @@ public class Biglietto extends TitoloViaggio {
         super(dataEmissione, puntoEmissione);
         this.tipoBiglietto = corsa.getMezzo().getTipo_mezzo().getTipoBiglietto();
         this.corsa = corsa;
+        counter++;
     }
 
+    public boolean isObliterato() {
+        return obliterato;
+    }
+
+    public void setObliterato(boolean obliterato) {
+        this.obliterato = obliterato;
+    }
 
     public static int getCounter() {
         return counter;
@@ -55,8 +66,8 @@ public class Biglietto extends TitoloViaggio {
                 "tipoBiglietto=" + tipoBiglietto +
                 ", corsa=" + corsa +
                 ", validita=" + validita +
-                "} " + super.toString();
+                ", obliterato=" + obliterato +
+                '}';
     }
-
 }
 

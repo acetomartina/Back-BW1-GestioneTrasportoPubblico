@@ -15,7 +15,7 @@ public class Abbonamento extends TitoloViaggio {
     @Column(name = "numero_abbonamento")
     private String numero_abbonamento;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "numero_tessera")
     private Tessera tessera_id;
 
@@ -94,5 +94,16 @@ public class Abbonamento extends TitoloViaggio {
 
     public void setValidità(boolean validità) {
         this.validità = validità;
+    }
+
+    @Override
+    public String toString() {
+        return "Abbonamento{" +
+                "numero_abbonamento='" + numero_abbonamento + '\'' +
+                ", tessera_id=" + tessera_id +
+                ", dataScadenza=" + dataScadenza +
+                ", periodicita=" + periodicita +
+                ", validità=" + validità +
+                '}';
     }
 }
