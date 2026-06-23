@@ -49,6 +49,7 @@ public class Mezzo {
     protected Mezzo() {
     }
 
+
     public Mezzo(LocalDate data_emissione_mezzo, TipoMezzo tipo_mezzo, StatoMezzo stato_mezzo) {
         this.tipo_mezzo = tipo_mezzo;
         this.passeggeri_max = tipo_mezzo.getCapienzaMassima();
