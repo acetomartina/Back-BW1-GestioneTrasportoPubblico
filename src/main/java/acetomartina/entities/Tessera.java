@@ -39,6 +39,10 @@ public class Tessera {
         return id;
     }
 
+    public int getNumeroTessera() {
+        return numeroTessera;
+    }
+
     public LocalDate getDataEmissione() {
         return dataEmissione;
     }
