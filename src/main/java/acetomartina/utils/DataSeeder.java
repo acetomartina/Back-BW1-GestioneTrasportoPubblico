@@ -1,4 +1,4 @@
-package utils;
+package acetomartina.utils;
 
 import acetomartina.DAO.*;
 import acetomartina.entities.Mezzo;
@@ -21,6 +21,11 @@ public class DataSeeder {
     }
 
     public static void popolaPuntiEmissione(PuntoEmissioneDao puntoEmissioneDao){
+
+        if( !puntoEmissioneDao.findAll().isEmpty()) {
+            System.out.println("Punti emissioni già presenti.");
+            return;
+        }
 
         PuntoEmissione p1 = new PuntoEmissione(
                 TipoPuntoEmissione.DISTRIBUTORE,true

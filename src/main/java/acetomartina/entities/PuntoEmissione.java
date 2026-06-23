@@ -14,55 +14,55 @@ public class PuntoEmissione {
     @Id
     @Column(name= "punto_emissione")
     @GeneratedValue
-    private UUID punto_emissione;
+    private UUID id;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo_punto_emissione")
-    private TipoPuntoEmissione tipo_punto_emissione;
+    private TipoPuntoEmissione tipoPuntoEmissione;
 
     @Column(name = "in_attività")
-    private boolean in_attività;
+    private boolean inAttivita;
 
     @OneToMany(mappedBy = "puntoEmissione")
-    private List<TitoloViaggio> lista_vendite = new ArrayList<>();
+    private List<TitoloViaggio> listaVendite = new ArrayList<>();
 
     protected PuntoEmissione(){}
     public PuntoEmissione(TipoPuntoEmissione tipo_punto_emissione,boolean in_attività){
-        this.tipo_punto_emissione = tipo_punto_emissione;
-        this.in_attività= in_attività;
+        this.tipoPuntoEmissione = tipo_punto_emissione;
+        this.inAttivita= in_attività;
     }
 
     public List<TitoloViaggio> getLista_vendite() {
-        return lista_vendite;
+        return listaVendite;
     }
 
     public UUID getPunto_emissione() {
-        return punto_emissione;
+        return id;
     }
 
     public TipoPuntoEmissione getTipo_punto_emissione() {
-        return tipo_punto_emissione;
+        return tipoPuntoEmissione;
     }
 
     public boolean isIn_attività() {
-        return in_attività;
+        return inAttivita;
     }
 
     public void setTipo_punto_emissione(TipoPuntoEmissione tipo_punto_emissione) {
-        this.tipo_punto_emissione = tipo_punto_emissione;
+        this.tipoPuntoEmissione = tipo_punto_emissione;
     }
 
     public void setIn_attività(boolean in_attività) {
-        this.in_attività = in_attività;
+        this.inAttivita = in_attività;
     }
 
     @Override
     public String toString() {
         return "PuntoEmissione{" +
-                "punto_emissione=" + punto_emissione +
-                ", tipo_punto_emissione=" + tipo_punto_emissione +
-                ", in_attività=" + in_attività +
-                ", lista_vendite=" + lista_vendite +
+                "punto_emissione=" + id +
+                ", tipo_punto_emissione=" + tipoPuntoEmissione +
+                ", in_attività=" + inAttivita +
+                ", lista_vendite=" + listaVendite +
                 '}';
     }
 }
