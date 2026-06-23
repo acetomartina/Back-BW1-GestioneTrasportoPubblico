@@ -24,11 +24,9 @@ public class Application {
         TitoloViaggioDao TitoloViaggioDao = new TitoloViaggioDao(entityManager);
         TrattaDao TrattaDao = new TrattaDao(entityManager);
 
-        //TEST UTENTE
-
-
-        Utente alessia = new Utente(TipoUtente.UTENTE, "Alessia","Cotini", LocalDate.of(1997,12,29), "Roma");
-        utenteDAO.save(alessia);
+        //TEST UTENTE ok!!!!
+        //Utente alessia = new Utente(TipoUtente.UTENTE, "Alessia","Cotini", LocalDate.of(1997,12,29), "Roma");
+        //utenteDAO.save(alessia);
 
 
 
