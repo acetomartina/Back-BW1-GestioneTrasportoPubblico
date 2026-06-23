@@ -21,8 +21,8 @@ public class PuntoEmissione {
     @Column(name = "in_attività")
     private boolean in_attività;
 
-    protected PuntoEmissione(TipoPuntoEmissione tipo_punto_emissione,boolean in_attività){}
-    public PuntoEmissione(){
+    protected PuntoEmissione(){}
+    public PuntoEmissione(TipoPuntoEmissione tipo_punto_emissione,boolean in_attività){
         this.tipo_punto_emissione = tipo_punto_emissione;
         this.in_attività= in_attività;
     }

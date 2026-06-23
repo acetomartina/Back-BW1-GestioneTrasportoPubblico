@@ -26,8 +26,8 @@ public class Biglietto extends TitoloViaggio {
     public Biglietto() {
     }
 
-    public Biglietto(LocalDate dataEmissione, Corsa corsa) {
-        super(dataEmissione);
+    public Biglietto(LocalDate dataEmissione, Corsa corsa, PuntoEmissione puntoEmissione) {
+        super(dataEmissione, puntoEmissione);
         this.tipoBiglietto = corsa.getMezzo().getTipo_mezzo().getTipoBiglietto();
         this.corsa = corsa;
     }

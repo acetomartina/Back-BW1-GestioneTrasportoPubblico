@@ -11,6 +11,7 @@
         <class>acetomartina.entities.TitoloViaggio</class>
         <class>acetomartina.entities.Tratta</class>
         <class>acetomartina.entities.Utente</class>
+        <class>acetomartina.entities.Corsa</class>
         <properties>
             <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/gestione_trasporto_pubblico"/>
             <property name="jakarta.persistence.jdbc.user" value="postgres"/>

@@ -20,7 +20,7 @@ public abstract class TitoloViaggio {
     @Column(name = "data_emissione", nullable = false)
     private LocalDate dataEmissione;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "punto_emissione_id", nullable = false)
     private PuntoEmissione puntoEmissione;
 
@@ -33,6 +33,7 @@ public abstract class TitoloViaggio {
         this.dataEmissione = dataEmissione;
         this.puntoEmissione = puntoEmissione;
     }
+
 
     public UUID getId() {
         return id;
