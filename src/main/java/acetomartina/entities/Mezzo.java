@@ -50,7 +50,6 @@ public class Mezzo {
     }
 
     public Mezzo(LocalDate data_emissione_mezzo, TipoMezzo tipo_mezzo, StatoMezzo stato_mezzo) {
-        this.data_emissione_mezzo = data_emissione_mezzo;
         this.tipo_mezzo = tipo_mezzo;
         this.passeggeri_max = tipo_mezzo.getCapienzaMassima();
         this.stato_mezzo = stato_mezzo;
@@ -100,7 +99,6 @@ public class Mezzo {
         return "Mezzo{" +
                 "mezzo_di_trasporto=" + mezzo_di_trasporto +
                 ", numero_mezzo='" + numero_mezzo + '\'' +
-                ", data_emissione_mezzo=" + data_emissione_mezzo +
                 ", tipo_mezzo=" + tipo_mezzo +
                 ", passeggeri_max=" + passeggeri_max +
                 ", stato_mezzo=" + stato_mezzo +
