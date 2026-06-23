@@ -29,6 +29,10 @@ public class Biglietto extends TitoloViaggio {
     @Column(name = "scadenza")
     private LocalDateTime scadenza;
 
+    @ManyToOne
+    @JoinColumn(name = "mezzo_id")
+    private Mezzo mezzo_id;
+
 
     public Biglietto() {
     }
