@@ -21,8 +21,6 @@ public class Mezzo {
     @Column(name = "numero_mezzo")
     private String numero_mezzo;
 
-    @Column(name = "data_emissione_mezzo")
-    private LocalDate data_emissione_mezzo;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo_mezzo")
@@ -66,9 +64,7 @@ public class Mezzo {
         return numero_mezzo;
     }
 
-    public LocalDate getData_emissione_mezzo() {
-        return data_emissione_mezzo;
-    }
+
 
     public TipoMezzo getTipo_mezzo() {
         return tipo_mezzo;
@@ -82,9 +78,6 @@ public class Mezzo {
         this.numero_mezzo = numero_mezzo;
     }
 
-    public void setData_emissione_mezzo(LocalDate data_emissione_mezzo) {
-        this.data_emissione_mezzo = data_emissione_mezzo;
-    }
 
     public void setTipo_mezzo(TipoMezzo tipo_mezzo) {
         this.tipo_mezzo = tipo_mezzo;
