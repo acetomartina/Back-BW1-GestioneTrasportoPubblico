@@ -1,4 +1,4 @@
-package entities;
+package acetomartina.entities;
 
 import jakarta.persistence.*;
 

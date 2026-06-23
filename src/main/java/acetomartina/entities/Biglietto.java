@@ -1,13 +1,12 @@
-package entities;
+package acetomartina.entities;
 
-import enom.TipoBiglietto;
+import acetomartina.enom.TipoBiglietto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Entity
 @Table(name = "biglietti")

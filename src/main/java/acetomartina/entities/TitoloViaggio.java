@@ -1,4 +1,4 @@
-package entities;
+package acetomartina.entities;
 
 import acetomartina.isbnGeneretor.ISBNGenerator;
 import jakarta.persistence.*;

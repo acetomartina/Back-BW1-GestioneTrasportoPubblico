@@ -1,11 +1,10 @@
-package entities;
+package acetomartina.entities;
 
-import enom.PeriodicitàAbbonamento;
+import acetomartina.enom.PeriodicitàAbbonamento;
 import jakarta.persistence.*;
 
 import java.security.SecureRandom;
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Entity
 @Table(name = "abbonamenti")
