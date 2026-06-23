@@ -1,4 +1,4 @@
-package enom;
+package acetomartina.enom;
 
 public enum TipoPuntoEmissione {
     DISTRIBUTORE,

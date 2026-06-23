@@ -1,0 +1,28 @@
+package acetomartina.DAO;
+
+import acetomartina.entities.Tessera;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
+
+public class TesseraDao {
+    private final EntityManager entityManager;
+
+    //COSTRUTTORE
+    public TesseraDao(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
+
+    // SALVO
+    public void save(Tessera tessera){
+        EntityTransaction transazione = this.entityManager.getTransaction();
+        try {
+            transazione.begin();
+            this.entityManager.persist(tessera);
+            transazione.commit();
+            System.out.println("La tessera numero : "+ tessera.getNumeroTessera() + " è stata aggiunta al DATABASE");
+        } catch (Exception e) {
+            if (transazione.isActive()) transazione.rollback();
+            throw new RuntimeException("Errore durante il salvataggio della tessera : " + e.getMessage());
+        }
+    }
+}
