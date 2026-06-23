@@ -1,12 +1,12 @@
 package acetomartina.DAO;
 
 import acetomartina.entities.Biglietto;
-import acetomartina.entities.Mezzo;
+
 import acetomartina.entities.TitoloViaggio;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.TypedQuery;
-import org.hibernate.service.spi.InjectService;
+
 
 import java.time.LocalDateTime;
 import java.util.List;
