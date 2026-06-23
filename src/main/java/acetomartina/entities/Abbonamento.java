@@ -1,6 +1,6 @@
 package acetomartina.entities;
 
-import acetomartina.enom.PeriodicitàAbbonamento;
+import acetomartina.enums.PeriodicitàAbbonamento;
 import jakarta.persistence.*;
 
 import java.security.SecureRandom;

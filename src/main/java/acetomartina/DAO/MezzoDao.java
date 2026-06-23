@@ -4,6 +4,7 @@ import acetomartina.enom.StatoMezzo;
 import acetomartina.entities.Manutenzione;
 import acetomartina.entities.Mezzo;
 
+import acetomartina.entities.TitoloViaggio;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 
@@ -30,6 +31,15 @@ public class MezzoDao {
             if (transazione.isActive()) transazione.rollback();
             throw new RuntimeException("Errore durante il salvataggio del mezzo : " + e.getMessage(), e);
         }
+
+
+    }
+    //CERCO PER ID
+
+    public Mezzo findMezzoById(UUID id){
+        Mezzo fromDB = this.entityManager.find(Mezzo.class, id);
+        if (fromDB == null) throw new RuntimeException(" mezzo non trovato nel database.");
+        return fromDB;
     }
 
     // CERCA PER ID

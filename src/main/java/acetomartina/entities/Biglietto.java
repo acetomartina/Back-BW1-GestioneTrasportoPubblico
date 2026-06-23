@@ -1,9 +1,10 @@
 package acetomartina.entities;
 
-import acetomartina.enom.TipoBiglietto;
+import acetomartina.enums.TipoBiglietto;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Entity
@@ -25,15 +26,31 @@ public class Biglietto extends TitoloViaggio {
     @Column(name = "obliterato")
     private boolean obliterato;
 
+    @Column(name = "scadenza")
+    private LocalDateTime scadenza;
+
+    @ManyToOne
+    @JoinColumn(name = "mezzo_id")
+    private Mezzo mezzo_id;
+
 
     public Biglietto() {
     }
 
-    public Biglietto(LocalDate dataEmissione, Corsa corsa, PuntoEmissione puntoEmissione) {
+    public Biglietto(LocalDate dataEmissione, Corsa corsa, PuntoEmissione puntoEmissione,LocalDateTime scadenza) {
         super(dataEmissione, puntoEmissione);
         this.tipoBiglietto = corsa.getMezzo().getTipo_mezzo().getTipoBiglietto();
         this.corsa = corsa;
+        this.scadenza = scadenza;
         counter++;
+    }
+
+    public LocalDateTime getScadenza() {
+        return scadenza;
+    }
+
+    public void setScadenza(LocalDateTime scadenza) {
+        this.scadenza = scadenza;
     }
 
     public boolean isObliterato() {
@@ -67,6 +84,7 @@ public class Biglietto extends TitoloViaggio {
                 ", corsa=" + corsa +
                 ", validita=" + validita +
                 ", obliterato=" + obliterato +
+                ", scadenza=" + scadenza +
                 '}';
     }
 }

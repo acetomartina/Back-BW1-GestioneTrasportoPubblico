@@ -1,6 +1,6 @@
 package acetomartina.entities;
 
-import acetomartina.enom.TipoUtente;
+import acetomartina.enums.TipoUtente;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;

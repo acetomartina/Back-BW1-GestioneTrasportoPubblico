@@ -1,4 +1,4 @@
-package acetomartina.enom;
+package acetomartina.enums;
 
 public enum TipoBiglietto {
     GENERICO,

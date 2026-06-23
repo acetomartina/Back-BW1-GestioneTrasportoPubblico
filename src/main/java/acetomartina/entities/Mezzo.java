@@ -1,7 +1,7 @@
 package acetomartina.entities;
 
-import acetomartina.enom.StatoMezzo;
-import acetomartina.enom.TipoMezzo;
+import acetomartina.enums.StatoMezzo;
+import acetomartina.enums.TipoMezzo;
 import jakarta.persistence.*;
 
 import java.security.SecureRandom;
