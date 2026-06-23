@@ -54,18 +54,13 @@ public class TitoloViaggioDao {
     // VALIDITA' BIGLIETTO
     public boolean checkValidity(Biglietto biglietto){
         Biglietto fromDB = (Biglietto) this.findById(biglietto.getId());
-
-        // Se non è obliterato è valido (non è ancora stato usato)
         if (!fromDB.isObliterato()) {
             return true;
         }
-
-        // Se è obliterato, controlliamo se è scaduto rispetto all'ora attuale
         if (fromDB.getScadenza() != null && LocalDateTime.now().isBefore(fromDB.getScadenza())) {
-            return true; // È obliterato ma non ancora scaduto
+            return true;
         }
-
-        return false; // Scaduto
+        return false;
     }
 
     // CONVALIDO IL BIGLIETTO
