@@ -25,6 +25,10 @@ public class Tessera {
     @JoinColumn(name = "utente_id", unique = true)
     private Utente utente;
 
+    @Column(name = "attiva")
+    private boolean attiva;
+
+
     public Tessera(){
 
     }
