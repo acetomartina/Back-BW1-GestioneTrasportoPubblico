@@ -2,6 +2,7 @@ package acetomartina.entities;
 
 import jakarta.persistence.*;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.UUID;
@@ -14,49 +15,24 @@ public class Tratta {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "zona_partenza",nullable = false)
+    @Column(name = "zona_partenza", nullable = false)
     private String zonaPartenza;
 
-    @Column (name = "capolinea",nullable = false)
+    @Column(name = "capolinea", nullable = false)
     private String capolinea;
 
-    @Column(name = "tempo_previsto", nullable = false)
-    private int tempoPrevisto; //minuti
+    @Column(name = "durata", nullable = false)
+    private Duration durata;
 
-    @Column(name = "data_percorrenza")
-    private LocalDate dataPercorrenza;
 
-    @Column(name = "orario_partenza", nullable = false)
-    private LocalTime orarioPartenza;
-
-    @Column(name = "orario_arrivo")
-    private LocalTime orarioArrivo;
-
-    @Column (name = "tempo_effettivo")
-    private int tempoEffettivo; //minuti
-
-    @Column(name = "numero_biglietti_obliterati")
-    private int numeroBigliettiObliterati;
-
-    @OneToOne
-    @JoinColumn(name = "mezzo_id")
-    private Mezzo mezzo;
-
-    public Tratta(){
+    public Tratta() {
 
     }
 
-    public Tratta(String zonaPartenza, String capolinea, int tempoPrevisto, LocalDate dataPercorrenza, LocalTime orarioPartenza, LocalTime orarioArrivo, int tempoEffettivo, int numeroBigliettiObliterati, Mezzo mezzo){
+    public Tratta(String zonaPartenza, String capolinea, Duration durata) {
         this.zonaPartenza = zonaPartenza;
         this.capolinea = capolinea;
-        this.tempoPrevisto = tempoPrevisto;
-        this.dataPercorrenza = dataPercorrenza;
-        this.orarioPartenza = orarioPartenza;
-        this.orarioArrivo = orarioArrivo;
-        this.tempoEffettivo = tempoEffettivo;
-        this.numeroBigliettiObliterati = numeroBigliettiObliterati;
-        this.mezzo = mezzo;
-
+        this.durata = durata;
     }
 
     public UUID getId() {
@@ -83,60 +59,12 @@ public class Tratta {
         this.capolinea = capolinea;
     }
 
-    public int getTempoPrevisto() {
-        return tempoPrevisto;
+    public Duration getDurata() {
+        return durata;
     }
 
-    public void setTempoPrevisto(int tempoPrevisto) {
-        this.tempoPrevisto = tempoPrevisto;
-    }
-
-    public LocalDate getDataPercorrenza() {
-        return dataPercorrenza;
-    }
-
-    public void setDataPercorrenza(LocalDate dataPercorrenza) {
-        this.dataPercorrenza = dataPercorrenza;
-    }
-
-    public LocalTime getOrarioPartenza() {
-        return orarioPartenza;
-    }
-
-    public void setOrarioPartenza(LocalTime orarioPartenza) {
-        this.orarioPartenza = orarioPartenza;
-    }
-
-    public LocalTime getOrarioArrivo() {
-        return orarioArrivo;
-    }
-
-    public void setOrarioArrivo(LocalTime orarioArrivo) {
-        this.orarioArrivo = orarioArrivo;
-    }
-
-    public int getTempoEffettivo() {
-        return tempoEffettivo;
-    }
-
-    public void setTempoEffettivo(int tempoEffettivo) {
-        this.tempoEffettivo = tempoEffettivo;
-    }
-
-    public int getNumeroBigliettiObliterati() {
-        return numeroBigliettiObliterati;
-    }
-
-    public void setNumeroBigliettiObliterati(int numeroBigliettiObliterati) {
-        this.numeroBigliettiObliterati = numeroBigliettiObliterati;
-    }
-
-    public Mezzo getMezzo() {
-        return mezzo;
-    }
-
-    public void setMezzo(Mezzo mezzo) {
-        this.mezzo = mezzo;
+    public void setDurata(Duration durata) {
+        this.durata = durata;
     }
 
     @Override
@@ -145,8 +73,7 @@ public class Tratta {
                 "id=" + id +
                 ", zonaPartenza='" + zonaPartenza + '\'' +
                 ", capolinea='" + capolinea + '\'' +
-                ", tempoPrevisto=" + tempoPrevisto + " min" +
-                ", mezzo=" + (mezzo != null ? mezzo.getMezzo_di_trasporto() : "nessuno") +
+                ", durata=" + durata +
                 '}';
     }
 }

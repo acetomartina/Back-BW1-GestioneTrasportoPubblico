@@ -28,9 +28,10 @@ public abstract class TitoloViaggio {
     public TitoloViaggio() {
     }
 
-    public TitoloViaggio(LocalDate dataEmissione) {
+    public TitoloViaggio(LocalDate dataEmissione, PuntoEmissione puntoEmissione) {
         this.codiceUnivoco = ISBNGenerator.generateISBN13();
         this.dataEmissione = dataEmissione;
+        this.puntoEmissione = puntoEmissione;
     }
 
     public UUID getId() {
@@ -50,4 +51,7 @@ public abstract class TitoloViaggio {
         return dataEmissione;
     }
 
+    public PuntoEmissione getPuntoEmissione() {
+        return puntoEmissione;
+    }
 }

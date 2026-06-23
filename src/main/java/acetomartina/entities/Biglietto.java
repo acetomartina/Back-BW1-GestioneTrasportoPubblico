@@ -1,9 +1,7 @@
 package acetomartina.entities;
 
 import acetomartina.enom.TipoBiglietto;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -17,11 +15,9 @@ public class Biglietto extends TitoloViaggio {
     @Column(name = "tipo_biglietto")
     private TipoBiglietto tipoBiglietto;
 
-    @Column(name = "data_partenza")
-    private LocalDate dataPartenza;
-
-    @Column(name = "orario-Partenza")
-    private LocalTime orarioPartenza;
+    @ManyToOne
+    @JoinColumn(name = "corsa_id")
+    private Corsa corsa;
 
     @Column(name = "Validità", nullable = false)
     private boolean validita;
@@ -30,18 +26,10 @@ public class Biglietto extends TitoloViaggio {
     public Biglietto() {
     }
 
-    public Biglietto(LocalDate dataEmissione, TipoBiglietto tipoBiglietto, LocalDate dataPartenza, LocalTime orarioPartenza) {
+    public Biglietto(LocalDate dataEmissione, Corsa corsa) {
         super(dataEmissione);
-        this.tipoBiglietto = tipoBiglietto;
-        this.dataPartenza = dataPartenza;
-        this.orarioPartenza = orarioPartenza;
-    }
-
-    public boolean isValido() {
-        if ((LocalDate.now().equals(dataPartenza) && LocalTime.now().isAfter(orarioPartenza))
-                || LocalDate.now().isAfter(dataPartenza)) {
-            return false;
-        } else return true;
+        this.tipoBiglietto = corsa.getMezzo().getTipo_mezzo().getTipoBiglietto();
+        this.corsa = corsa;
     }
 
 
@@ -61,24 +49,13 @@ public class Biglietto extends TitoloViaggio {
         this.tipoBiglietto = tipoBiglietto;
     }
 
-    public LocalDate getDataPartenza() {
-        return dataPartenza;
-    }
-
-    public void setDataPartenza(LocalDate dataPartenza) {
-        this.dataPartenza = dataPartenza;
-    }
-
-    public LocalTime getOrarioPartenza() {
-        return orarioPartenza;
-    }
-
-    public void setOrarioPartenza(LocalTime orarioPartenza) {
-        this.orarioPartenza = orarioPartenza;
-    }
-
-    public boolean isValidita() {
-        return validita;
+    @Override
+    public String toString() {
+        return "Biglietto{" +
+                "tipoBiglietto=" + tipoBiglietto +
+                ", corsa=" + corsa +
+                ", validita=" + validita +
+                "} " + super.toString();
     }
 
 }

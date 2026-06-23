@@ -12,7 +12,7 @@ import java.util.UUID;
 public class Mezzo {
 
     @Id
-    @Column(name= "mezzo_di_trasporto")
+    @Column(name = "mezzo_di_trasporto")
     @GeneratedValue
     private UUID mezzo_di_trasporto;
 
@@ -22,7 +22,6 @@ public class Mezzo {
     @Column(name = "data_emissione_mezzo")
     private LocalDate data_emissione_mezzo;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "tipo_mezzo")
     private TipoMezzo tipo_mezzo;
 
@@ -41,12 +40,15 @@ public class Mezzo {
             this.numero_mezzo = ISBN + "NM";
         }
     }
-    protected Mezzo(){}
-    public Mezzo(LocalDate data_emissione_mezzo,TipoMezzo tipo_mezzo,int passeggeri_max,boolean in_servizio){
+
+    protected Mezzo() {
+    }
+
+    public Mezzo(LocalDate data_emissione_mezzo, TipoMezzo tipo_mezzo, boolean in_servizio) {
         this.data_emissione_mezzo = data_emissione_mezzo;
         this.tipo_mezzo = tipo_mezzo;
-        this.passeggeri_max= passeggeri_max;
-        this.in_servizio= in_servizio;
+        this.passeggeri_max = tipo_mezzo.getCapienzaMassima();
+        this.in_servizio = in_servizio;
     }
 
     public UUID getMezzo_di_trasporto() {
