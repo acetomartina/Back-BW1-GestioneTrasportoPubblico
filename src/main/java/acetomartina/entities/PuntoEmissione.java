@@ -1,6 +1,6 @@
 package acetomartina.entities;
 
-import acetomartina.enom.TipoPuntoEmissione;
+import acetomartina.enums.TipoPuntoEmissione;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -55,4 +55,16 @@ public class PuntoEmissione {
     public void setIn_attività(boolean in_attività) {
         this.in_attività = in_attività;
     }
+
+    @Override
+    public String toString() {
+        return "PuntoEmissione{" +
+                "punto_emissione=" + punto_emissione +
+                ", tipo_punto_emissione=" + tipo_punto_emissione +
+                ", in_attività=" + in_attività +
+                ", lista_vendite=" + lista_vendite +
+                '}';
+    }
 }
+
+

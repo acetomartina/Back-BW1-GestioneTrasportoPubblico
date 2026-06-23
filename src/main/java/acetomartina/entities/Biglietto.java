@@ -1,10 +1,9 @@
 package acetomartina.entities;
 
-import acetomartina.enom.TipoBiglietto;
+import acetomartina.enums.TipoBiglietto;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 
 @Entity
 @Table(name = "biglietti")
