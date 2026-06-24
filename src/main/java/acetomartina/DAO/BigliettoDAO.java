@@ -72,5 +72,23 @@ public class BigliettoDAO {
 
     // METODO PER OTTENERE LISTA DI BIGLIETTI OBLITERATI IN UN PERIODO DI TEMPO
 
+    public List<Biglietto> getBigliettiObliteratiNelPeriodo(LocalDateTime inizio, LocalDateTime fine) {
+        if (inizio == null || fine == null) {
+            throw new IllegalArgumentException("Le date di inizio e fine non possono essere nulle.");
+        }
+
+        List<Biglietto> bigliettiTrovati = entityManager.createQuery(
+                        "FROM Biglietto WHERE obliterato BETWEEN :inizio AND :fine", Biglietto.class)
+                .setParameter("inizio", inizio)
+                .setParameter("fine", fine)
+                .getResultList();
+
+        if (bigliettiTrovati.isEmpty()) {
+            System.out.println("Nessun biglietto obliterato trovato nel periodo selezionato.");
+        }
+
+        return bigliettiTrovati;
+    }
+
 
 }
