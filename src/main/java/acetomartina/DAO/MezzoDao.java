@@ -7,7 +7,9 @@ import acetomartina.enums.StatoMezzo;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -106,7 +108,6 @@ public class MezzoDao {
     }
 
     // DATO UN MEZZO DEVE TORNARE I PERIODI DI ATTIVITA O MANTENZIONE
-    // QUI....
     public List<IntervalloDate> getPeriodiAttivita(Mezzo mezzo) {
         List<Manutenzione> listaManutenzioni = mezzo.getManutenzioni();
 
@@ -130,11 +131,9 @@ public class MezzoDao {
             LocalDate fineManutenzioneCorrente = manutenzioniOrdinate.get(i).getDataFine();
             LocalDate inizioManutenzioneSuccessiva = manutenzioniOrdinate.get(i + 1).getDataInizio();
 
-            // il giorno DOPO la fine, fino al giorno PRIMA del nuovo inizio
             LocalDate inizioOperativo = fineManutenzioneCorrente.plusDays(1);
             LocalDate fineOperativo = inizioManutenzioneSuccessiva.minusDays(1);
 
-            // c'è davvero un buco? (se le manutenzioni sono consecutive, no)
             if (!inizioOperativo.isAfter(fineOperativo)) {
                 periodiOperativi.add(new IntervalloDate(inizioOperativo, fineOperativo));
             }
@@ -149,14 +148,40 @@ public class MezzoDao {
 
 
     // METODO PER TROVARE TUTTI I BIGLIETTI OBLITERATI SU UN MEZZO
-    //QUI...
     public int getBigliettiObliterati(Mezzo mezzo) {
         List<Biglietto> bigliettiTrovati = entityManager.createQuery("from Biglietto where corsa.mezzo.mezzo_di_trasporto = :mezzoID and obliterato is not null", Biglietto.class).setParameter("mezzoID", mezzo.getMezzo_di_trasporto()).getResultList();
         return bigliettiTrovati.size();
     }
 
-    // NUMERO DI VOLTE CHE UN MEZZO PERCORRE UNA TRATTA E STAMPA PER OGNI TRATTA IL TEMPO DI PERCORRENZA EFFETTIVO
-    //QUI....
+    // NUMERO DI VOLTE CHE UN MEZZO PERCORRE UNA TRATTA
+    // STAMPA PER OGNI TRATTA IL TEMPO DI PERCORRENZA EFFETTIVO
+
+    public String getDurataCorsa (Corsa corsa){
+        Duration durataCorsa = Duration.between( corsa.getPartenza(),corsa.getArrivoEffettivo());
+        long ore = durataCorsa.toHours();
+        long minuti = durataCorsa.toMinutesPart();
+        return "%02d:%02d".formatted(ore, minuti);
+    }
+    public void getNumeroCorsePercorse(Mezzo mezzo) {
+        List<Corsa> corseTrovate = entityManager.createQuery(
+                        "SELECT c FROM Corsa c WHERE c.arrivoEffettivo < :params AND c.mezzo = :mezzo",
+                        Corsa.class)
+                .setParameter("params", LocalDateTime.now())
+                .setParameter("mezzo", mezzo)
+                .getResultList();
+
+        System.out.println("Le corse trovate sono : " + corseTrovate.size());
+        corseTrovate.forEach(corsa -> System.out.println("La durata della corsa è stata : " + getDurataCorsa(corsa)));
+    }
+
+
+
+
+
+
+
+
+
 
 
 }
