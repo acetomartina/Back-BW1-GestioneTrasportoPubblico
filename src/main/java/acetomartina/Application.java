@@ -242,6 +242,30 @@ public class Application {
 
         System.out.println("biglietti obliterati " + obliterati);
 
+        Corsa corsa11 = new Corsa(tratta1, autobus3, LocalDateTime.now().minusDays(2).withHour(8).withMinute(0));
+        Corsa corsa12 = new Corsa(tratta2, autobus1, LocalDateTime.now().minusDays(5).withHour(11).withMinute(0));
+        Corsa corsa13 = new Corsa(tratta3, autobus2, LocalDateTime.now().minusDays(6).withHour(17).withMinute(30));
+        Corsa corsa14 = new Corsa(tratta4, autobus3, LocalDateTime.now().minusDays(9).withHour(7).withMinute(48));
+        Corsa corsa15 = new Corsa(tratta5, autobus1, LocalDateTime.now().minusDays(8).withHour(19).withMinute(0));
+
+        corsaDao.save(corsa11);
+        corsaDao.save(corsa12);
+        corsaDao.save(corsa13);
+        corsaDao.save(corsa14);
+        corsaDao.save(corsa15);
+
+
+        mezzoDao.getNumeroCorsePercorse(autobus1);
+        corsa15.setRitardo(30);
+        mezzoDao.getNumeroCorsePercorse(autobus1);
+
+        //DAJE*2
+
+        AmminstratoreDAO amminstratoreDAO = new AmminstratoreDAO(entityManager);
+        amminstratoreDAO.getNumeroCorsePercorsePiuMedia(autobus1);
+
+
+
 
         System.out.println("Siamo connessi!");
     }
