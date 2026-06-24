@@ -11,14 +11,13 @@ import acetomartina.enums.TipoUtente;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
-import acetomartina.utils.DataSeeder;
+
 
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class Application {
     private static final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("gestione-trasporto-pubblico-pu");
@@ -31,50 +30,33 @@ public class Application {
         entityManager.getTransaction().commit();
     }
 
-
     public static void main(String[] args) {
 
         EntityManager entityManager = entityManagerFactory.createEntityManager();
 
         //DAO
 
-        UtenteDao utenteDAO = new UtenteDao(entityManager);
+        AbbonamentoDAO abbonamentoDAO = new AbbonamentoDAO(entityManager);
+        AmminstratoreDAO amminstratoreDAO = new AmminstratoreDAO(entityManager);
+        BigliettoDAO bigliettoDAO = new BigliettoDAO(entityManager);
+        CorsaDao corsaDao = new CorsaDao(entityManager);
+        ManutenzioneDAO manutenzioneDAO = new ManutenzioneDAO(entityManager);
         MezzoDao mezzoDao = new MezzoDao(entityManager);
         PuntoEmissioneDao puntoEmissioneDao = new PuntoEmissioneDao(entityManager);
         TesseraDao TesseraDao = new TesseraDao(entityManager);
         TitoloViaggioDao TitoloViaggioDao = new TitoloViaggioDao(entityManager);
         TrattaDao TrattaDao = new TrattaDao(entityManager);
+        UtenteDao utenteDAO = new UtenteDao(entityManager);
 
 
-        System.out.println("Distributori");
-        puntoEmissioneDao.findByTipo(TipoPuntoEmissione.RIVENDITORE).forEach(System.out::println);
 
 
-        //TEST UTENTE!!!! OK
-        Utente alessia = new Utente(TipoUtente.UTENTE, "Alessia", "Cotini", LocalDate.of(1997, 12, 29), "Roma");
-        utenteDAO.save(alessia);
 
-        Tessera tessera = new Tessera(LocalDate.now(),
-                alessia,
-                true);
-
-        puntoEmissioneDao.emettiTessera(tessera);
-        System.out.println("Tessera emessa: ");
-        System.out.println(tessera);
-
-        puntoEmissioneDao.rinnovaTessera(tessera.getId());
-        System.out.println("Tessera rinnovata: ");
-        System.out.println(tessera);
-
-
-//        TEST CORSA!!! OK
 
 
         Mezzo autobus1 = new Mezzo(LocalDate.now().minusDays(13), TipoMezzo.AUTOBUS);
         Mezzo autobus2 = new Mezzo(LocalDate.now().minusDays(25), TipoMezzo.AUTOBUS);
         Mezzo autobus3 = new Mezzo(LocalDate.now().minusDays(5), TipoMezzo.AUTOBUS);
-
-//         3 tram
         Mezzo tram1 = new Mezzo(LocalDate.now().minusDays(45), TipoMezzo.TRAM);
         Mezzo tram2 = new Mezzo(LocalDate.now().minusDays(120), TipoMezzo.TRAM);
         Mezzo tram3 = new Mezzo(LocalDate.now().minusDays(75), TipoMezzo.TRAM);
@@ -82,14 +64,11 @@ public class Application {
         List<Mezzo> mezzi = new ArrayList<>(List.of(autobus1, autobus2, autobus3, tram1, tram2, tram3));
         salvaLista(mezzi);
 
-//         5 tratte intercity (esempio bus/treno tra cittÃ  italiane)
         Tratta tratta1 = new Tratta("Roma", "Napoli", Duration.ofHours(2));
         Tratta tratta2 = new Tratta("Milano", "Torino", Duration.ofHours(1).plusMinutes(30));
         Tratta tratta3 = new Tratta("Firenze", "Bologna", Duration.ofHours(1));
         Tratta tratta4 = new Tratta("Bari", "Lecce", Duration.ofHours(1).plusMinutes(30));
         Tratta tratta5 = new Tratta("Venezia", "Verona", Duration.ofHours(1).plusMinutes(15));
-
-//         5 tratte tram urbane (esempio rete tram di Roma)
         Tratta trattaTram1 = new Tratta("Termini", "Trastevere", Duration.ofMinutes(20));
         Tratta trattaTram2 = new Tratta("Piazza Risorgimento", "Piazza Mancini", Duration.ofMinutes(15));
         Tratta trattaTram3 = new Tratta("Porta Maggiore", "Centocelle", Duration.ofMinutes(25));
@@ -99,7 +78,6 @@ public class Application {
         List<Tratta> lista = new ArrayList<>(List.of(tratta1, tratta2, tratta3, tratta4, tratta5, trattaTram1, trattaTram2, trattaTram3, trattaTram4, trattaTram5));
         salvaLista(lista);
 
-//         10 corse nazionali, distribuite sui 3 autobus
         Corsa corsa1 = new Corsa(tratta1, autobus1, LocalDateTime.now().plusDays(2));
         Corsa corsa2 = new Corsa(tratta2, autobus2, LocalDateTime.now().plusDays(2).withHour(9).withMinute(30));
         Corsa corsa3 = new Corsa(tratta3, autobus3, LocalDateTime.now().plusDays(2).withHour(11).withMinute(0));
@@ -110,8 +88,6 @@ public class Application {
         Corsa corsa8 = new Corsa(tratta3, autobus2, LocalDateTime.now().plusDays(3).withHour(12).withMinute(30));
         Corsa corsa9 = new Corsa(tratta4, autobus3, LocalDateTime.now().plusDays(4).withHour(7).withMinute(45));
         Corsa corsa10 = new Corsa(tratta5, autobus1, LocalDateTime.now().plusDays(4).withHour(16).withMinute(0));
-
-// 5 corse tram, distribuite sui 3 tram
         Corsa corsaTram1 = new Corsa(trattaTram1, tram1, LocalDateTime.now().plusHours(1));
         Corsa corsaTram2 = new Corsa(trattaTram2, tram2, LocalDateTime.now().plusHours(1).plusMinutes(20));
         Corsa corsaTram3 = new Corsa(trattaTram3, tram3, LocalDateTime.now().plusHours(2));
@@ -120,7 +96,6 @@ public class Application {
 
         List<Corsa> listaCorse = new ArrayList<>(List.of(corsa1, corsa2, corsa3, corsa4, corsa5, corsa6, corsa7, corsa8, corsa9, corsa10, corsaTram1, corsaTram2, corsaTram3, corsaTram4, corsaTram5));
         salvaLista(listaCorse);
-
 
         PuntoEmissione puntoEmissione1 = new PuntoEmissione(TipoPuntoEmissione.DISTRIBUTORE, true);
         PuntoEmissione puntoEmissione2 = new PuntoEmissione(TipoPuntoEmissione.DISTRIBUTORE, false);
@@ -182,7 +157,6 @@ public class Application {
 
         salvaLista(biglietti);
 
-
         Manutenzione manutenzione1 = new Manutenzione(LocalDate.now().plusDays(20), LocalDate.now().plusDays(27), autobus1, acetomartina.enom.StatoManutenzione.PROGRAMMATA);
         Manutenzione manutenzione2 = new Manutenzione(LocalDate.now().minusDays(5), LocalDate.now().plusDays(2), autobus2, acetomartina.enom.StatoManutenzione.IN_CORSO);
         Manutenzione manutenzione3 = new Manutenzione(LocalDate.now().minusDays(30), LocalDate.now().minusDays(25), autobus3, acetomartina.enom.StatoManutenzione.ESEGUITA);
@@ -208,39 +182,6 @@ public class Application {
 
         salvaLista(manutenzioni);
 
-//        BigliettoDAO bigliettoDAO = new BigliettoDAO(entityManager);
-//        bigliettoDAO.obliteraBiglietto(biglietto3);
-//        bigliettoDAO.obliteraBiglietto(biglietto3);
-
-        CorsaDao corsaDao = new CorsaDao(entityManager);
-        Corsa corsaTrovata = corsaDao.getById(corsa6.getId());
-
-//        Mezzo mezzoTrovato = mezzoDao.getById(UUID.fromString("d83c1fbb-ebae-4082-83bb-3095e9dfaba2"));
-
-        ManutenzioneDAO manutenzioneDAO = new ManutenzioneDAO(entityManager);
-
-        Manutenzione manutenzioneTrovata = manutenzioneDAO.getById(manutenzione3.getId_Manutenzione());
-
-        //FUNZIONA
-        //puntoEmissioneDao.emettiESalvaBiglietto(puntoEmissione2, corsaTrovata);
-
-        //FUNZIONA
-//        mezzoDao.aggiungiCorsa(corsaTrovata, mezzoTrovato);
-
-        // FUNZIONA
-//        mezzoDao.aggiungiManutenzione(manutenzioneTrovata, mezzoTrovato);
-
-        BigliettoDAO bigliettoDAO = new BigliettoDAO(entityManager);
-
-        bigliettoDAO.obliteraBiglietto(biglietto5);
-
-        bigliettoDAO.obliteraBiglietto(biglietto4);
-        bigliettoDAO.obliteraBiglietto(biglietto3);
-
-
-        int obliterati = mezzoDao.getBigliettiObliterati(autobus1);
-
-        System.out.println("biglietti obliterati " + obliterati);
 
         Corsa corsa11 = new Corsa(tratta1, autobus3, LocalDateTime.now().minusDays(2).withHour(8).withMinute(0));
         Corsa corsa12 = new Corsa(tratta2, autobus1, LocalDateTime.now().minusDays(5).withHour(11).withMinute(0));
@@ -255,14 +196,6 @@ public class Application {
         corsaDao.save(corsa15);
 
 
-        mezzoDao.getNumeroCorsePercorse(autobus1);
-        corsa15.setRitardo(30);
-        mezzoDao.getNumeroCorsePercorse(autobus1);
-
-        //DAJE*2
-
-        AmminstratoreDAO amminstratoreDAO = new AmminstratoreDAO(entityManager);
-        amminstratoreDAO.getNumeroCorsePercorsePiuMedia(autobus1);
 
 
 
