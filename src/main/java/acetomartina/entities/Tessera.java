@@ -35,7 +35,7 @@ public class Tessera {
     @JoinColumn(name = "utente_id", unique = true)
     private Utente utente;
 
-    @OneToMany(mappedBy = "tessera_id")
+    @OneToMany(mappedBy = "tessera")
     private List<Abbonamento> abbonamenti;
 
     @Column(name = "tessera_attiva")

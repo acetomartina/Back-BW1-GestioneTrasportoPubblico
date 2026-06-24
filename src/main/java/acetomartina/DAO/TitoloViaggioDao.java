@@ -1,5 +1,6 @@
 package acetomartina.DAO;
 
+import acetomartina.entities.Abbonamento;
 import acetomartina.entities.Biglietto;
 
 import acetomartina.entities.TitoloViaggio;
@@ -21,13 +22,13 @@ public class TitoloViaggioDao {
     }
 
     // SALVO
-    public void save(TitoloViaggio titoloViaggio){
+    public void save(TitoloViaggio titoloViaggio) {
         EntityTransaction transazione = this.entityManager.getTransaction();
         try {
             transazione.begin();
             this.entityManager.persist(titoloViaggio);
             transazione.commit();
-            System.out.println("Il titolo di viaggio numero "+ titoloViaggio.getCodiceUnivoco() + " è stato aggiunto al DATABASE");
+            System.out.println("Il titolo di viaggio numero " + titoloViaggio.getCodiceUnivoco() + " è stato aggiunto al DATABASE");
         } catch (Exception e) {
             if (transazione.isActive()) transazione.rollback();
             throw new RuntimeException("Errore durante il salvataggio del titolo di viaggio : " + e.getMessage());
@@ -35,89 +36,45 @@ public class TitoloViaggioDao {
     }
 
     //CERCO PER ID
-
-    public TitoloViaggio findById(UUID id){
+    public TitoloViaggio findById(UUID id) {
         TitoloViaggio fromDB = this.entityManager.find(TitoloViaggio.class, id);
         if (fromDB == null) throw new RuntimeException(" utente non trovato nel database.");
         return fromDB;
     }
 
     //RIMUOVO TRAMITE ID
-
-    public void deleteFromDb (UUID id){
+    public void deleteFromDb(UUID id) {
         TitoloViaggio fromDB = this.findById(id);
         if (fromDB == null) throw new RuntimeException(" id non trovato nel database.");
         EntityTransaction transaction = this.entityManager.getTransaction();
         transaction.begin();
         this.entityManager.remove(fromDB);
         transaction.commit();
-        System.out.println("Il titolo di viaggio "+ fromDB.getCodiceUnivoco()+" è stato eliminato dal database");
-
+        System.out.println("Il titolo di viaggio " + fromDB.getCodiceUnivoco() + " è stato eliminato dal database");
     }
 
-    // VALIDITA' BIGLIETTO
-    public boolean checkValidity(Biglietto biglietto){
-        Biglietto fromDB = (Biglietto) this.findById(biglietto.getId());
-        if (!fromDB.isObliterato()) {
-            return true;
+    // VERIFICA VALIDITA
+    public boolean verificaValidita(TitoloViaggio titoloViaggio) {
+        if (titoloViaggio instanceof Biglietto) {
+            if (((Biglietto) titoloViaggio).isValido()) {
+                System.out.println("Il biglietto è valido!");
+                return true;
+            } else {
+                System.out.println("Il biglietto è gia scaduto!");
+                return false;
+            }
         }
-        if (fromDB.getScadenza() != null && LocalDateTime.now().isBefore(fromDB.getScadenza())) {
-            return true;
-        }
-        return false;
-    }
-
-    // CONVALIDO IL BIGLIETTO
-    public Biglietto convalidateFromDb (Biglietto biglietto){
-        Biglietto fromDB = (Biglietto) this.findById(biglietto.getId());
-
-        if (fromDB.isObliterato()) {
-            System.out.println("Biglietto già utilizzato! Scadeva il: " + fromDB.getScadenza());
-            return fromDB;
-        }
-
-        EntityTransaction transaction = this.entityManager.getTransaction();
-        try {
-            transaction.begin();
-            fromDB.setObliterato(true);
-            fromDB.setScadenza(LocalDateTime.now().plusMinutes(90));
-            this.entityManager.merge(fromDB);
-            transaction.commit();
-            System.out.println("Biglietto convalidato con successo. Scadenza: " + fromDB.getScadenza());
-        } catch (Exception e) {
-            if (transaction.isActive()) transaction.rollback();
-            throw new RuntimeException("Errore durante la convalida: " + e.getMessage());
-        }
-
-        return fromDB;
-    }
-
-    // CERCO PER VALIDITA'
-    public Biglietto findByValidity (Biglietto biglietto){
-        Biglietto fromDB = (Biglietto) this.findById(biglietto.getId());
-        if (fromDB.isObliterato()) {
-            System.out.println("Biglietto timbrato. Data emissione: " + fromDB.getDataEmissione());
+        if (titoloViaggio instanceof Abbonamento) {
+            if (((Abbonamento) titoloViaggio).isValido()) {
+                System.out.println("L'abbonamento è valido!");
+                return true;
+            } else {
+                System.out.println("L'abbonamento è scaduto!");
+                return false;
+            }
         } else {
-            System.out.println("Biglietto non timbrato");
+            return false;
         }
-        return fromDB;
-    }
-
-    //LISTA BIGLIETTI VALIDATI
-
-    public List<Biglietto> getAllValidateTickets (boolean yes){
-        TypedQuery<Biglietto> query = entityManager.createQuery("SELECT b FROM Biglietto b WHERE b.obliterato is true", Biglietto.class);
-        return query.getResultList();
-    }
-
-    //LISTA BIGLIETTI VALIDATI PER MEZZO
-    public List<Biglietto> getValidateForMezzo(UUID mezzo_id) {
-        TypedQuery<Biglietto> query = entityManager.createQuery(
-                "SELECT b FROM Biglietto b WHERE b.obliterato = true AND b.mezzo_id = :mezzoId",
-                Biglietto.class
-        );
-        query.setParameter("mezzoId", mezzo_id);
-        return query.getResultList();
     }
 }
 

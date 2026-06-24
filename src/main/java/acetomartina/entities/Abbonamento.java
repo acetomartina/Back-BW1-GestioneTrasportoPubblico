@@ -17,27 +17,35 @@ public class Abbonamento extends TitoloViaggio {
 
     @ManyToOne
     @JoinColumn(name = "numero_tessera")
-    private Tessera tessera_id;
+    private Tessera tessera;
 
     @Column(name = "data_scadenza", nullable = false)
     private LocalDate dataScadenza;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private PeriodicitàAbbonamento periodicita;
 
-    @Column(name = "validità", nullable = false)
-    private boolean validità;
 
+    protected Abbonamento() {
+    }
 
-    protected Abbonamento(){}
-
-    public Abbonamento(Tessera tessera_id,LocalDate dataScadenza,PeriodicitàAbbonamento periodicita,boolean validità){
-        this.tessera_id= tessera_id;
-        this.dataScadenza= dataScadenza;
+    public Abbonamento(LocalDate dataEmissione, PuntoEmissione puntoEmissione, Tessera tessera_id, PeriodicitàAbbonamento periodicita) {
+        super(dataEmissione, puntoEmissione);
+        this.tessera = tessera_id;
         this.periodicita = periodicita;
-        this.validità = validità;
+        switch (periodicita) {
+            case SETTIMANALE -> this.dataScadenza = dataEmissione.plusWeeks(1);
+            case MENSILE -> this.dataScadenza = dataEmissione.plusMonths(1);
+            default -> throw new IllegalArgumentException("Periodicità non gestita: " + periodicita);
+        }
         counter++;
     }
+
+    public boolean isValido() {
+        return !LocalDate.now().isAfter(this.dataScadenza);
+    }
+
     @PrePersist
     public void generaNumeroAbbonamento() {
         if (this.numero_abbonamento == null) {
@@ -48,14 +56,6 @@ public class Abbonamento extends TitoloViaggio {
         }
     }
 
-    public String getNumero_abbonamento() {
-        return numero_abbonamento;
-    }
-
-    public void setNumero_abbonamento(String numero_abbonamento) {
-        this.numero_abbonamento = numero_abbonamento;
-    }
-
     public static int getCounter() {
         return counter;
     }
@@ -64,12 +64,20 @@ public class Abbonamento extends TitoloViaggio {
         Abbonamento.counter = counter;
     }
 
+    public String getNumero_abbonamento() {
+        return numero_abbonamento;
+    }
+
+    public void setNumero_abbonamento(String numero_abbonamento) {
+        this.numero_abbonamento = numero_abbonamento;
+    }
+
     public Tessera getTessera_id() {
-        return tessera_id;
+        return tessera;
     }
 
     public void setTessera_id(Tessera tessera_id) {
-        this.tessera_id = tessera_id;
+        this.tessera = tessera_id;
     }
 
     public LocalDate getDataScadenza() {
@@ -88,22 +96,13 @@ public class Abbonamento extends TitoloViaggio {
         this.periodicita = periodicita;
     }
 
-    public boolean isValidità() {
-        return validità;
-    }
-
-    public void setValidità(boolean validità) {
-        this.validità = validità;
-    }
-
     @Override
     public String toString() {
         return "Abbonamento{" +
                 "numero_abbonamento='" + numero_abbonamento + '\'' +
-                ", tessera_id=" + tessera_id +
+                ", tessera_id=" + tessera +
                 ", dataScadenza=" + dataScadenza +
                 ", periodicita=" + periodicita +
-                ", validità=" + validità +
-                '}';
+                "} " + super.toString();
     }
 }
