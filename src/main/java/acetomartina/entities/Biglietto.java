@@ -1,6 +1,6 @@
 package acetomartina.entities;
 
-import acetomartina.enom.TipoBiglietto;
+import acetomartina.enums.TipoBiglietto;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -28,6 +28,10 @@ public class Biglietto extends TitoloViaggio {
 
     @Column(name = "scadenza")
     private LocalDateTime scadenza;
+
+    @ManyToOne
+    @JoinColumn(name = "mezzo_id")
+    private Mezzo mezzo_id;
 
 
     public Biglietto() {

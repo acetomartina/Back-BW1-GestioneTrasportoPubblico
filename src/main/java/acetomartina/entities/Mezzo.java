@@ -1,7 +1,7 @@
 package acetomartina.entities;
 
-import acetomartina.enom.StatoMezzo;
-import acetomartina.enom.TipoMezzo;
+import acetomartina.enums.StatoMezzo;
+import acetomartina.enums.TipoMezzo;
 import jakarta.persistence.*;
 
 import java.security.SecureRandom;
@@ -33,7 +33,7 @@ public class Mezzo {
     @Column(name = "stato_mezzo")
     private StatoMezzo stato_mezzo;
 
-    @OneToMany(mappedBy = "corsa")
+    @OneToMany(mappedBy = "mezzo")
     private List<Corsa> corse;
 
     @PrePersist
@@ -49,8 +49,8 @@ public class Mezzo {
     protected Mezzo() {
     }
 
+
     public Mezzo(LocalDate data_emissione_mezzo, TipoMezzo tipo_mezzo, StatoMezzo stato_mezzo) {
-        this.data_emissione_mezzo = data_emissione_mezzo;
         this.tipo_mezzo = tipo_mezzo;
         this.passeggeri_max = tipo_mezzo.getCapienzaMassima();
         this.stato_mezzo = stato_mezzo;
@@ -100,7 +100,6 @@ public class Mezzo {
         return "Mezzo{" +
                 "mezzo_di_trasporto=" + mezzo_di_trasporto +
                 ", numero_mezzo='" + numero_mezzo + '\'' +
-                ", data_emissione_mezzo=" + data_emissione_mezzo +
                 ", tipo_mezzo=" + tipo_mezzo +
                 ", passeggeri_max=" + passeggeri_max +
                 ", stato_mezzo=" + stato_mezzo +

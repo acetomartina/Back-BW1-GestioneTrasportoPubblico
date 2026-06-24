@@ -2,6 +2,7 @@ package acetomartina.entities;
 
 import jakarta.persistence.*;
 
+import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -15,6 +16,14 @@ public class Tessera {
 
     @Column(name = "numero_tessera",unique = true)
     private int numeroTessera;
+
+    @PrePersist
+    public void generaNumeroTessera(){
+        if(this.numeroTessera == 0){
+            SecureRandom random = new SecureRandom();
+            this.numeroTessera = random.nextInt(900000) + 100000;
+        }
+    }
 
     @Column(name = "data_emissione", nullable = false)
     private LocalDate dataEmissione;
@@ -36,7 +45,7 @@ public class Tessera {
 
     }
 
-    public Tessera(LocalDate dataEmissione, LocalDate dataScadenza, Utente utente, boolean tessera_attiva){
+    public Tessera(LocalDate dataEmissione, Utente utente, boolean tessera_attiva){
         this.dataEmissione = dataEmissione;
         this.dataScadenza = dataEmissione.plusYears(1);
         this.utente = utente;
@@ -68,7 +77,7 @@ public class Tessera {
     }
 
     public void setId(Long id) {
-        this.tessera_id = tessera_id;
+        this.tessera_id = id;
     }
 
     public void setDataEmissione(LocalDate dataEmissione) {

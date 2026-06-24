@@ -1,20 +1,16 @@
 package acetomartina;
 
 import acetomartina.DAO.*;
-import acetomartina.enom.TipoMezzo;
-import acetomartina.enom.TipoPuntoEmissione;
-import acetomartina.enom.TipoUtente;
-import acetomartina.entities.*;
+import acetomartina.entities.Tessera;
+import acetomartina.entities.Utente;
+import acetomartina.enums.TipoPuntoEmissione;
+import acetomartina.enums.TipoUtente;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
+import acetomartina.utils.DataSeeder;
 
-import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 public class Application {
     private static final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("gestione-trasporto-pubblico-pu");
@@ -30,7 +26,8 @@ public class Application {
 
 
     public static void main(String[] args) {
-        //EntityManager entityManager = entityManagerFactory.createEntityManager();
+
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
 
         //DAO
 
@@ -41,9 +38,28 @@ public class Application {
         TitoloViaggioDao TitoloViaggioDao = new TitoloViaggioDao(entityManager);
         TrattaDao TrattaDao = new TrattaDao(entityManager);
 
+
+        System.out.println("Distributori");
+        puntoEmissioneDao.findByTipo(TipoPuntoEmissione.RIVENDITORE).forEach(System.out::println);
+
+
+
+
         //TEST UTENTE!!!! OK
-        //Utente alessia = new Utente(TipoUtente.UTENTE, "Alessia","Cotini", LocalDate.of(1997,12,29), "Roma");
-        //utenteDAO.save(alessia);
+        Utente alessia = new Utente(TipoUtente.UTENTE, "Alessia","Cotini", LocalDate.of(1997,12,29), "Roma");
+        utenteDAO.save(alessia);
+
+        Tessera tessera = new Tessera(LocalDate.now(),
+                alessia,
+                true);
+
+        puntoEmissioneDao.emettiTessera(tessera);
+        System.out.println("Tessera emessa: ");
+        System.out.println(tessera);
+
+        puntoEmissioneDao.rinnovaTessera(tessera.getId());
+        System.out.println("Tessera rinnovata: ");
+        System.out.println(tessera);
 
 
         //TEST CORSA!!! OK
@@ -110,12 +126,6 @@ public class Application {
         //List<Biglietto> listaCorsa3 = entityManager.createQuery("from Biglietto where corsa.id = :param", Biglietto.class).setParameter("param", corsa3.getId()).getResultList();
 
         //listaCorsa3.forEach(biglietto -> System.out.println(biglietto));
-
-        System.out.println("ciao belli ");
-
-
-
-
 
 
         System.out.println("Siamo connessi!");

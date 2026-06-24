@@ -1,6 +1,6 @@
 package acetomartina.entities;
 
-import acetomartina.enom.TipoUtente;
+import acetomartina.enums.TipoUtente;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -30,7 +30,7 @@ public class Utente {
   @Column(name = "luogo_nascita")
     private String luogo_nascita;
 
-   @OneToOne(mappedBy = "tessera")
+   @OneToOne(mappedBy = "utente")
     private Tessera tessera;
 
   protected Utente(){}

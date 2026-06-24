@@ -1,11 +1,15 @@
 package acetomartina.DAO;
 
 import acetomartina.entities.Biglietto;
+
 import acetomartina.entities.TitoloViaggio;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.TypedQuery;
+
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 public class TitoloViaggioDao {
@@ -54,18 +58,13 @@ public class TitoloViaggioDao {
     // VALIDITA' BIGLIETTO
     public boolean checkValidity(Biglietto biglietto){
         Biglietto fromDB = (Biglietto) this.findById(biglietto.getId());
-
-        // Se non è obliterato è valido (non è ancora stato usato)
         if (!fromDB.isObliterato()) {
             return true;
         }
-
-        // Se è obliterato, controlliamo se è scaduto rispetto all'ora attuale
         if (fromDB.getScadenza() != null && LocalDateTime.now().isBefore(fromDB.getScadenza())) {
-            return true; // È obliterato ma non ancora scaduto
+            return true;
         }
-
-        return false; // Scaduto
+        return false;
     }
 
     // CONVALIDO IL BIGLIETTO
@@ -102,6 +101,23 @@ public class TitoloViaggioDao {
             System.out.println("Biglietto non timbrato");
         }
         return fromDB;
+    }
+
+    //LISTA BIGLIETTI VALIDATI
+
+    public List<Biglietto> getAllValidateTickets (boolean yes){
+        TypedQuery<Biglietto> query = entityManager.createQuery("SELECT b FROM Biglietto b WHERE b.obliterato is true", Biglietto.class);
+        return query.getResultList();
+    }
+
+    //LISTA BIGLIETTI VALIDATI PER MEZZO
+    public List<Biglietto> getValidateForMezzo(UUID mezzo_id) {
+        TypedQuery<Biglietto> query = entityManager.createQuery(
+                "SELECT b FROM Biglietto b WHERE b.obliterato = true AND b.mezzo_id = :mezzoId",
+                Biglietto.class
+        );
+        query.setParameter("mezzoId", mezzo_id);
+        return query.getResultList();
     }
 }
 
