@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 
 import java.security.SecureRandom;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,6 +21,9 @@ public class Mezzo {
 
     @Column(name = "numero_mezzo")
     private String numero_mezzo;
+
+    @Column(name = "data_emissione")
+    private LocalDate dataEmissione;
 
 
     @Enumerated(EnumType.STRING)
@@ -37,7 +41,7 @@ public class Mezzo {
     private List<Corsa> corse;
 
     @OneToMany(mappedBy = "mezzo")
-    private List<Manutenzione> manutanzioni;
+    private List<Manutenzione> manutenzioni;
 
     @PrePersist
     public void generaNumeroMezzo() {
@@ -52,7 +56,8 @@ public class Mezzo {
     protected Mezzo() {
     }
 
-    public Mezzo(TipoMezzo tipo_mezzo) {
+    public Mezzo(LocalDate dataEmissione, TipoMezzo tipo_mezzo) {
+        this.dataEmissione = dataEmissione;
         this.tipo_mezzo = tipo_mezzo;
         this.passeggeri_max = tipo_mezzo.getCapienzaMassima();
         this.stato_mezzo = StatoMezzo.ATTIVO;
@@ -62,26 +67,28 @@ public class Mezzo {
         return mezzo_di_trasporto;
     }
 
+    public void setMezzo_di_trasporto(UUID mezzo_di_trasporto) {
+        this.mezzo_di_trasporto = mezzo_di_trasporto;
+    }
+
     public String getNumero_mezzo() {
         return numero_mezzo;
-    }
-
-
-    public TipoMezzo getTipo_mezzo() {
-        return tipo_mezzo;
-    }
-
-    public int getPasseggeri_max() {
-        return passeggeri_max;
     }
 
     public void setNumero_mezzo(String numero_mezzo) {
         this.numero_mezzo = numero_mezzo;
     }
 
+    public TipoMezzo getTipo_mezzo() {
+        return tipo_mezzo;
+    }
 
     public void setTipo_mezzo(TipoMezzo tipo_mezzo) {
         this.tipo_mezzo = tipo_mezzo;
+    }
+
+    public int getPasseggeri_max() {
+        return passeggeri_max;
     }
 
     public void setPasseggeri_max(int passeggeri_max) {
@@ -94,6 +101,30 @@ public class Mezzo {
 
     public void setStato_mezzo(StatoMezzo stato_mezzo) {
         this.stato_mezzo = stato_mezzo;
+    }
+
+    public List<Corsa> getCorse() {
+        return corse;
+    }
+
+    public void setCorse(Corsa corsa) {
+        this.corse.add(corsa);
+    }
+
+    public List<Manutenzione> getManutenzioni() {
+        return manutenzioni;
+    }
+
+    public void setManutenzioni(Manutenzione manutenzione) {
+        this.manutenzioni.add(manutenzione);
+    }
+
+    public LocalDate getDataEmissione() {
+        return dataEmissione;
+    }
+
+    public void setDataEmissione(LocalDate dataEmissione) {
+        this.dataEmissione = dataEmissione;
     }
 
     @Override

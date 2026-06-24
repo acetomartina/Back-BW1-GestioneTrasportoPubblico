@@ -1,13 +1,15 @@
 package acetomartina.DAO;
 
+import acetomartina.Exceptions.NonTrovatoEccezzione;
+import acetomartina.entities.*;
 import acetomartina.enums.StatoMezzo;
-import acetomartina.entities.Manutenzione;
-import acetomartina.entities.Mezzo;
 
-import acetomartina.entities.TitoloViaggio;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -36,7 +38,7 @@ public class MezzoDao {
     }
     //CERCO PER ID
 
-    public Mezzo findMezzoById(UUID id){
+    public Mezzo findMezzoById(UUID id) {
         Mezzo fromDB = this.entityManager.find(Mezzo.class, id);
         if (fromDB == null) throw new RuntimeException(" mezzo non trovato nel database.");
         return fromDB;
@@ -79,10 +81,82 @@ public class MezzoDao {
         }
     }
 
-//    // AGGIUNGE MANUTANZIONE
-//    public void aggiungiManutenzione(Manutenzione manutenzione){
-//
-//
-//    }
+    // AGGIUNGE MANUTANZIONE
+    public void aggiungiManutenzione(Manutenzione manutenzione, Mezzo mezzo) {
+        try {
+            mezzo.setManutenzioni(manutenzione);
+            System.out.println("Manutenzione aggiunta!");
+        } catch (NonTrovatoEccezzione e) {
+            throw new RuntimeException("Errore nella programazione della manutenzione!");
+        } catch (Exception e) {
+            throw new RuntimeException("Errore eccezzionale!", e);
+        }
+    }
+
+    //AGGIUNGE UNA CORSA AL MEZZO
+    public void aggiungiCorsa(Corsa corsa, Mezzo mezzo) {
+        try {
+            mezzo.setCorse(corsa);
+            System.out.println("Corsa aggiunta!");
+        } catch (NonTrovatoEccezzione e) {
+            throw new RuntimeException("Errore nell'aggiunta della corsa!");
+        } catch (Exception e) {
+            throw new RuntimeException("Errore eccezzionale!", e);
+        }
+    }
+
+    // DATO UN MEZZO DEVE TORNARE I PERIODI DI ATTIVITA O MANTENZIONE
+    // QUI....
+    public List<IntervalloDate> getPeriodiAttivita(Mezzo mezzo) {
+        List<Manutenzione> listaManutenzioni = mezzo.getManutenzioni();
+
+        if (listaManutenzioni == null || listaManutenzioni.isEmpty()) {
+            System.out.println("Il mezzo non ha ancora alcuna effettuato nessuna manutanzione");
+            return List.of();
+        }
+
+        List<Manutenzione> manutenzioniOrdinate = listaManutenzioni.stream().sorted(Comparator.comparing(Manutenzione::getDataInizio)).toList();
+
+        List<IntervalloDate> periodiOperativi = new ArrayList<>();
+
+        LocalDate inizioPrimo = mezzo.getDataEmissione();
+        LocalDate finePrimo = manutenzioniOrdinate.get(0).getDataInizio().minusDays(1);
+        if (!inizioPrimo.isAfter(finePrimo)) {
+            periodiOperativi.add(new IntervalloDate(inizioPrimo, finePrimo));
+        }
+
+
+        for (int i = 0; i < manutenzioniOrdinate.size() - 1; i++) {
+            LocalDate fineManutenzioneCorrente = manutenzioniOrdinate.get(i).getDataFine();
+            LocalDate inizioManutenzioneSuccessiva = manutenzioniOrdinate.get(i + 1).getDataInizio();
+
+            // il giorno DOPO la fine, fino al giorno PRIMA del nuovo inizio
+            LocalDate inizioOperativo = fineManutenzioneCorrente.plusDays(1);
+            LocalDate fineOperativo = inizioManutenzioneSuccessiva.minusDays(1);
+
+            // c'è davvero un buco? (se le manutenzioni sono consecutive, no)
+            if (!inizioOperativo.isAfter(fineOperativo)) {
+                periodiOperativi.add(new IntervalloDate(inizioOperativo, fineOperativo));
+            }
+        }
+
+        LocalDate ultimaManutenzione = manutenzioniOrdinate.getLast().getDataFine().plusDays(1);
+        if (!ultimaManutenzione.isAfter(LocalDate.now())) {
+            periodiOperativi.add(new IntervalloDate(ultimaManutenzione, LocalDate.now()));
+        }
+        return periodiOperativi;
+    }
+
+
+    // METODO PER TROVARE TUTTI I BIGLIETTI OBLITERATI SU UN MEZZO
+    //QUI...
+    public int getBigliettiObliterati(Mezzo mezzo) {
+        List<Biglietto> bigliettiTrovati = entityManager.createQuery("from Biglietto where corsa.mezzo.mezzo_di_trasporto = :mezzoID and obliterato is not null", Biglietto.class).setParameter("mezzoID", mezzo.getMezzo_di_trasporto()).getResultList();
+        return bigliettiTrovati.size();
+    }
+
+    // NUMERO DI VOLTE CHE UN MEZZO PERCORRE UNA TRATTA E STAMPA PER OGNI TRATTA IL TEMPO DI PERCORRENZA EFFETTIVO
+    //QUI....
+
 
 }

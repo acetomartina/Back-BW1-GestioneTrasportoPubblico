@@ -15,6 +15,10 @@ public class CorsaDao {
         this.entityManager = entityManager;
     }
 
+    public Corsa getById(UUID id) {
+        return entityManager.find(Corsa.class, id);
+    }
+
     // SALVO
     public void save(Corsa corsa) {
         EntityTransaction transazione = this.entityManager.getTransaction();
@@ -29,7 +33,7 @@ public class CorsaDao {
         }
     }
 
-    public Corsa getById(UUID id) {
-        return entityManager.find(Corsa.class, id);
-    }
+
+
+
 }

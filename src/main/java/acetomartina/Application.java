@@ -18,6 +18,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class Application {
     private static final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("gestione-trasporto-pubblico-pu");
@@ -68,14 +69,15 @@ public class Application {
 
 //        TEST CORSA!!! OK
 
-        Mezzo autobus1 = new Mezzo(TipoMezzo.AUTOBUS);
-        Mezzo autobus2 = new Mezzo(TipoMezzo.AUTOBUS);
-        Mezzo autobus3 = new Mezzo(TipoMezzo.AUTOBUS);
+
+        Mezzo autobus1 = new Mezzo(LocalDate.now().minusDays(13), TipoMezzo.AUTOBUS);
+        Mezzo autobus2 = new Mezzo(LocalDate.now().minusDays(25), TipoMezzo.AUTOBUS);
+        Mezzo autobus3 = new Mezzo(LocalDate.now().minusDays(5), TipoMezzo.AUTOBUS);
 
 //         3 tram
-        Mezzo tram1 = new Mezzo(TipoMezzo.TRAM);
-        Mezzo tram2 = new Mezzo(TipoMezzo.TRAM);
-        Mezzo tram3 = new Mezzo(TipoMezzo.TRAM);
+        Mezzo tram1 = new Mezzo(LocalDate.now().minusDays(45), TipoMezzo.TRAM);
+        Mezzo tram2 = new Mezzo(LocalDate.now().minusDays(120), TipoMezzo.TRAM);
+        Mezzo tram3 = new Mezzo(LocalDate.now().minusDays(75), TipoMezzo.TRAM);
 
         List<Mezzo> mezzi = new ArrayList<>(List.of(autobus1, autobus2, autobus3, tram1, tram2, tram3));
         salvaLista(mezzi);
@@ -213,7 +215,32 @@ public class Application {
         CorsaDao corsaDao = new CorsaDao(entityManager);
         Corsa corsaTrovata = corsaDao.getById(corsa6.getId());
 
-        puntoEmissioneDao.emettiESalvaBiglietto(puntoEmissione2, corsaTrovata);
+//        Mezzo mezzoTrovato = mezzoDao.getById(UUID.fromString("d83c1fbb-ebae-4082-83bb-3095e9dfaba2"));
+
+        ManutenzioneDAO manutenzioneDAO = new ManutenzioneDAO(entityManager);
+
+        Manutenzione manutenzioneTrovata = manutenzioneDAO.getById(manutenzione3.getId_Manutenzione());
+
+        //FUNZIONA
+        //puntoEmissioneDao.emettiESalvaBiglietto(puntoEmissione2, corsaTrovata);
+
+        //FUNZIONA
+//        mezzoDao.aggiungiCorsa(corsaTrovata, mezzoTrovato);
+
+        // FUNZIONA
+//        mezzoDao.aggiungiManutenzione(manutenzioneTrovata, mezzoTrovato);
+
+        BigliettoDAO bigliettoDAO = new BigliettoDAO(entityManager);
+
+        bigliettoDAO.obliteraBiglietto(biglietto5);
+
+        bigliettoDAO.obliteraBiglietto(biglietto4);
+        bigliettoDAO.obliteraBiglietto(biglietto3);
+
+
+        int obliterati = mezzoDao.getBigliettiObliterati(autobus1);
+
+        System.out.println("biglietti obliterati " + obliterati);
 
 
         System.out.println("Siamo connessi!");

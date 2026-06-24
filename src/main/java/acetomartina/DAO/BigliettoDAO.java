@@ -70,5 +70,7 @@ public class BigliettoDAO {
         return bigliettiTrovati;
     }
 
+    // METODO PER OTTENERE LISTA DI BIGLIETTI OBLITERATI IN UN PERIODO DI TEMPO
+
 
 }

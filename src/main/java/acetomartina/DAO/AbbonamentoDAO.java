@@ -15,9 +15,15 @@ public class AbbonamentoDAO {
     }
 
     //VERIFICA VALIDITA
-    public boolean verificaValidita(Abbonamento abbonamento) {
-        if (abbonamento == null) return false;
-        return abbonamento.isValido();
+    public List<Abbonamento> verificaValidita(Tessera tessera) {
+        List<Abbonamento> abbonamentiTrovati = entityManager.createQuery("from Abbonamento where tessera.tessera_id = :tesseraID", Abbonamento.class).setParameter("tesseraID", tessera.getNumeroTessera()).getResultList();
+        abbonamentiTrovati.forEach(abbonamento -> {
+            if (abbonamento.isValido())
+                System.out.println("L'abbonamento " + abbonamento.getNumero_abbonamento() + " è ancora valido !");
+            else
+                System.out.println("L'abbonamento " + abbonamento.getNumero_abbonamento() + " è scaduto! Deve essere rinnovato !");
+        });
+        return abbonamentiTrovati;
     }
 
     public List<Abbonamento> getByTessera(Tessera tessera) {
