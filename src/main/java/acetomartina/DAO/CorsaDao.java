@@ -4,7 +4,9 @@ import acetomartina.entities.Corsa;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.TypedQuery;
 
+import java.util.List;
 import java.util.UUID;
 
 public class CorsaDao {
@@ -31,6 +33,15 @@ public class CorsaDao {
             if (transazione.isActive()) transazione.rollback();
             throw new RuntimeException("Errore durante il salvataggio della tratta : " + e.getMessage());
         }
+    }
+
+    public List<Corsa> findAll() {
+        TypedQuery<Corsa> query = entityManager.createQuery(
+                "SELECT c FROM Corsa c",
+                Corsa.class
+        );
+
+        return query.getResultList();
     }
 
 

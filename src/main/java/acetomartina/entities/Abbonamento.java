@@ -1,6 +1,6 @@
 package acetomartina.entities;
 
-import acetomartina.enums.PeriodicitàAbbonamento;
+import acetomartina.enums.PeriodicitaAbbonamento;
 import jakarta.persistence.*;
 
 import java.security.SecureRandom;
@@ -24,13 +24,13 @@ public class Abbonamento extends TitoloViaggio {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private PeriodicitàAbbonamento periodicita;
+    private PeriodicitaAbbonamento periodicita;
 
 
     protected Abbonamento() {
     }
 
-    public Abbonamento(LocalDate dataEmissione, PuntoEmissione puntoEmissione, Tessera tessera_id, PeriodicitàAbbonamento periodicita) {
+    public Abbonamento(LocalDate dataEmissione, PuntoEmissione puntoEmissione, Tessera tessera_id, PeriodicitaAbbonamento periodicita) {
         super(dataEmissione, puntoEmissione);
         this.tessera = tessera_id;
         this.periodicita = periodicita;
@@ -88,11 +88,11 @@ public class Abbonamento extends TitoloViaggio {
         this.dataScadenza = dataScadenza;
     }
 
-    public PeriodicitàAbbonamento getPeriodicita() {
+    public PeriodicitaAbbonamento getPeriodicita() {
         return periodicita;
     }
 
-    public void setPeriodicita(PeriodicitàAbbonamento periodicita) {
+    public void setPeriodicita(PeriodicitaAbbonamento periodicita) {
         this.periodicita = periodicita;
     }
 

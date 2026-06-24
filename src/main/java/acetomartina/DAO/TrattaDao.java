@@ -3,6 +3,9 @@ package acetomartina.DAO;
 import acetomartina.entities.Tratta;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.TypedQuery;
+
+import java.util.List;
 
 public class TrattaDao {
     private final EntityManager entityManager;
@@ -24,5 +27,13 @@ public class TrattaDao {
             if (transazione.isActive()) transazione.rollback();
             throw new RuntimeException("Errore durante il salvataggio della tratta : " + e.getMessage());
         }
+    }
+
+    public List<Tratta> findAll() {
+        TypedQuery<Tratta> query = entityManager.createQuery(
+                "SELECT t FROM Tratta t",
+                Tratta.class
+        );
+        return query.getResultList();
     }
 }

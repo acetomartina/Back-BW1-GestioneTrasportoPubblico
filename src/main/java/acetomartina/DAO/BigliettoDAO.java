@@ -2,6 +2,7 @@ package acetomartina.DAO;
 
 import acetomartina.Exceptions.NonTrovatoEccezzione;
 import acetomartina.entities.Biglietto;
+import acetomartina.entities.Tratta;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 
@@ -16,7 +17,18 @@ public class BigliettoDAO {
     }
 
 
-    // OBLITERA IL BIGLIETTO
+    public void save(Biglietto biglietto){
+        EntityTransaction transazione = this.entityManager.getTransaction();
+        try {
+            transazione.begin();
+            this.entityManager.persist(biglietto);
+            transazione.commit();
+            System.out.println("Biglietto salvato.");
+        } catch (Exception e) {
+            if (transazione.isActive()) transazione.rollback();
+            throw new RuntimeException("Errore durante il salvataggio del biglietto.");
+        }
+    }    // OBLITERA IL BIGLIETTO
     public void obliteraBiglietto(Biglietto biglietto) {
         Biglietto fromDB = entityManager.find(Biglietto.class, biglietto.getId());
         if (fromDB.getObliterato() != null) {
