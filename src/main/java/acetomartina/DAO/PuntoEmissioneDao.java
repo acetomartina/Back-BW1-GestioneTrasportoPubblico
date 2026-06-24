@@ -134,6 +134,26 @@ public class PuntoEmissioneDao {
 
     // METODO PER TROVARE BIGLIETTI EMESSI DATO UN INTERVALLO DI TEMPO
 
+    public List<Biglietto> getBigliettiInUnIntervalloDiTempo (LocalDate inizio, LocalDate fine){
+        if (inizio == null || fine == null){
+            throw new IllegalArgumentException("Le date di inizio e fine non possono essere nulle.");
+        }
+        List<Biglietto> bigliettiTrovati = entityManager.createQuery(
+                        "FROM Biglietto WHERE dataEmissione BETWEEN :inizio AND :fine", Biglietto.class)
+                .setParameter("inizio", inizio)
+                .setParameter("fine", fine)
+                .getResultList();
+
+        if (bigliettiTrovati.isEmpty()) {
+            System.out.println("Nessun biglietto emesso trovato nel periodo selezionato.");
+        }
+        System.out.println("I biglietti trovati sono : ");
+        bigliettiTrovati.forEach(biglietto -> System.out.println(biglietto.toString()));
+
+        return bigliettiTrovati;
+    }
+    }
 
 
-}
+
+
