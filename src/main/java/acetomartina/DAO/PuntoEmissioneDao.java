@@ -1,9 +1,7 @@
 package acetomartina.DAO;
 
-import acetomartina.entities.Biglietto;
-import acetomartina.entities.Corsa;
-import acetomartina.entities.PuntoEmissione;
-import acetomartina.entities.Tessera;
+import acetomartina.entities.*;
+import acetomartina.enums.PeriodicitàAbbonamento;
 import acetomartina.enums.TipoPuntoEmissione;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
@@ -90,7 +88,6 @@ public class PuntoEmissioneDao {
         transaction.commit();
 
         System.out.println("Tessera emessa correttamente!");
-        ;
     }
 
     public void rinnovaTessera(Long tesseraId) {
@@ -113,10 +110,26 @@ public class PuntoEmissioneDao {
         }
     }
 
-    public void emettiESalva(PuntoEmissione puntoEmissione, Corsa corsa) {
-        entityManager.getTransaction().begin();
-        entityManager.persist(puntoEmissione.creaBiglietto(corsa));
-        entityManager.getTransaction().commit();
+    public void emettiESalvaBiglietto(PuntoEmissione puntoEmissione, Corsa corsa) {
+        try {
+            entityManager.getTransaction().begin();
+            entityManager.persist(puntoEmissione.creaBiglietto(corsa));
+            entityManager.getTransaction().commit();
+            System.out.println("Biglietto emesso e salvato");
+        } catch (Exception e) {
+            throw new RuntimeException("Errore nell'emssione del biglietto ! !");
+        }
+    }
+
+    public void emettiESalvaAbbonamento(PuntoEmissione puntoEmissione, Tratta tratta, Tessera tessera, PeriodicitàAbbonamento periodicita) {
+        try {
+            entityManager.getTransaction().begin();
+            entityManager.persist(puntoEmissione.creaAbbonamento(tratta, tessera, periodicita));
+            entityManager.getTransaction().commit();
+            System.out.println("Abbonamento emesso e salvato");
+        } catch (Exception e) {
+            throw new RuntimeException("Errore nell'emssione dell'abbonamento !");
+        }
     }
 
 

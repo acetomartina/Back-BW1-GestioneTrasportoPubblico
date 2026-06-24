@@ -206,11 +206,14 @@ public class Application {
 
         salvaLista(manutenzioni);
 
-        BigliettoDAO bigliettoDAO = new BigliettoDAO(entityManager);
+//        BigliettoDAO bigliettoDAO = new BigliettoDAO(entityManager);
+//        bigliettoDAO.obliteraBiglietto(biglietto3);
+//        bigliettoDAO.obliteraBiglietto(biglietto3);
 
-        bigliettoDAO.obliteraBiglietto(biglietto3);
+        CorsaDao corsaDao = new CorsaDao(entityManager);
+        Corsa corsaTrovata = corsaDao.getById(corsa6.getId());
 
-        bigliettoDAO.obliteraBiglietto(biglietto3);
+        puntoEmissioneDao.emettiESalvaBiglietto(puntoEmissione2, corsaTrovata);
 
 
         System.out.println("Siamo connessi!");
