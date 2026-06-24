@@ -1,5 +1,5 @@
 package acetomartina.enom;
 
 public enum StatoManutenzione {
-    IN_CORSO, ESEGUITA
+    IN_CORSO, ESEGUITA, PROGRAMMATA
 }

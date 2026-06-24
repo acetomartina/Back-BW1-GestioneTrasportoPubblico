@@ -12,12 +12,13 @@
         <class>acetomartina.entities.Tratta</class>
         <class>acetomartina.entities.Utente</class>
         <class>acetomartina.entities.Corsa</class>
+        <class>acetomartina.entities.Manutenzione</class>
         <properties>
             <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/gestione_trasporto_pubblico"/>
             <property name="jakarta.persistence.jdbc.user" value="postgres"/>
             <property name="jakarta.persistence.jdbc.password" value="1234"/>
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.hbm2ddl.auto" value="create"/>
         </properties>
     </persistence-unit>
 </persistence>

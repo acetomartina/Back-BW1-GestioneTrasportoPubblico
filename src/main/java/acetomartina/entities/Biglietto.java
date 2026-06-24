@@ -13,6 +13,7 @@ public class Biglietto extends TitoloViaggio {
 
     private static int counter = 0;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "tipo_biglietto")
     private TipoBiglietto tipoBiglietto;
 
@@ -20,45 +21,32 @@ public class Biglietto extends TitoloViaggio {
     @JoinColumn(name = "corsa_id")
     private Corsa corsa;
 
-    @Column(name = "Validità", nullable = false)
-    private boolean validita;
-
     @Column(name = "obliterato")
-    private boolean obliterato;
-
-    @Column(name = "scadenza")
-    private LocalDateTime scadenza;
+    private LocalDateTime obliterato;
 
     @ManyToOne
     @JoinColumn(name = "mezzo_id")
-    private Mezzo mezzo_id;
+    private Mezzo mezzo;
 
 
     public Biglietto() {
     }
 
-    public Biglietto(LocalDate dataEmissione, Corsa corsa, PuntoEmissione puntoEmissione,LocalDateTime scadenza) {
+    public Biglietto(LocalDate dataEmissione, Corsa corsa, PuntoEmissione puntoEmissione) {
         super(dataEmissione, puntoEmissione);
         this.tipoBiglietto = corsa.getMezzo().getTipo_mezzo().getTipoBiglietto();
         this.corsa = corsa;
-        this.scadenza = scadenza;
+        this.mezzo = corsa.getMezzo();
         counter++;
     }
 
-    public LocalDateTime getScadenza() {
-        return scadenza;
-    }
-
-    public void setScadenza(LocalDateTime scadenza) {
-        this.scadenza = scadenza;
-    }
-
-    public boolean isObliterato() {
-        return obliterato;
-    }
-
-    public void setObliterato(boolean obliterato) {
-        this.obliterato = obliterato;
+    @Transient
+    public boolean isValido() {
+        if (this.obliterato == null) {
+            return true;
+        }
+        LocalDateTime scadenza = this.obliterato.plusMinutes(90);
+        return LocalDateTime.now().isBefore(scadenza);
     }
 
     public static int getCounter() {
@@ -77,15 +65,38 @@ public class Biglietto extends TitoloViaggio {
         this.tipoBiglietto = tipoBiglietto;
     }
 
+    public Corsa getCorsa() {
+        return corsa;
+    }
+
+    public void setCorsa(Corsa corsa) {
+        this.corsa = corsa;
+    }
+
+    public LocalDateTime getObliterato() {
+        return obliterato;
+    }
+
+    public void setObliterato(LocalDateTime obliterato) {
+        this.obliterato = obliterato;
+    }
+
+    public Mezzo getMezzo_id() {
+        return mezzo;
+    }
+
+    public void setMezzo_id(Mezzo mezzo_id) {
+        this.mezzo = mezzo_id;
+    }
+
     @Override
     public String toString() {
         return "Biglietto{" +
                 "tipoBiglietto=" + tipoBiglietto +
                 ", corsa=" + corsa +
-                ", validita=" + validita +
                 ", obliterato=" + obliterato +
-                ", scadenza=" + scadenza +
-                '}';
+                ", mezzo_id=" + mezzo +
+                "} " + super.toString();
     }
 }
 

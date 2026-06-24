@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 @Entity
@@ -25,8 +26,8 @@ public class Manutenzione {
     @JoinColumn(name = "mezzo_id")
     private Mezzo mezzo;
 
-    @Column(name = "manutenzione")
-    private Period durata;
+    @Column(name = "durata")
+    private Integer durata;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "stato_manutenzione")
@@ -39,7 +40,7 @@ public class Manutenzione {
         this.dataInizio = dataInizio;
         this.dataFine = dataFine;
         this.mezzo = mezzo;
-        this.durata = Period.between(dataInizio, dataFine);
+        this.durata = (int) ChronoUnit.DAYS.between(dataInizio, dataFine);
         this.statoManutenzione = statoManutenzione;
     }
 
@@ -75,20 +76,20 @@ public class Manutenzione {
         this.mezzo = mezzo;
     }
 
-    public Period getDurata() {
-        return durata;
-    }
-
-    public void setDurata(Period durata) {
-        this.durata = durata;
-    }
-
     public StatoManutenzione getStatoManutenzione() {
         return statoManutenzione;
     }
 
     public void setStatoManutenzione(StatoManutenzione statoManutenzione) {
         this.statoManutenzione = statoManutenzione;
+    }
+
+    public Integer getDurata() {
+        return durata;
+    }
+
+    public void setDurata(Integer durata) {
+        this.durata = durata;
     }
 
     @Override
