@@ -266,7 +266,6 @@ public class Application {
 
 
 
-
         System.out.println("Siamo connessi!");
     }
 }
