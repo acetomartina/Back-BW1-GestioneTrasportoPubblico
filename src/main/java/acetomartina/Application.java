@@ -1,8 +1,9 @@
 package acetomartina;
 
 import acetomartina.DAO.*;
-import acetomartina.entities.Tessera;
-import acetomartina.entities.Utente;
+import acetomartina.entities.*;
+import acetomartina.enums.StatoMezzo;
+import acetomartina.enums.TipoMezzo;
 import acetomartina.enums.TipoPuntoEmissione;
 import acetomartina.enums.TipoUtente;
 import jakarta.persistence.EntityManager;
@@ -10,7 +11,9 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import acetomartina.utils.DataSeeder;
 
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Application {
     private static final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("gestione-trasporto-pubblico-pu");
@@ -45,28 +48,14 @@ public class Application {
 
 
 
-        //TEST UTENTE!!!! OK
-        Utente alessia = new Utente(TipoUtente.UTENTE, "Alessia","Cotini", LocalDate.of(1997,12,29), "Roma");
-        utenteDAO.save(alessia);
 
-        Tessera tessera = new Tessera(LocalDate.now(),
-                alessia,
-                true);
-
-        puntoEmissioneDao.emettiTessera(tessera);
-        System.out.println("Tessera emessa: ");
-        System.out.println(tessera);
-
-        puntoEmissioneDao.rinnovaTessera(tessera.getId());
-        System.out.println("Tessera rinnovata: ");
-        System.out.println(tessera);
 
 
         //TEST CORSA!!! OK
 
         //Mezzo autobus1 = new Mezzo(LocalDate.now().minusYears(1), TipoMezzo.AUTOBUS, true);
         //Mezzo autobus2 = new Mezzo(LocalDate.now().minusYears(3), TipoMezzo.AUTOBUS, true);
-        //Mezzo autobus3 = new Mezzo(LocalDate.now().minusMonths(6), TipoMezzo.AUTOBUS, true);
+        Mezzo autobus3 = new Mezzo( TipoMezzo.AUTOBUS, StatoMezzo.ATTIVO);
 
         // 3 tram
         //Mezzo tram1 = new Mezzo(LocalDate.now().minusYears(2), TipoMezzo.TRAM, true);
@@ -79,7 +68,7 @@ public class Application {
         // 5 tratte intercity (esempio bus/treno tra cittÃ  italiane)
         //Tratta tratta1 = new Tratta("Roma", "Napoli", Duration.ofHours(2));
         //Tratta tratta2 = new Tratta("Milano", "Torino", Duration.ofHours(1).plusMinutes(30));
-        //Tratta tratta3 = new Tratta("Firenze", "Bologna", Duration.ofHours(1));
+        Tratta tratta3 = new Tratta("Firenze", "Bologna", Duration.ofHours(1));
         //Tratta tratta4 = new Tratta("Bari", "Lecce", Duration.ofHours(1).plusMinutes(30));
         //Tratta tratta5 = new Tratta("Venezia", "Verona", Duration.ofHours(1).plusMinutes(15));
 
@@ -96,7 +85,7 @@ public class Application {
         // 10 corse nazionali, distribuite sui 3 autobus
         //Corsa corsa1 = new Corsa(tratta1, autobus1, LocalDateTime.now().plusDays(2));
         //Corsa corsa2 = new Corsa(tratta2, autobus2, LocalDateTime.now().plusDays(2).withHour(9).withMinute(30));
-        //Corsa corsa3 = new Corsa(tratta3, autobus3, LocalDateTime.now().plusDays(2).withHour(11).withMinute(0));
+        Corsa corsa3 = new Corsa(tratta3, autobus3, LocalDateTime.now().plusDays(2).withHour(11).withMinute(0));
         //Corsa corsa4 = new Corsa(tratta4, autobus1, LocalDateTime.now().plusDays(2).withHour(13).withMinute(15));
         //Corsa corsa5 = new Corsa(tratta5, autobus2, LocalDateTime.now().plusDays(2).withHour(15).withMinute(45));
         //Corsa corsa6 = new Corsa(tratta1, autobus3, LocalDateTime.now().plusDays(3).withHour(8).withMinute(0));
@@ -115,12 +104,16 @@ public class Application {
         //List<Corsa> listaCorse = new ArrayList<>(List.of(corsa1, corsa2, corsa3, corsa4, corsa5, corsa6, corsa7, corsa8, corsa9, corsa10, corsaTram1, corsaTram2, corsaTram3, corsaTram4, corsaTram5));
         //salvaLista(listaCorse);
 
-        //PuntoEmissione puntoEmissione = new PuntoEmissione(TipoPuntoEmissione.DISTRIBUTORE, true);
-        //puntoEmissioneDao.save(puntoEmissione);
+        PuntoEmissione puntoEmissione = new PuntoEmissione(TipoPuntoEmissione.DISTRIBUTORE, true);
+        puntoEmissioneDao.save(puntoEmissione);
 
 
 
-        //Biglietto biglietto1 = new Biglietto(LocalDate.now(), corsa3, puntoEmissione);
+        Biglietto biglietto1 = new Biglietto(LocalDate.now(), corsa3, puntoEmissione, LocalDateTime.now().plusDays(1));
+
+        TitoloViaggioDao.save(biglietto1);
+
+
         //Biglietto biglietto2 = new Biglietto(LocalDate.now().minusDays(2), corsa3,puntoEmissione);
 
         //List<Biglietto> listaCorsa3 = entityManager.createQuery("from Biglietto where corsa.id = :param", Biglietto.class).setParameter("param", corsa3.getId()).getResultList();
