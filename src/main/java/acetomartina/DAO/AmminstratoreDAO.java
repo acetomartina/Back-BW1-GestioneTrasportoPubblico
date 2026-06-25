@@ -162,6 +162,61 @@ public class AmminstratoreDAO {
                     List<Manutenzione> manutenzioni = mezzoDao.getManutenzioniMezzo(tuttiImezzi.get(sceltaMezzo - 1).getMezzo_di_trasporto());
                     manutenzioni.forEach(manutenzione -> System.out.println("Manutenzione :" + " Inizio : " + manutenzione.getDataInizio() + " - Fine : " + manutenzione.getDataFine() + " Tempo di inattività : " + manutenzione.getDurata() + " giorni"));
                 }
+                case 7 -> {
+                    List<Mezzo> tuttiImezzi = mezzoDao.findAll();
+                    System.out.println("Inserisci il numero del mezzo per ottenere l'informazione");
+                    for (int i = 0; i < tuttiImezzi.size(); i++) {
+                        Mezzo mezzo = tuttiImezzi.get(i);
+                        System.out.println(i + 1 + ")" + mezzo.getTipo_mezzo() + " " + mezzo.getNumero_mezzo());
+                    }
+                    int sceltaMezzo = 0;
+                    boolean sceltaMezzoValida = false;
+                    do {
+                        try {
+                            sceltaMezzo = Integer.parseInt(scanner.nextLine());
+                            if (sceltaMezzo <= tuttiImezzi.size() && sceltaMezzo >= 1) {
+                                sceltaMezzoValida = true;
+                            } else {
+                                System.err.println("Qualcosa è andato storto! Riprova");
+                            }
+                        } catch (Exception e) {
+                            System.err.println("Qualcosa è andato storto!");
+                        }
+                    } while (!sceltaMezzoValida);
+                    Mezzo mezzoScelto = tuttiImezzi.get(sceltaMezzo - 1);
+                    List<IntervalloDate> periodiAttivita = mezzoDao.getPeriodiAttivita(mezzoScelto);
+                    periodiAttivita.forEach(intervallo -> System.out.println("Il mezzo : " + mezzoScelto.getTipo_mezzo() + " " + mezzoScelto.getNumero_mezzo() + " ha circolato dal " + intervallo.inizio() + " al " + intervallo.fine()));
+                }
+                case 8 -> {
+                    List<Mezzo> tuttiImezzi = mezzoDao.findAll();
+                    System.out.println("Inserisci il numero del mezzo per ottenere l'informazione");
+                    for (int i = 0; i < tuttiImezzi.size(); i++) {
+                        Mezzo mezzo = tuttiImezzi.get(i);
+                        System.out.println(i + 1 + ")" + mezzo.getTipo_mezzo() + " " + mezzo.getNumero_mezzo());
+                    }
+                    int sceltaMezzo = 0;
+                    boolean sceltaMezzoValida = false;
+                    do {
+                        try {
+                            sceltaMezzo = Integer.parseInt(scanner.nextLine());
+                            if (sceltaMezzo <= tuttiImezzi.size() && sceltaMezzo >= 1) {
+                                sceltaMezzoValida = true;
+                            } else {
+                                System.err.println("Qualcosa è andato storto! Riprova");
+                            }
+                        } catch (Exception e) {
+                            System.err.println("Qualcosa è andato storto!");
+                        }
+                    } while (!sceltaMezzoValida);
+                    Mezzo mezzoScelto = tuttiImezzi.get(sceltaMezzo - 1);
+                    List<Biglietto> bigliettiOblit = mezzoDao.getListaBigliettiOblitSuMezzo(mezzoScelto);
+                    System.out.println("Sul mezz o" + mezzoScelto.getTipo_mezzo() + " " + mezzoScelto.getNumero_mezzo() + " sono stati obliterati : ");
+                    bigliettiOblit.forEach(biglietto -> System.out.println(biglietto.getCodiceUnivoco() + "Data" + biglietto.getObliterato()));
+                }
+                case 9 -> {
+                    List<Biglietto> listaBiglietti = bigliettoDAO.getBigliettiObliteratiNelPeriodo(LocalDateTime.now().minusDays(3), LocalDateTime.now());
+                    listaBiglietti.forEach(biglietto -> System.out.println(biglietto.getCodiceUnivoco() + "Data" + biglietto.getObliterato()));
+                }
             }
         } while (scelta != 0);
     }

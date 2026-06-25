@@ -459,6 +459,8 @@ public class Application {
 //        manutenzioneDAO.save(mn19);
 //        manutenzioneDAO.save(mn20);
 
+        
+
 
         System.out.println("E' stato un piacere e buon viaggio!");
     }
