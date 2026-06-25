@@ -25,4 +25,14 @@ public class TesseraDao {
             throw new RuntimeException("Errore durante il salvataggio della tessera : " + e.getMessage());
         }
     }
+
+    //TROVO CON ID
+    public Tessera getById(String numeroTessera) {
+        try {
+            return entityManager.find(Tessera.class, numeroTessera);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
 }

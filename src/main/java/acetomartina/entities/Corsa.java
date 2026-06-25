@@ -101,6 +101,7 @@ public class Corsa {
         this.arrivoEffettivo = arrivoEffettivo;
     }
 
+
     public Mezzo getMezzo() {
         return mezzo;
     }

@@ -26,8 +26,12 @@ public class Abbonamento extends TitoloViaggio {
     @Column(nullable = false)
     private PeriodicitaAbbonamento periodicita;
 
+    @ManyToOne
+    @JoinColumn(name = "tratta")
+    private Tratta tratta;
 
-    protected Abbonamento() {
+
+    public Abbonamento() {
     }
 
     public Abbonamento(LocalDate dataEmissione, PuntoEmissione puntoEmissione, Tessera tessera_id, PeriodicitaAbbonamento periodicita) {
@@ -54,6 +58,10 @@ public class Abbonamento extends TitoloViaggio {
             long ISBN = 100_000_000_000L + numeroCasuale;
             this.numero_abbonamento = ISBN + "AB";
         }
+    }
+
+    public void setTratta() {
+        this.tratta = tratta;
     }
 
     public static int getCounter() {
@@ -95,6 +103,11 @@ public class Abbonamento extends TitoloViaggio {
     public void setPeriodicita(PeriodicitaAbbonamento periodicita) {
         this.periodicita = periodicita;
     }
+
+    public void setTessera(Tessera tessera) {
+        this.tessera = tessera;
+    }
+
 
     @Override
     public String toString() {

@@ -31,13 +31,21 @@ public class AbbonamentoDAO {
     }
     //VERIFICA VALIDITA
     public List<Abbonamento> verificaValidita(Tessera tessera) {
-        List<Abbonamento> abbonamentiTrovati = entityManager.createQuery("from Abbonamento where tessera.tessera_id = :tesseraID", Abbonamento.class).setParameter("tesseraID", tessera.getNumeroTessera()).getResultList();
-        abbonamentiTrovati.forEach(abbonamento -> {
-            if (abbonamento.isValido())
-                System.out.println("L'abbonamento " + abbonamento.getNumero_abbonamento() + " è ancora valido !");
-            else
-                System.out.println("L'abbonamento " + abbonamento.getNumero_abbonamento() + " è scaduto! Deve essere rinnovato !");
-        });
+        List<Abbonamento> abbonamentiTrovati = entityManager.createQuery(
+                        "from Abbonamento where tessera.numeroTessera = :tesseraID", Abbonamento.class)
+                .setParameter("tesseraID", tessera.getNumeroTessera())
+                .getResultList();
+
+        if (abbonamentiTrovati.isEmpty()) {
+            System.out.println("Nessun abbonamento trovato per questa tessera.");
+        } else {
+            abbonamentiTrovati.forEach(abbonamento -> {
+                if (abbonamento.isValido())
+                    System.out.println("L'abbonamento " + abbonamento.getNumero_abbonamento() + " è ancora valido!");
+                else
+                    System.out.println("L'abbonamento " + abbonamento.getNumero_abbonamento() + " è scaduto! Deve essere rinnovato!");
+            });
+        }
         return abbonamentiTrovati;
     }
 
