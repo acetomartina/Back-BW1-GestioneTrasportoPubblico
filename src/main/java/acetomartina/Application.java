@@ -13,7 +13,9 @@ import org.hibernate.annotations.Imported;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Scanner;
 
 public class Application {
     private static final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("gestione-trasporto-pubblico-pu");
@@ -26,9 +28,24 @@ public class Application {
          entityManager.getTransaction().commit();
     }
 
+    private static final Scanner scanner = new Scanner(System.in);
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
     public static void main(String[] args) {
 
         EntityManager entityManager = entityManagerFactory.createEntityManager();
+
+        System.out.println("Benvenuto nella gestione del trosporto pubblico");
+        System.out.println("\n--- MENU PRINCIPALE ---");
+        System.out.println("1. Accedi come UTENTE SEMPLICE");
+        System.out.println("2. Accedi come AMMINISTRATORE");
+        System.out.println("3. Acquista un biglietto");
+        System.out.println("0. Esci dall'applicazione");
+
+        int scelta;
+        boolean sceltaValida= false;
+//        do{}
+//        while(){}
 
         //DAO
 
