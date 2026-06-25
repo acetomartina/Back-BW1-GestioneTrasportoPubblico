@@ -28,32 +28,36 @@ public class UtenteDao {
             DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
 
-
-
     //COSTRUTTORE
     public UtenteDao(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 
 
-
     // SALVO
-    public void save(Utente utente){
+    public void save(Utente utente) {
         EntityTransaction transazione = this.entityManager.getTransaction();
         try {
             transazione.begin();
             this.entityManager.persist(utente);
             transazione.commit();
-            System.out.println("L'utente "+ utente.getNome_utente() + " "+ utente.getCognome_utente()+ ", Ã¨ stato aggiunto al DATABASE");
+            System.out.println("L'utente " + utente.getNome_utente() + " " + utente.getCognome_utente() + ", Ã¨ stato aggiunto al DATABASE");
         } catch (Exception e) {
             if (transazione.isActive()) transazione.rollback();
             throw new RuntimeException("Errore durante il salvataggio dell'utente : " + e.getMessage());
         }
     }
 
+    public List<Utente> getTuttiGliUtenti() {
+        return entityManager.createQuery("from Utente", Utente.class).getResultList();
+    }
+
+    public List<Utente> getTuttiITesserati() {
+        return entityManager.createQuery("from Utente where tessera is not null", Utente.class).getResultList();
+    }
 
 
-    public void scannerUtente1(){
+    public void scannerUtente1() {
         System.out.println("Di cosa hai bisogno?");
         System.out.println("1 - Biglietto. ");
         System.out.println("2 - Abbonamento.");
@@ -63,14 +67,14 @@ public class UtenteDao {
         int sceltaUtente = 0;
         boolean sceltaUtenteValida = false;
 
-        do{
-            try{
-                sceltaUtente= Integer.parseInt(scanner.nextLine());
-                sceltaUtenteValida= true;
+        do {
+            try {
+                sceltaUtente = Integer.parseInt(scanner.nextLine());
+                sceltaUtenteValida = true;
             } catch (Exception e) {
                 System.err.println("Scelta non valida. Verifica di nuovo le opzioni disponibili.");
             }
-        }while (!sceltaUtenteValida);
+        } while (!sceltaUtenteValida);
 
 
         switch (sceltaUtente) {
@@ -81,8 +85,8 @@ public class UtenteDao {
                 int sceltaUtente2 = 0;
                 boolean sceltaUtenteValida2 = false;
 
-                do{
-                    try{
+                do {
+                    try {
                         sceltaUtente2 = Integer.parseInt(scanner.nextLine());
                         sceltaUtenteValida2 = true;
                     } catch (Exception e) {
@@ -90,14 +94,14 @@ public class UtenteDao {
                     }
                 } while (!sceltaUtenteValida2);
 
-                switch (sceltaUtente2){
+                switch (sceltaUtente2) {
                     case 1 -> {
                         System.out.println("Scegli la destinazione che devi raggiungere.");
                         List<Tratta> tratte = trattaDao.findAll();
                         final int[] numero = {1};
 
                         tratte.forEach(tratta -> {
-                            System.out.println(numero[0] + " - " + "Da " + tratta.getZonaPartenza() + " a " + tratta.getCapolinea() + " (previsto " + tratta.getDurata().toHours() + "." + tratta.getDurata().toMinutesPart()+ " h)");
+                            System.out.println(numero[0] + " - " + "Da " + tratta.getZonaPartenza() + " a " + tratta.getCapolinea() + " (previsto " + tratta.getDurata().toHours() + "." + tratta.getDurata().toMinutesPart() + " h)");
                             numero[0]++;
 
                         });
@@ -143,8 +147,6 @@ public class UtenteDao {
 
         }
     }
-
-
 
 
 }

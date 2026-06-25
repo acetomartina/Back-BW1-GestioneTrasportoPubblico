@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
+import java.util.UUID;
 
 public class Application {
     private static final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("gestione-trasporto-pubblico-pu");
@@ -24,11 +25,10 @@ public class Application {
     static EntityManager entityManager = entityManagerFactory.createEntityManager();
 
 
-
     public static <T> void salvaLista(List<T> lista) {
         entityManager.getTransaction().begin();
-         lista.forEach(entity -> entityManager.persist(entity));
-         entityManager.getTransaction().commit();
+        lista.forEach(entity -> entityManager.persist(entity));
+        entityManager.getTransaction().commit();
     }
 
     public static final Scanner scanner = new Scanner(System.in);
@@ -50,7 +50,7 @@ public class Application {
         MezzoDao mezzoDao = new MezzoDao(entityManager);
         PuntoEmissioneDao puntoEmissioneDao = new PuntoEmissioneDao(entityManager);
         TesseraDao tesseraDao = new TesseraDao(entityManager);
-        TitoloViaggioDao TitoloViaggioDao = new TitoloViaggioDao(entityManager);
+        TitoloViaggioDao titoloViaggioDao = new TitoloViaggioDao(entityManager);
         TrattaDao trattaDao = new TrattaDao(entityManager);
         UtenteDao utenteDAO = new UtenteDao(entityManager);
 
@@ -61,23 +61,28 @@ public class Application {
         System.out.println("0. Esci dall'applicazione");
 
         int scelta = 0;
-        boolean sceltaValida= false;
+        boolean sceltaValida = false;
 
-       do{
-           try {
-               System.out.println("Scegli un numero.");
-               scelta = Integer.parseInt(scanner.nextLine());
-               sceltaValida = true;
-           } catch (Exception e) {
-               System.err.println("Scelta non valida. Verifica di nuovo il menù.");
-           }
-       }
-       while(!sceltaValida);
+        do {
+            try {
+                System.out.println("Scegli un numero.");
+                scelta = Integer.parseInt(scanner.nextLine());
+                if (scelta == 0) break;
+                if (scelta == 1 || scelta == 2) {
+                    sceltaValida = true;
+                } else {
+                    System.err.println("valore non valido! Inserisci un numero da 1 a 2 ");
+                }
+            } catch (Exception e) {
+                System.err.println("Scelta non valida. Verifica di nuovo il menù.");
+            }
+        }
+        while (!sceltaValida);
 
-       switch (scelta){
-           case 1 -> utenteDAO.scannerUtente1();
-       }
-
+        switch (scelta) {
+            case 1 -> utenteDAO.scannerUtente1();
+            case 2 -> amminstratoreDAO.scannerAmministratore();
+        }
 
 
         PuntoEmissione pe1 = new PuntoEmissione(TipoPuntoEmissione.RIVENDITORE, true);
@@ -294,7 +299,6 @@ public class Application {
 //        utenteDAO.save(u20);
 
 
-
         Tessera ts1 = new Tessera(LocalDate.of(2026, 1, 5), u2, true);
         Tessera ts2 = new Tessera(LocalDate.of(2026, 1, 12), u3, true);
         Tessera ts3 = new Tessera(LocalDate.of(2026, 1, 20), u4, true);
@@ -356,6 +360,8 @@ public class Application {
         Biglietto b19 = new Biglietto(LocalDate.of(2026, 6, 24), c19, pe5);
         Biglietto b20 = new Biglietto(LocalDate.of(2026, 6, 24), c20, pe7);
 
+
+//
 //        bigliettoDAO.save(b1);
 //        bigliettoDAO.save(b2);
 //        bigliettoDAO.save(b3);
@@ -458,12 +464,6 @@ public class Application {
 //        manutenzioneDAO.save(mn18);
 //        manutenzioneDAO.save(mn19);
 //        manutenzioneDAO.save(mn20);
-
-
-
-
-
-
 
 
         System.out.println("Siamo connessi!");

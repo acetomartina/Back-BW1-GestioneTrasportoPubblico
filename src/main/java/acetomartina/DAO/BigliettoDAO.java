@@ -8,6 +8,7 @@ import jakarta.persistence.EntityTransaction;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 public class BigliettoDAO {
     private EntityManager entityManager;
@@ -17,7 +18,7 @@ public class BigliettoDAO {
     }
 
 
-    public void save(Biglietto biglietto){
+    public void save(Biglietto biglietto) {
         EntityTransaction transazione = this.entityManager.getTransaction();
         try {
             transazione.begin();
@@ -29,6 +30,7 @@ public class BigliettoDAO {
             throw new RuntimeException("Errore durante il salvataggio del biglietto.");
         }
     }    // OBLITERA IL BIGLIETTO
+
     public void obliteraBiglietto(Biglietto biglietto) {
         Biglietto fromDB = entityManager.find(Biglietto.class, biglietto.getId());
         if (fromDB.getObliterato() != null) {
@@ -100,6 +102,10 @@ public class BigliettoDAO {
         }
 
         return bigliettiTrovati;
+    }
+
+    public Biglietto getByID(UUID id) {
+        return entityManager.find(Biglietto.class, id);
     }
 
 

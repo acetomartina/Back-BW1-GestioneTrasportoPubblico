@@ -42,6 +42,13 @@ public class Utente {
       this.luogo_nascita= luogo_nascita;
     }
 
+    public UUID getUtente_id() {
+        return utente_id;
+    }
+
+    public void setUtente_id(UUID utente_id) {
+        this.utente_id = utente_id;
+    }
 
     public TipoUtente getTipo_utente() {
         return tipo_utente;
@@ -49,10 +56,6 @@ public class Utente {
 
     public void setTipo_utente(TipoUtente tipo_utente) {
         this.tipo_utente = tipo_utente;
-    }
-
-    public UUID getUtente_id() {
-        return utente_id;
     }
 
     public String getNome_utente() {
@@ -85,6 +88,14 @@ public class Utente {
 
     public void setLuogo_nascita(String luogo_nascita) {
         this.luogo_nascita = luogo_nascita;
+    }
+
+    public Tessera getTessera() {
+        return tessera;
+    }
+
+    public void setTessera(Tessera tessera) {
+        this.tessera = tessera;
     }
 
     @Override
