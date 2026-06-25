@@ -26,8 +26,9 @@ public class AmminstratoreDAO {
     static EntityManager em2 = entityManagerFactory.createEntityManager();
 
     BigliettoDAO bigliettoDAO = new BigliettoDAO(em2);
+    TesseraDao tesseraDAO = new TesseraDao(em2);
     AbbonamentoDAO abbonamentoDAO = new AbbonamentoDAO(em2);
-    UtenteDao utenteDao = new UtenteDao(em2);
+    UtenteDao utenteDao = new UtenteDao(em2, tesseraDAO, abbonamentoDAO);
     MezzoDao mezzoDao = new MezzoDao(em2);
 
     Scanner scanner = new Scanner(System.in);
