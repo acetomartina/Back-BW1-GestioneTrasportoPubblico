@@ -154,15 +154,21 @@ public class MezzoDao {
         return bigliettiTrovati.size();
     }
 
+    public List<Biglietto> getListaBigliettiOblitSuMezzo(Mezzo mezzo) {
+        List<Biglietto> bigliettiTrovati = entityManager.createQuery("from Biglietto where corsa.mezzo.mezzo_di_trasporto = :mezzoID and obliterato is not null", Biglietto.class).setParameter("mezzoID", mezzo.getMezzo_di_trasporto()).getResultList();
+        return bigliettiTrovati;
+    }
+
     // NUMERO DI VOLTE CHE UN MEZZO PERCORRE UNA TRATTA
     // STAMPA PER OGNI TRATTA IL TEMPO DI PERCORRENZA EFFETTIVO
 
-    public String getDurataCorsa (Corsa corsa){
-        Duration durataCorsa = Duration.between( corsa.getPartenza(),corsa.getArrivoEffettivo());
+    public String getDurataCorsa(Corsa corsa) {
+        Duration durataCorsa = Duration.between(corsa.getPartenza(), corsa.getArrivoEffettivo());
         long ore = durataCorsa.toHours();
         long minuti = durataCorsa.toMinutesPart();
         return "%02d:%02d".formatted(ore, minuti);
     }
+
     public void getNumeroCorsePercorse(Mezzo mezzo) {
         List<Corsa> corseTrovate = entityManager.createQuery(
                         "SELECT c FROM Corsa c WHERE c.arrivoEffettivo < :params AND c.mezzo = :mezzo",
@@ -182,15 +188,6 @@ public class MezzoDao {
         );
         return query.getResultList();
     }
-
-
-
-
-
-
-
-
-
 
 
 }

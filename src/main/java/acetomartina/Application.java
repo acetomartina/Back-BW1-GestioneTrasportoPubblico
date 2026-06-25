@@ -465,6 +465,8 @@ public class Application {
 //        manutenzioneDAO.save(mn19);
 //        manutenzioneDAO.save(mn20);
 
+        
+
 
         System.out.println("Siamo connessi!");
     }
