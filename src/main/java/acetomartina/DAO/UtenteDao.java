@@ -9,6 +9,7 @@ import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
 
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static acetomartina.Application.scanner;
@@ -22,6 +23,9 @@ public class UtenteDao {
 
     TrattaDao trattaDao = new TrattaDao(em2);
     CorsaDao corsaDao = new CorsaDao(em2);
+
+    DateTimeFormatter formatter =
+            DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
 
 
@@ -40,7 +44,7 @@ public class UtenteDao {
             transazione.begin();
             this.entityManager.persist(utente);
             transazione.commit();
-            System.out.println("L'utente "+ utente.getNome_utente() + " "+ utente.getCognome_utente()+ ", è stato aggiunto al DATABASE");
+            System.out.println("L'utente "+ utente.getNome_utente() + " "+ utente.getCognome_utente()+ ", Ã¨ stato aggiunto al DATABASE");
         } catch (Exception e) {
             if (transazione.isActive()) transazione.rollback();
             throw new RuntimeException("Errore durante il salvataggio dell'utente : " + e.getMessage());
@@ -101,23 +105,33 @@ public class UtenteDao {
                         int trattaScelta;
                         boolean trattaSceltaValida = false;
 
-                        do{
-                            try{
+                        do {
+                            try {
                                 trattaScelta = Integer.parseInt(scanner.nextLine());
                                 trattaSceltaValida = true;
+
                                 List<Corsa> corse = corsaDao.findAllByTratta(tratte.get(trattaScelta));
+
                                 final int[] numeroCorsa = {1};
+
                                 System.out.println("Bene! Ora puoi scegliere la corsa.");
+
                                 corse.forEach(corsa -> {
-                                    System.out.println(numeroCorsa[0] + " - " + corsa.getMezzo().getTipo_mezzo() + " - " + corsa.getPartenza() + " - " + corsa.getArrivoPrev()  );
+                                    System.out.println(
+                                            numeroCorsa[0] + " - " +
+                                                    corsa.getMezzo().getTipo_mezzo() + " - " +
+                                                    "Partenza prevista: " + corsa.getPartenza().format(formatter) + "h - " +
+                                                    "Arrivo previsto: " + corsa.getArrivoPrev().format(formatter) + "h - " +
+                                                    "Ritardo previsto: " + corsa.getRitardo().toMinutes() + " minuti."
+                                    );
+
                                     numeroCorsa[0]++;
                                 });
 
-                            } catch (Exception e){
-                                System.err.println("Scelta non valida. Verifica di nuovo le tratte disponibili.");
+                            } catch (Exception e) {
+                                System.err.println("Scelta non valida.");
                             }
-                        }
-                        while(!trattaSceltaValida);
+                        } while (!trattaSceltaValida);
 
 
                     }
