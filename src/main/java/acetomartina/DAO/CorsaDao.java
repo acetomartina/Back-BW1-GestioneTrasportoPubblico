@@ -5,6 +5,8 @@ import acetomartina.entities.Corsa;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 
+import java.time.Duration;
+import java.util.List;
 import java.util.UUID;
 
 public class CorsaDao {
@@ -32,7 +34,6 @@ public class CorsaDao {
             throw new RuntimeException("Errore durante il salvataggio della tratta : " + e.getMessage());
         }
     }
-
 
 
 
