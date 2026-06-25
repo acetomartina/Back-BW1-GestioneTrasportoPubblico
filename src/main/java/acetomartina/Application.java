@@ -7,6 +7,7 @@ import acetomartina.utils.DataSeeder;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.hibernate.annotations.Changelog;
 import org.hibernate.annotations.Imported;
 
@@ -22,30 +23,22 @@ public class Application {
 
     static EntityManager entityManager = entityManagerFactory.createEntityManager();
 
-     public static <T> void salvaLista(List<T> lista) {
+
+
+    public static <T> void salvaLista(List<T> lista) {
         entityManager.getTransaction().begin();
          lista.forEach(entity -> entityManager.persist(entity));
          entityManager.getTransaction().commit();
     }
 
-    private static final Scanner scanner = new Scanner(System.in);
+    public static final Scanner scanner = new Scanner(System.in);
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public static void main(String[] args) {
 
+
         EntityManager entityManager = entityManagerFactory.createEntityManager();
-
-        System.out.println("Benvenuto nella gestione del trosporto pubblico");
-        System.out.println("\n--- MENU PRINCIPALE ---");
-        System.out.println("1. Accedi come UTENTE SEMPLICE");
-        System.out.println("2. Accedi come AMMINISTRATORE");
-        System.out.println("3. Acquista un biglietto");
-        System.out.println("0. Esci dall'applicazione");
-
-        int scelta;
-        boolean sceltaValida= false;
-//        do{}
-//        while(){}
+        Scanner scanner = new Scanner(System.in);
 
         //DAO
 
@@ -60,6 +53,32 @@ public class Application {
         TitoloViaggioDao TitoloViaggioDao = new TitoloViaggioDao(entityManager);
         TrattaDao trattaDao = new TrattaDao(entityManager);
         UtenteDao utenteDAO = new UtenteDao(entityManager);
+
+        System.out.println("Benvenuto nella gestione del trosporto pubblico");
+        System.out.println("\n--- MENU PRINCIPALE ---");
+        System.out.println("1. Accedi come UTENTE SEMPLICE");
+        System.out.println("2. Accedi come AMMINISTRATORE");
+        System.out.println("0. Esci dall'applicazione");
+
+        int scelta = 0;
+        boolean sceltaValida= false;
+
+       do{
+           try {
+               System.out.println("Scegli un numero.");
+               scelta = Integer.parseInt(scanner.nextLine());
+               sceltaValida = true;
+           } catch (Exception e) {
+               System.err.println("Scelta non valida. Verifica di nuovo il menù.");
+           }
+       }
+       while(!sceltaValida);
+
+       switch (scelta){
+           case 1 -> utenteDAO.scannerUtente1();
+       }
+
+
 
         PuntoEmissione pe1 = new PuntoEmissione(TipoPuntoEmissione.RIVENDITORE, true);
         PuntoEmissione pe2 = new PuntoEmissione(TipoPuntoEmissione.DISTRIBUTORE, false);

@@ -2,6 +2,7 @@ package acetomartina.DAO;
 
 import acetomartina.entities.Corsa;
 
+import acetomartina.entities.Tratta;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.TypedQuery;
@@ -45,6 +46,16 @@ public class CorsaDao {
         return query.getResultList();
     }
 
+    public List<Corsa> findAllByTratta(Tratta tratta) {
+        TypedQuery<Corsa> query = entityManager.createQuery(
+                "SELECT c FROM Corsa c WHERE c.tratta.id = :trattaId",
+                Corsa.class
+        );
+
+        query.setParameter("trattaId", tratta.getId());
+
+        return query.getResultList();
+    }
 
 
 }
