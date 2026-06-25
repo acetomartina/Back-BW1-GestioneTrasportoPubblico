@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class AmminstratoreDAO {
     private EntityManager entityManager;
@@ -214,7 +217,32 @@ public class AmminstratoreDAO {
                     bigliettiOblit.forEach(biglietto -> System.out.println(biglietto.getCodiceUnivoco() + "Data" + biglietto.getObliterato()));
                 }
                 case 9 -> {
-                    List<Biglietto> listaBiglietti = bigliettoDAO.getBigliettiObliteratiNelPeriodo(LocalDateTime.now().minusDays(3), LocalDateTime.now());
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                    LocalDate dataInizio = null;
+                    boolean dataValida = false;
+                    do {
+                        System.out.println("Inserisci la prima data (gg/mm/aaaa):");
+                        try {
+                            dataInizio = LocalDate.parse(scanner.nextLine(), formatter);
+                            dataValida = true;
+                        } catch (DateTimeParseException e) {
+                            System.err.println("Data non valida! Usa il formato gg/mm/aaaa.");
+                        }
+                    } while (!dataValida);
+
+                    LocalDate dataFine = null;
+                    boolean dataFineValida = false;
+                    do {
+                        System.out.println("Inserisci la data finale (gg/mm/aaaa):");
+                        try {
+                            dataFine = LocalDate.parse(scanner.nextLine(), formatter);
+                            dataFineValida = true;
+                        } catch (DateTimeParseException e) {
+                            System.err.println("Data non valida! Usa il formato gg/mm/aaaa.");
+                        }
+                    } while (!dataFineValida);
+
+                    List<Biglietto> listaBiglietti = bigliettoDAO.getBigliettiObliteratiNelPeriodo(dataInizio, dataFine);
                     listaBiglietti.forEach(biglietto -> System.out.println(biglietto.getCodiceUnivoco() + "Data" + biglietto.getObliterato()));
                 }
             }

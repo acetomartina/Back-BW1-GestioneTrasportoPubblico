@@ -6,6 +6,7 @@ import acetomartina.entities.Tratta;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -86,15 +87,19 @@ public class BigliettoDAO {
 
     // METODO PER OTTENERE LISTA DI BIGLIETTI OBLITERATI IN UN PERIODO DI TEMPO
 
-    public List<Biglietto> getBigliettiObliteratiNelPeriodo(LocalDateTime inizio, LocalDateTime fine) {
+    public List<Biglietto> getBigliettiObliteratiNelPeriodo(LocalDate inizio, LocalDate fine) {
         if (inizio == null || fine == null) {
             throw new IllegalArgumentException("Le date di inizio e fine non possono essere nulle.");
         }
 
+        LocalDateTime inizioPeriodo = inizio.atStartOfDay();          // 00:00 del giorno di inizio
+        LocalDateTime finePeriodo = fine.plusDays(1).atStartOfDay(); // 00:00 del giorno DOPO la fine
+
         List<Biglietto> bigliettiTrovati = entityManager.createQuery(
-                        "FROM Biglietto WHERE obliterato BETWEEN :inizio AND :fine", Biglietto.class)
-                .setParameter("inizio", inizio)
-                .setParameter("fine", fine)
+                        "SELECT b FROM Biglietto b WHERE b.obliterato >= :inizio AND b.obliterato < :fine",
+                        Biglietto.class)
+                .setParameter("inizio", inizioPeriodo)
+                .setParameter("fine", finePeriodo)
                 .getResultList();
 
         if (bigliettiTrovati.isEmpty()) {
