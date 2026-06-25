@@ -59,10 +59,39 @@ public class UtenteDao {
 
     public void scannerUtente1() {
         System.out.println("Di cosa hai bisogno?");
-        System.out.println("1 - Biglietto. ");
-        System.out.println("2 - Abbonamento.");
-        System.out.println("3 - Tessera.");
-        System.out.println("0 - Esci.");
+        System.out.println("1 - Macchinetta digitale.");
+        System.out.println("2 - Rivenditore autorizzato più vicino.");
+
+        int sceltaPuntoEmissione = 0;
+        boolean sceltaPeValida = false;
+
+        do{
+            try {
+                sceltaPuntoEmissione = Integer.parseInt(scanner.nextLine());
+                if (sceltaPuntoEmissione == 1 || sceltaPuntoEmissione == 2) {
+                    sceltaPeValida = true;
+                } else System.out.println("Devi inserire un opzione valida.");
+            } catch (Exception e) {
+                System.err.println("Opzione non valida. Verifica di nuovo il menù.");
+            }
+        } while (!sceltaPeValida);
+
+        switch (sceltaPuntoEmissione){
+            case 1 -> {
+                System.out.println("Bene! Benvenuto. Di cosa hai bisogno?");
+                System.out.println("1 - Biglietto. ");
+                System.out.println("2 - Abbonamento.");
+                System.out.println("3 - Tessera.");
+                System.out.println("0 - Esci.");
+
+
+            }
+
+            case 2 -> {
+                System.out.println("Bene! Puoi recarti al rivenditore in Via Appia Nuova n.27.");
+            }
+        }
+
 
         int sceltaUtente = 0;
         boolean sceltaUtenteValida = false;
@@ -287,9 +316,11 @@ public class UtenteDao {
                             }
                         } while (!trattaSceltaValida);
 
+
+                        // con tratte.get prendo tutte le tratte dal DB
+                        // parto da -1 perché la lista parte da 0
                         Tratta trattaSelezionata = tratte.get(trattaScelta - 1);
 
-                        // 3. LOGICA DI SALVATAGGIO REALE SUL DATABASE
                         String tipoString = (tipoAbbonamento == 1) ? "Settimanale" : "Mensile";
                         System.out.println("\nRegistrazione abbonamento " + tipoString + " sulla tratta: Da "
                                 + trattaSelezionata.getZonaPartenza() + " a " + trattaSelezionata.getCapolinea() + "...");
@@ -297,13 +328,16 @@ public class UtenteDao {
                         try {
                             entityManager.getTransaction().begin();
 
+                            // salvo la scelta dell'utente dentro l'abbonamento che sto creando
+                            // altrimenti l'abbonamento rimane senza tratta, la colonna sul DB prende null
+                            // e va nel catch = errore
                             Abbonamento nuovoAbbonamento = new Abbonamento();
 
                             // 1. GENERIAMO E IMPOSTIAMO IL CODICE UNIVOCO
                             nuovoAbbonamento.setCodiceUnivoco(java.util.UUID.randomUUID().toString());
 
                             // 2. Impostiamo gli altri campi (Tratta e Tessera)
-                            nuovoAbbonamento.setTratta();
+                            nuovoAbbonamento.setTratta(trattaSelezionata);
                             nuovoAbbonamento.setTessera(tesseraTrovata);
 
                             // 3. Impostiamo le date a seconda di come calcoli la scadenza

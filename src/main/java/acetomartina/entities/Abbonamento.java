@@ -60,8 +60,9 @@ public class Abbonamento extends TitoloViaggio {
         }
     }
 
-    public void setTratta() {
-        this.tratta = tratta;
+    public void setTratta(Tratta trattaSelezionata) {
+        this.tratta = trattaSelezionata
+        ;
     }
 
     public static int getCounter() {
