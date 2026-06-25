@@ -3,9 +3,6 @@ package acetomartina.entities;
 import jakarta.persistence.*;
 
 import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.List;
 import java.util.UUID;
 
 @Entity

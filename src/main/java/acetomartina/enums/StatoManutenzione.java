@@ -1,5 +1,5 @@
-package acetomartina.enom;
+package acetomartina.enums;
 
 public enum StatoManutenzione {
-    IN_CORSO, ESEGUITA, PROGRAMMATA
+    IN_CORSO, CONCLUSA, PROGRAMMATA
 }

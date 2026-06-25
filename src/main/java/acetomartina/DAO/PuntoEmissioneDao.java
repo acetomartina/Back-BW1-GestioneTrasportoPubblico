@@ -1,7 +1,7 @@
 package acetomartina.DAO;
 
 import acetomartina.entities.*;
-import acetomartina.enums.PeriodicitàAbbonamento;
+import acetomartina.enums.PeriodicitaAbbonamento;
 import acetomartina.enums.TipoPuntoEmissione;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
@@ -121,7 +121,7 @@ public class PuntoEmissioneDao {
         }
     }
 
-    public void emettiESalvaAbbonamento(PuntoEmissione puntoEmissione, Tratta tratta, Tessera tessera, PeriodicitàAbbonamento periodicita) {
+    public void emettiESalvaAbbonamento(PuntoEmissione puntoEmissione, Tratta tratta, Tessera tessera, PeriodicitaAbbonamento periodicita) {
         try {
             entityManager.getTransaction().begin();
             entityManager.persist(puntoEmissione.creaAbbonamento(tratta, tessera, periodicita));
@@ -133,7 +133,27 @@ public class PuntoEmissioneDao {
     }
 
     // METODO PER TROVARE BIGLIETTI EMESSI DATO UN INTERVALLO DI TEMPO
-    // QUI.......
+
+    public List<Biglietto> getBigliettiInUnIntervalloDiTempo (LocalDate inizio, LocalDate fine){
+        if (inizio == null || fine == null){
+            throw new IllegalArgumentException("Le date di inizio e fine non possono essere nulle.");
+        }
+        List<Biglietto> bigliettiTrovati = entityManager.createQuery(
+                        "FROM Biglietto WHERE dataEmissione BETWEEN :inizio AND :fine", Biglietto.class)
+                .setParameter("inizio", inizio)
+                .setParameter("fine", fine)
+                .getResultList();
+
+        if (bigliettiTrovati.isEmpty()) {
+            System.out.println("Nessun biglietto emesso trovato nel periodo selezionato.");
+        }
+        System.out.println("I biglietti trovati sono : ");
+        bigliettiTrovati.forEach(biglietto -> System.out.println(biglietto.toString()));
+
+        return bigliettiTrovati;
+    }
+    }
 
 
-}
+
+

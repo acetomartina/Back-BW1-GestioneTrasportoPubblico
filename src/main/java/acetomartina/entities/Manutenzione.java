@@ -1,6 +1,6 @@
 package acetomartina.entities;
 
-import acetomartina.enom.StatoManutenzione;
+import acetomartina.enums.StatoManutenzione;
 import jakarta.persistence.*;
 
 import java.time.Duration;

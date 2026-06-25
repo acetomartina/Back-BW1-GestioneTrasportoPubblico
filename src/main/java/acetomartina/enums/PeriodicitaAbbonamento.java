@@ -1,6 +1,6 @@
 package acetomartina.enums;
 
-public enum PeriodicitàAbbonamento {
+public enum PeriodicitaAbbonamento {
     SETTIMANALE,
     MENSILE
 }
