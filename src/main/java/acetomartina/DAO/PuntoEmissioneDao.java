@@ -117,7 +117,7 @@ public class PuntoEmissioneDao {
             entityManager.getTransaction().commit();
             System.out.println("Biglietto emesso e salvato");
         } catch (Exception e) {
-            throw new RuntimeException("Errore nell'emssione del biglietto ! !");
+            throw new RuntimeException("Errore nell'emissione del biglietto ! !");
         }
     }
 

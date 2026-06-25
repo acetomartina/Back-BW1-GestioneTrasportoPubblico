@@ -3,13 +3,10 @@ package acetomartina;
 import acetomartina.DAO.*;
 import acetomartina.enums.*;
 import acetomartina.entities.*;
-import acetomartina.utils.DataSeeder;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import org.hibernate.annotations.Changelog;
-import org.hibernate.annotations.Imported;
+
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -100,7 +97,7 @@ public class Application {
         PuntoEmissione pe18 = new PuntoEmissione(TipoPuntoEmissione.DISTRIBUTORE, true);
         PuntoEmissione pe19 = new PuntoEmissione(TipoPuntoEmissione.DISTRIBUTORE, false);
         PuntoEmissione pe20 = new PuntoEmissione(TipoPuntoEmissione.RIVENDITORE, true);
-
+//
 //        puntoEmissioneDao.save(pe1);
 //        puntoEmissioneDao.save(pe2);
 //        puntoEmissioneDao.save(pe3);
@@ -165,7 +162,7 @@ public class Application {
 //        mezzoDao.save(m17);
 //        mezzoDao.save(m18);
 //        mezzoDao.save(m19);
-//        mezzoDao.save(m20);
+//      mezzoDao.save(m20);
 
         Tratta t1 = new Tratta("Stazione Termini", "Anagnina", Duration.ofMinutes(40));
         Tratta t2 = new Tratta("Laurentina", "Rebibbia", Duration.ofMinutes(50));
@@ -249,7 +246,7 @@ public class Application {
 //        corsaDao.save(c17);
 //        corsaDao.save(c18);
 //        corsaDao.save(c19);
-//        corsaDao.save(c20);
+//       corsaDao.save(c20);
 
         Utente u1 = new Utente(TipoUtente.AMMINISTRATORE, "Martina", "Aceto", LocalDate.of(1998, 4, 16), "Calabria");
         Utente u2 = new Utente(TipoUtente.UTENTE, "Naruto", "Uzumaki", LocalDate.of(1999, 10, 10), "Villaggio della Foglia");
@@ -314,7 +311,7 @@ public class Application {
         Tessera ts17 = new Tessera(LocalDate.of(2026, 6, 1), u18, true);
         Tessera ts18 = new Tessera(LocalDate.of(2026, 6, 10), u19, true);
         Tessera ts19 = new Tessera(LocalDate.of(2026, 6, 18), u20, true);
-//
+
 //        tesseraDao.save(ts1);
 //        tesseraDao.save(ts2);
 //        tesseraDao.save(ts3);
