@@ -6,6 +6,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.TypedQuery;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.UUID;
 
@@ -43,7 +44,6 @@ public class CorsaDao {
 
         return query.getResultList();
     }
-
 
 
 
