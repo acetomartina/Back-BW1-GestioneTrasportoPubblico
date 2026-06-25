@@ -61,29 +61,29 @@ public class DataSeeder {
         PuntoEmissione pe19 = new PuntoEmissione(TipoPuntoEmissione.DISTRIBUTORE, false);
         PuntoEmissione pe20 = new PuntoEmissione(TipoPuntoEmissione.RIVENDITORE, true);
 
-        puntoEmissioneDao.save(pe1);
-        puntoEmissioneDao.save(pe2);
-        puntoEmissioneDao.save(pe3);
-        puntoEmissioneDao.save(pe4);
-        puntoEmissioneDao.save(pe5);
-        puntoEmissioneDao.save(pe6);
-        puntoEmissioneDao.save(pe7);
-        puntoEmissioneDao.save(pe8);
-        puntoEmissioneDao.save(pe9);
-        puntoEmissioneDao.save(pe10);
-        puntoEmissioneDao.save(pe11);
-        puntoEmissioneDao.save(pe12);
-        puntoEmissioneDao.save(pe13);
-        puntoEmissioneDao.save(pe14);
-        puntoEmissioneDao.save(pe15);
-        puntoEmissioneDao.save(pe16);
-        puntoEmissioneDao.save(pe17);
-        puntoEmissioneDao.save(pe18);
-        puntoEmissioneDao.save(pe19);
-        puntoEmissioneDao.save(pe20);
+//        puntoEmissioneDao.save(pe1);
+//        puntoEmissioneDao.save(pe2);
+//        puntoEmissioneDao.save(pe3);
+//        puntoEmissioneDao.save(pe4);
+//        puntoEmissioneDao.save(pe5);
+//        puntoEmissioneDao.save(pe6);
+//        puntoEmissioneDao.save(pe7);
+//        puntoEmissioneDao.save(pe8);
+//        puntoEmissioneDao.save(pe9);
+//        puntoEmissioneDao.save(pe10);
+//        puntoEmissioneDao.save(pe11);
+//        puntoEmissioneDao.save(pe12);
+//        puntoEmissioneDao.save(pe13);
+//        puntoEmissioneDao.save(pe14);
+//        puntoEmissioneDao.save(pe15);
+//        puntoEmissioneDao.save(pe16);
+//        puntoEmissioneDao.save(pe17);
+//        puntoEmissioneDao.save(pe18);
+//        puntoEmissioneDao.save(pe19);
+//        puntoEmissioneDao.save(pe20);
 
 
-        System.out.println("Punti emissione caricati!");
+//        System.out.println("Punti emissione caricati!");
 
 
     }
@@ -117,29 +117,29 @@ public class DataSeeder {
         }
 
 
+//
+//        mezzoDao.save(m1);
+//        mezzoDao.save(m2);
+//        mezzoDao.save(m3);
+//        mezzoDao.save(m4);
+//        mezzoDao.save(m5);
+//        mezzoDao.save(m6);
+//        mezzoDao.save(m7);
+//        mezzoDao.save(m8);
+//        mezzoDao.save(m9);
+//        mezzoDao.save(m10);
+//        mezzoDao.save(m11);
+//        mezzoDao.save(m12);
+//        mezzoDao.save(m13);
+//        mezzoDao.save(m14);
+//        mezzoDao.save(m15);
+//        mezzoDao.save(m16);
+//        mezzoDao.save(m17);
+//        mezzoDao.save(m18);
+//        mezzoDao.save(m19);
+//        mezzoDao.save(m20);
 
-        mezzoDao.save(m1);
-        mezzoDao.save(m2);
-        mezzoDao.save(m3);
-        mezzoDao.save(m4);
-        mezzoDao.save(m5);
-        mezzoDao.save(m6);
-        mezzoDao.save(m7);
-        mezzoDao.save(m8);
-        mezzoDao.save(m9);
-        mezzoDao.save(m10);
-        mezzoDao.save(m11);
-        mezzoDao.save(m12);
-        mezzoDao.save(m13);
-        mezzoDao.save(m14);
-        mezzoDao.save(m15);
-        mezzoDao.save(m16);
-        mezzoDao.save(m17);
-        mezzoDao.save(m18);
-        mezzoDao.save(m19);
-        mezzoDao.save(m20);
-
-        System.out.println("Mezzi caricati!");
+//        System.out.println("Mezzi caricati!");
     }
 
     Tratta t1 = new Tratta("Stazione Termini", "Anagnina", Duration.ofMinutes(40));
@@ -169,29 +169,29 @@ public class DataSeeder {
             System.out.println("Tratte già presenti.");
             return;
         }
-        trattaDao.save(t1);
-        trattaDao.save(t2);
-        trattaDao.save(t3);
-        trattaDao.save(t4);
-        trattaDao.save(t5);
-        trattaDao.save(t6);
-        trattaDao.save(t7);
-        trattaDao.save(t8);
-        trattaDao.save(t9);
-        trattaDao.save(t10);
-        trattaDao.save(t11);
-        trattaDao.save(t12);
-        trattaDao.save(t13);
-        trattaDao.save(t14);
-        trattaDao.save(t15);
-        trattaDao.save(t16);
-        trattaDao.save(t17);
-        trattaDao.save(t18);
-        trattaDao.save(t19);
-        trattaDao.save(t20);
+//        trattaDao.save(t1);
+//        trattaDao.save(t2);
+//        trattaDao.save(t3);
+//        trattaDao.save(t4);
+//        trattaDao.save(t5);
+//        trattaDao.save(t6);
+//        trattaDao.save(t7);
+//        trattaDao.save(t8);
+//        trattaDao.save(t9);
+//        trattaDao.save(t10);
+//        trattaDao.save(t11);
+//        trattaDao.save(t12);
+//        trattaDao.save(t13);
+//        trattaDao.save(t14);
+//        trattaDao.save(t15);
+//        trattaDao.save(t16);
+//        trattaDao.save(t17);
+//        trattaDao.save(t18);
+//        trattaDao.save(t19);
+//        trattaDao.save(t20);
 
 
-        System.out.println("Tratte caricate!");
+//        System.out.println("Tratte caricate!");
     }
 
     Corsa c1 = new Corsa(t1, m1, LocalDateTime.of(2026, 6, 24, 8, 0));
@@ -222,29 +222,29 @@ public class DataSeeder {
             return;
         }
 
+//
+//        corsaDao.save(c1);
+//        corsaDao.save(c2);
+//        corsaDao.save(c3);
+//        corsaDao.save(c4);
+//        corsaDao.save(c5);
+//        corsaDao.save(c6);
+//        corsaDao.save(c7);
+//        corsaDao.save(c8);
+//        corsaDao.save(c9);
+//        corsaDao.save(c10);
+//        corsaDao.save(c11);
+//        corsaDao.save(c12);
+//        corsaDao.save(c13);
+//        corsaDao.save(c14);
+//        corsaDao.save(c15);
+//        corsaDao.save(c16);
+//        corsaDao.save(c17);
+//        corsaDao.save(c18);
+//        corsaDao.save(c19);
+//        corsaDao.save(c20);
 
-        corsaDao.save(c1);
-        corsaDao.save(c2);
-        corsaDao.save(c3);
-        corsaDao.save(c4);
-        corsaDao.save(c5);
-        corsaDao.save(c6);
-        corsaDao.save(c7);
-        corsaDao.save(c8);
-        corsaDao.save(c9);
-        corsaDao.save(c10);
-        corsaDao.save(c11);
-        corsaDao.save(c12);
-        corsaDao.save(c13);
-        corsaDao.save(c14);
-        corsaDao.save(c15);
-        corsaDao.save(c16);
-        corsaDao.save(c17);
-        corsaDao.save(c18);
-        corsaDao.save(c19);
-        corsaDao.save(c20);
-
-        System.out.println("Corse salvate correttamente.");
+//        System.out.println("Corse salvate correttamente.");
 
     }
 
