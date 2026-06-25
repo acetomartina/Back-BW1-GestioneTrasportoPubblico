@@ -6,6 +6,7 @@ import acetomartina.enums.StatoMezzo;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.TypedQuery;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -172,6 +173,14 @@ public class MezzoDao {
 
         System.out.println("Le corse trovate sono : " + corseTrovate.size());
         corseTrovate.forEach(corsa -> System.out.println("La durata della corsa è stata : " + getDurataCorsa(corsa)));
+    }
+
+    public List<Mezzo> findAll() {
+        TypedQuery<Mezzo> query = entityManager.createQuery(
+                "SELECT m FROM Mezzo m",
+                Mezzo.class
+        );
+        return query.getResultList();
     }
 
 

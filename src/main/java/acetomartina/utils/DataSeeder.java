@@ -8,14 +8,12 @@ import acetomartina.enums.TipoPuntoEmissione;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
-import static acetomartina.Application.salvaLista;
 
 public class DataSeeder {
 
-    public static void popolaDatabase(
+    public  void popolaDatabase(
             UtenteDao utenteDao,
             MezzoDao mezzoDao,
             PuntoEmissioneDao puntoEmissioneDao,
@@ -26,194 +24,234 @@ public class DataSeeder {
             AbbonamentoDAO abbonamentoDAO,
             AmminstratoreDAO amminstratoreDAO,
             BigliettoDAO bigliettoDAO,
-            ManutenzioneDAO manutenzioneDAO){
+            ManutenzioneDAO manutenzioneDAO) {
 
         popolaPuntiEmissione(puntoEmissioneDao);
         popolaMezzi(mezzoDao);
         popolaTratte(trattaDao);
+        popolaCorse(corsaDao, trattaDao, mezzoDao);
     }
 
-    public static void popolaPuntiEmissione(PuntoEmissioneDao puntoEmissioneDao){
 
-        if( !puntoEmissioneDao.findAll().isEmpty()) {
+    public void popolaPuntiEmissione(PuntoEmissioneDao puntoEmissioneDao) {
+
+        if (!puntoEmissioneDao.findAll().isEmpty()) {
             System.out.println("Punti emissioni già presenti.");
             return;
         }
 
-        PuntoEmissione p1 = new PuntoEmissione(
-                TipoPuntoEmissione.DISTRIBUTORE,true
-        );
+        PuntoEmissione pe1 = new PuntoEmissione(TipoPuntoEmissione.RIVENDITORE, true);
+        PuntoEmissione pe2 = new PuntoEmissione(TipoPuntoEmissione.DISTRIBUTORE, false);
+        PuntoEmissione pe3 = new PuntoEmissione(TipoPuntoEmissione.RIVENDITORE, true);
+        PuntoEmissione pe4 = new PuntoEmissione(TipoPuntoEmissione.DISTRIBUTORE, false); // Fuori servizio
+        PuntoEmissione pe5 = new PuntoEmissione(TipoPuntoEmissione.DISTRIBUTORE, true);
+        PuntoEmissione pe6 = new PuntoEmissione(TipoPuntoEmissione.RIVENDITORE, true);
+        PuntoEmissione pe7 = new PuntoEmissione(TipoPuntoEmissione.DISTRIBUTORE, false);
+        PuntoEmissione pe8 = new PuntoEmissione(TipoPuntoEmissione.DISTRIBUTORE, true);
+        PuntoEmissione pe9 = new PuntoEmissione(TipoPuntoEmissione.RIVENDITORE, false); // Chiusa
+        PuntoEmissione pe10 = new PuntoEmissione(TipoPuntoEmissione.DISTRIBUTORE, true);
+        PuntoEmissione pe11 = new PuntoEmissione(TipoPuntoEmissione.RIVENDITORE, false);
+        PuntoEmissione pe12 = new PuntoEmissione(TipoPuntoEmissione.DISTRIBUTORE, true);
+        PuntoEmissione pe13 = new PuntoEmissione(TipoPuntoEmissione.DISTRIBUTORE, true);
+        PuntoEmissione pe14 = new PuntoEmissione(TipoPuntoEmissione.RIVENDITORE, false);
+        PuntoEmissione pe15 = new PuntoEmissione(TipoPuntoEmissione.DISTRIBUTORE, false);
+        PuntoEmissione pe16 = new PuntoEmissione(TipoPuntoEmissione.DISTRIBUTORE, true);
+        PuntoEmissione pe17 = new PuntoEmissione(TipoPuntoEmissione.RIVENDITORE, true);
+        PuntoEmissione pe18 = new PuntoEmissione(TipoPuntoEmissione.DISTRIBUTORE, true);
+        PuntoEmissione pe19 = new PuntoEmissione(TipoPuntoEmissione.DISTRIBUTORE, false);
+        PuntoEmissione pe20 = new PuntoEmissione(TipoPuntoEmissione.RIVENDITORE, true);
 
-        PuntoEmissione p2 = new PuntoEmissione(
-                TipoPuntoEmissione.DISTRIBUTORE,true
-        );
+        puntoEmissioneDao.save(pe1);
+        puntoEmissioneDao.save(pe2);
+        puntoEmissioneDao.save(pe3);
+        puntoEmissioneDao.save(pe4);
+        puntoEmissioneDao.save(pe5);
+        puntoEmissioneDao.save(pe6);
+        puntoEmissioneDao.save(pe7);
+        puntoEmissioneDao.save(pe8);
+        puntoEmissioneDao.save(pe9);
+        puntoEmissioneDao.save(pe10);
+        puntoEmissioneDao.save(pe11);
+        puntoEmissioneDao.save(pe12);
+        puntoEmissioneDao.save(pe13);
+        puntoEmissioneDao.save(pe14);
+        puntoEmissioneDao.save(pe15);
+        puntoEmissioneDao.save(pe16);
+        puntoEmissioneDao.save(pe17);
+        puntoEmissioneDao.save(pe18);
+        puntoEmissioneDao.save(pe19);
+        puntoEmissioneDao.save(pe20);
 
-        PuntoEmissione p3 = new PuntoEmissione(
-                TipoPuntoEmissione.DISTRIBUTORE,false
-        );
-
-        PuntoEmissione p4 = new PuntoEmissione(
-                TipoPuntoEmissione.RIVENDITORE,true
-        );
-
-        PuntoEmissione p5 = new PuntoEmissione(
-                TipoPuntoEmissione.RIVENDITORE,true
-        );
-
-        PuntoEmissione p6 = new PuntoEmissione(
-                TipoPuntoEmissione.RIVENDITORE,false
-        );
-
-        puntoEmissioneDao.save(p1);
-        puntoEmissioneDao.save(p2);
-        puntoEmissioneDao.save(p3);
-        puntoEmissioneDao.save(p4);
-        puntoEmissioneDao.save(p5);
-        puntoEmissioneDao.save(p6);
 
         System.out.println("Punti emissione caricati!");
-        Mezzo autobus1 = new Mezzo(LocalDate.now().minusDays(13), TipoMezzo.AUTOBUS);
-        Mezzo autobus2 = new Mezzo(LocalDate.now().minusDays(25), TipoMezzo.AUTOBUS);
-        Mezzo autobus3 = new Mezzo(LocalDate.now().minusDays(5), TipoMezzo.AUTOBUS);
-        Mezzo tram1 = new Mezzo(LocalDate.now().minusDays(45), TipoMezzo.TRAM);
-        Mezzo tram2 = new Mezzo(LocalDate.now().minusDays(120), TipoMezzo.TRAM);
-        Mezzo tram3 = new Mezzo(LocalDate.now().minusDays(75), TipoMezzo.TRAM);
-
-        List<Mezzo> mezzi = new ArrayList<>(List.of(autobus1, autobus2, autobus3, tram1, tram2, tram3));
-        salvaLista(mezzi);
-
-        Tratta tratta1 = new Tratta("Roma", "Napoli", Duration.ofHours(2));
-        Tratta tratta2 = new Tratta("Milano", "Torino", Duration.ofHours(1).plusMinutes(30));
-        Tratta tratta3 = new Tratta("Firenze", "Bologna", Duration.ofHours(1));
-        Tratta tratta4 = new Tratta("Bari", "Lecce", Duration.ofHours(1).plusMinutes(30));
-        Tratta tratta5 = new Tratta("Venezia", "Verona", Duration.ofHours(1).plusMinutes(15));
-        Tratta trattaTram1 = new Tratta("Termini", "Trastevere", Duration.ofMinutes(20));
-        Tratta trattaTram2 = new Tratta("Piazza Risorgimento", "Piazza Mancini", Duration.ofMinutes(15));
-        Tratta trattaTram3 = new Tratta("Porta Maggiore", "Centocelle", Duration.ofMinutes(25));
-        Tratta trattaTram4 = new Tratta("Piazzale Flaminio", "Valle Giulia", Duration.ofMinutes(10));
-        Tratta trattaTram5 = new Tratta("Largo Argentina", "Casaletto", Duration.ofMinutes(30));
-
-        List<Tratta> lista = new ArrayList<>(List.of(tratta1, tratta2, tratta3, tratta4, tratta5, trattaTram1, trattaTram2, trattaTram3, trattaTram4, trattaTram5));
-        salvaLista(lista);
-
-        Corsa corsa1 = new Corsa(tratta1, autobus1, LocalDateTime.now().plusDays(2));
-        Corsa corsa2 = new Corsa(tratta2, autobus2, LocalDateTime.now().plusDays(2).withHour(9).withMinute(30));
-        Corsa corsa3 = new Corsa(tratta3, autobus3, LocalDateTime.now().plusDays(2).withHour(11).withMinute(0));
-        Corsa corsa4 = new Corsa(tratta4, autobus1, LocalDateTime.now().plusDays(2).withHour(13).withMinute(15));
-        Corsa corsa5 = new Corsa(tratta5, autobus2, LocalDateTime.now().plusDays(2).withHour(15).withMinute(45));
-        Corsa corsa6 = new Corsa(tratta1, autobus3, LocalDateTime.now().plusDays(3).withHour(8).withMinute(0));
-        Corsa corsa7 = new Corsa(tratta2, autobus1, LocalDateTime.now().plusDays(3).withHour(10).withMinute(0));
-        Corsa corsa8 = new Corsa(tratta3, autobus2, LocalDateTime.now().plusDays(3).withHour(12).withMinute(30));
-        Corsa corsa9 = new Corsa(tratta4, autobus3, LocalDateTime.now().plusDays(4).withHour(7).withMinute(45));
-        Corsa corsa10 = new Corsa(tratta5, autobus1, LocalDateTime.now().plusDays(4).withHour(16).withMinute(0));
-        Corsa corsaTram1 = new Corsa(trattaTram1, tram1, LocalDateTime.now().plusHours(1));
-        Corsa corsaTram2 = new Corsa(trattaTram2, tram2, LocalDateTime.now().plusHours(1).plusMinutes(20));
-        Corsa corsaTram3 = new Corsa(trattaTram3, tram3, LocalDateTime.now().plusHours(2));
-        Corsa corsaTram4 = new Corsa(trattaTram4, tram1, LocalDateTime.now().plusHours(2).plusMinutes(15));
-        Corsa corsaTram5 = new Corsa(trattaTram5, tram2, LocalDateTime.now().plusHours(3));
-
-        List<Corsa> listaCorse = new ArrayList<>(List.of(corsa1, corsa2, corsa3, corsa4, corsa5, corsa6, corsa7, corsa8, corsa9, corsa10, corsaTram1, corsaTram2, corsaTram3, corsaTram4, corsaTram5));
-        salvaLista(listaCorse);
-
-        PuntoEmissione puntoEmissione1 = new PuntoEmissione(TipoPuntoEmissione.DISTRIBUTORE, true);
-        PuntoEmissione puntoEmissione2 = new PuntoEmissione(TipoPuntoEmissione.DISTRIBUTORE, false);
-        PuntoEmissione puntoEmissione3 = new PuntoEmissione(TipoPuntoEmissione.RIVENDITORE, true);
-        PuntoEmissione puntoEmissione4 = new PuntoEmissione(TipoPuntoEmissione.RIVENDITORE, true);
-        PuntoEmissione puntoEmissione5 = new PuntoEmissione(TipoPuntoEmissione.DISTRIBUTORE, false);
-
-        List<PuntoEmissione> puntiEmissione = new ArrayList<>();
-        puntiEmissione.add(puntoEmissione1);
-        puntiEmissione.add(puntoEmissione2);
-        puntiEmissione.add(puntoEmissione3);
-        puntiEmissione.add(puntoEmissione4);
-        puntiEmissione.add(puntoEmissione5);
-
-        salvaLista(puntiEmissione);
-
-        Biglietto biglietto1 = new Biglietto(LocalDate.now(), corsa3, puntoEmissione1);
-        Biglietto biglietto2 = new Biglietto(LocalDate.now().minusDays(2), corsa3, puntoEmissione2);
-        Biglietto biglietto3 = new Biglietto(LocalDate.now().minusDays(1), corsa1, puntoEmissione3);
-        Biglietto biglietto4 = new Biglietto(LocalDate.now().minusDays(5), corsa2, puntoEmissione1);
-        Biglietto biglietto5 = new Biglietto(LocalDate.now().minusDays(3), corsa1, puntoEmissione4);
-        Biglietto biglietto6 = new Biglietto(LocalDate.now().minusDays(7), corsa3, puntoEmissione5);
-        Biglietto biglietto7 = new Biglietto(LocalDate.now().minusDays(10), corsa2, puntoEmissione2);
-        Biglietto biglietto8 = new Biglietto(LocalDate.now().minusDays(4), corsa1, puntoEmissione1);
-        Biglietto biglietto9 = new Biglietto(LocalDate.now().minusDays(6), corsa3, puntoEmissione3);
-        Biglietto biglietto10 = new Biglietto(LocalDate.now().minusDays(8), corsa2, puntoEmissione4);
-        Biglietto biglietto11 = new Biglietto(LocalDate.now().minusDays(12), corsa1, puntoEmissione5);
-        Biglietto biglietto12 = new Biglietto(LocalDate.now().minusDays(9), corsa3, puntoEmissione1);
-        Biglietto biglietto13 = new Biglietto(LocalDate.now().minusDays(15), corsa2, puntoEmissione2);
-        Biglietto biglietto14 = new Biglietto(LocalDate.now().minusDays(11), corsa1, puntoEmissione3);
-        Biglietto biglietto15 = new Biglietto(LocalDate.now().minusDays(14), corsa3, puntoEmissione4);
-        Biglietto biglietto16 = new Biglietto(LocalDate.now().minusDays(20), corsa2, puntoEmissione5);
-        Biglietto biglietto17 = new Biglietto(LocalDate.now().minusDays(18), corsa1, puntoEmissione1);
-        Biglietto biglietto18 = new Biglietto(LocalDate.now().minusDays(13), corsa3, puntoEmissione2);
-        Biglietto biglietto19 = new Biglietto(LocalDate.now().minusDays(16), corsa2, puntoEmissione3);
-        Biglietto biglietto20 = new Biglietto(LocalDate.now().minusDays(25), corsa1, puntoEmissione4);
-
-        List<Biglietto> biglietti = new ArrayList<>();
-        biglietti.add(biglietto1);
-        biglietti.add(biglietto2);
-        biglietti.add(biglietto3);
-        biglietti.add(biglietto4);
-        biglietti.add(biglietto5);
-        biglietti.add(biglietto6);
-        biglietti.add(biglietto7);
-        biglietti.add(biglietto8);
-        biglietti.add(biglietto9);
-        biglietti.add(biglietto10);
-        biglietti.add(biglietto11);
-        biglietti.add(biglietto12);
-        biglietti.add(biglietto13);
-        biglietti.add(biglietto14);
-        biglietti.add(biglietto15);
-        biglietti.add(biglietto16);
-        biglietti.add(biglietto17);
-        biglietti.add(biglietto18);
-        biglietti.add(biglietto19);
-        biglietti.add(biglietto20);
-
-        salvaLista(biglietti);
-
-        Manutenzione manutenzione1 = new Manutenzione(LocalDate.now().plusDays(20), LocalDate.now().plusDays(27), autobus1, acetomartina.enom.StatoManutenzione.PROGRAMMATA);
-        Manutenzione manutenzione2 = new Manutenzione(LocalDate.now().minusDays(5), LocalDate.now().plusDays(2), autobus2, acetomartina.enom.StatoManutenzione.IN_CORSO);
-        Manutenzione manutenzione3 = new Manutenzione(LocalDate.now().minusDays(30), LocalDate.now().minusDays(25), autobus3, acetomartina.enom.StatoManutenzione.ESEGUITA);
-        Manutenzione manutenzione4 = new Manutenzione(LocalDate.now().plusDays(10), LocalDate.now().plusDays(15), autobus1, acetomartina.enom.StatoManutenzione.PROGRAMMATA);
-        Manutenzione manutenzione5 = new Manutenzione(LocalDate.now().minusDays(60), LocalDate.now().minusDays(52), autobus3, acetomartina.enom.StatoManutenzione.ESEGUITA);
-        Manutenzione manutenzione6 = new Manutenzione(LocalDate.now().minusDays(3), LocalDate.now().plusDays(4), tram2, acetomartina.enom.StatoManutenzione.IN_CORSO);
-        Manutenzione manutenzione7 = new Manutenzione(LocalDate.now().plusDays(30), LocalDate.now().plusDays(38), tram1, acetomartina.enom.StatoManutenzione.PROGRAMMATA);
-        Manutenzione manutenzione8 = new Manutenzione(LocalDate.now().minusDays(45), LocalDate.now().minusDays(40), tram3, acetomartina.enom.StatoManutenzione.ESEGUITA);
-        Manutenzione manutenzione9 = new Manutenzione(LocalDate.now().plusDays(5), LocalDate.now().plusDays(9), tram1, acetomartina.enom.StatoManutenzione.PROGRAMMATA);
-        Manutenzione manutenzione10 = new Manutenzione(LocalDate.now().minusDays(15), LocalDate.now().minusDays(10), tram3, acetomartina.enom.StatoManutenzione.ESEGUITA);
-
-        List<Manutenzione> manutenzioni = new ArrayList<>();
-        manutenzioni.add(manutenzione1);
-        manutenzioni.add(manutenzione2);
-        manutenzioni.add(manutenzione3);
-        manutenzioni.add(manutenzione4);
-        manutenzioni.add(manutenzione5);
-        manutenzioni.add(manutenzione6);
-        manutenzioni.add(manutenzione7);
-        manutenzioni.add(manutenzione8);
-        manutenzioni.add(manutenzione9);
-        manutenzioni.add(manutenzione10);
-
-        salvaLista(manutenzioni);
-
-
-        Corsa corsa11 = new Corsa(tratta1, autobus3, LocalDateTime.now().minusDays(2).withHour(8).withMinute(0));
-        Corsa corsa12 = new Corsa(tratta2, autobus1, LocalDateTime.now().minusDays(5).withHour(11).withMinute(0));
-        Corsa corsa13 = new Corsa(tratta3, autobus2, LocalDateTime.now().minusDays(6).withHour(17).withMinute(30));
-        Corsa corsa14 = new Corsa(tratta4, autobus3, LocalDateTime.now().minusDays(9).withHour(7).withMinute(48));
-        Corsa corsa15 = new Corsa(tratta5, autobus1, LocalDateTime.now().minusDays(8).withHour(19).withMinute(0));
-         
-
-
 
 
     }
 
-    private static void popolaMezzi(MezzoDao mezzoDao){}
+    Mezzo m1 = new Mezzo(LocalDate.of(2025, 1, 10), TipoMezzo.TRAM);
+    Mezzo m2 = new Mezzo(LocalDate.of(2025, 1, 15), TipoMezzo.AUTOBUS);
+    Mezzo m3 = new Mezzo(LocalDate.of(2025, 2, 20), TipoMezzo.TRAM);
+    Mezzo m4 = new Mezzo(LocalDate.of(2025, 3, 5), TipoMezzo.AUTOBUS);
+    Mezzo m5 = new Mezzo(LocalDate.of(2025, 3, 12), TipoMezzo.AUTOBUS);
+    Mezzo m6 = new Mezzo(LocalDate.of(2025, 4, 18), TipoMezzo.TRAM);
+    Mezzo m7 = new Mezzo(LocalDate.of(2025, 5, 22), TipoMezzo.TRAM);
+    Mezzo m8 = new Mezzo(LocalDate.of(2025, 6, 30), TipoMezzo.AUTOBUS);
+    Mezzo m9 = new Mezzo(LocalDate.of(2025, 7, 14), TipoMezzo.AUTOBUS);
+    Mezzo m10 = new Mezzo(LocalDate.of(2025, 8, 5), TipoMezzo.TRAM);
+    Mezzo m11 = new Mezzo(LocalDate.of(2025, 9, 20), TipoMezzo.AUTOBUS);
+    Mezzo m12 = new Mezzo(LocalDate.of(2025, 10, 1), TipoMezzo.AUTOBUS);
+    Mezzo m13 = new Mezzo(LocalDate.of(2025, 10, 15), TipoMezzo.TRAM);
+    Mezzo m14 = new Mezzo(LocalDate.of(2025, 11, 2), TipoMezzo.TRAM);
+    Mezzo m15 = new Mezzo(LocalDate.of(2025, 11, 28), TipoMezzo.AUTOBUS);
+    Mezzo m16 = new Mezzo(LocalDate.of(2025, 12, 12), TipoMezzo.AUTOBUS);
+    Mezzo m17 = new Mezzo(LocalDate.of(2026, 1, 5), TipoMezzo.TRAM);
+    Mezzo m18 = new Mezzo(LocalDate.of(2026, 2, 10), TipoMezzo.TRAM);
+    Mezzo m19 = new Mezzo(LocalDate.of(2026, 3, 22), TipoMezzo.AUTOBUS);
+    Mezzo m20 = new Mezzo(LocalDate.of(2026, 4, 18), TipoMezzo.AUTOBUS);
 
-    private static void popolaTratte(TrattaDao trattaDao){}
+    public void popolaMezzi(MezzoDao mezzoDao) {
+
+        if (!mezzoDao.findAll().isEmpty()) {
+            System.out.println("Mezzi già presenti.");
+            return;
+        }
+
+
+
+        mezzoDao.save(m1);
+        mezzoDao.save(m2);
+        mezzoDao.save(m3);
+        mezzoDao.save(m4);
+        mezzoDao.save(m5);
+        mezzoDao.save(m6);
+        mezzoDao.save(m7);
+        mezzoDao.save(m8);
+        mezzoDao.save(m9);
+        mezzoDao.save(m10);
+        mezzoDao.save(m11);
+        mezzoDao.save(m12);
+        mezzoDao.save(m13);
+        mezzoDao.save(m14);
+        mezzoDao.save(m15);
+        mezzoDao.save(m16);
+        mezzoDao.save(m17);
+        mezzoDao.save(m18);
+        mezzoDao.save(m19);
+        mezzoDao.save(m20);
+
+        System.out.println("Mezzi caricati!");
+    }
+
+    Tratta t1 = new Tratta("Stazione Termini", "Anagnina", Duration.ofMinutes(40));
+    Tratta t2 = new Tratta("Laurentina", "Rebibbia", Duration.ofMinutes(50));
+    Tratta t3 = new Tratta("Piazza Venezia", "Viterbo", Duration.ofHours(2));
+    Tratta t4 = new Tratta("Flaminio", "Piazza del Popolo", Duration.ofMinutes(15));
+    Tratta t5 = new Tratta("Milano Centrale", "Duomo", Duration.ofMinutes(10));
+    Tratta t6 = new Tratta("Napoli Centrale", "Sorrento", Duration.ofMinutes(65));
+    Tratta t7 = new Tratta("Venezia S. Lucia", "Mestre", Duration.ofMinutes(12));
+    Tratta t8 = new Tratta("Firenze SMN", "Pisa Centrale", Duration.ofMinutes(50));
+    Tratta t9 = new Tratta("Bologna Centrale", "San Lazzaro", Duration.ofMinutes(25));
+    Tratta t10 = new Tratta("Torino Porta Nuova", "Lingotto", Duration.ofMinutes(15));
+    Tratta t11 = new Tratta("Londra King's Cross", "Camden Town", Duration.ofMinutes(18));
+    Tratta t12 = new Tratta("Parigi Gare du Nord", "Chatelet", Duration.ofMinutes(22));
+    Tratta t13 = new Tratta("Berlino Alexanderplatz", "Spandau", Duration.ofMinutes(35));
+    Tratta t14 = new Tratta("Vienna Hauptbahnhof", "Prater", Duration.ofMinutes(14));
+    Tratta t15 = new Tratta("Barcellona Sants", "Sagrada Familia", Duration.ofMinutes(20));
+    Tratta t16 = new Tratta("Madrid Atocha", "Sol", Duration.ofMinutes(12));
+    Tratta t17 = new Tratta("Amsterdam Centraal", "Schiphol", Duration.ofMinutes(18));
+    Tratta t18 = new Tratta("Bruxelles Midi", "Atomium", Duration.ofMinutes(30));
+    Tratta t19 = new Tratta("Ginevra Cornavin", "Aeroporto", Duration.ofMinutes(10));
+    Tratta t20 = new Tratta("Monaco Hauptbahnhof", "Marienplatz", Duration.ofMinutes(8));
+
+    public void popolaTratte(TrattaDao trattaDao) {
+
+        if (!trattaDao.findAll().isEmpty()) {
+            System.out.println("Tratte già presenti.");
+            return;
+        }
+        trattaDao.save(t1);
+        trattaDao.save(t2);
+        trattaDao.save(t3);
+        trattaDao.save(t4);
+        trattaDao.save(t5);
+        trattaDao.save(t6);
+        trattaDao.save(t7);
+        trattaDao.save(t8);
+        trattaDao.save(t9);
+        trattaDao.save(t10);
+        trattaDao.save(t11);
+        trattaDao.save(t12);
+        trattaDao.save(t13);
+        trattaDao.save(t14);
+        trattaDao.save(t15);
+        trattaDao.save(t16);
+        trattaDao.save(t17);
+        trattaDao.save(t18);
+        trattaDao.save(t19);
+        trattaDao.save(t20);
+
+
+        System.out.println("Tratte caricate!");
+    }
+
+    Corsa c1 = new Corsa(t1, m1, LocalDateTime.of(2026, 6, 24, 8, 0));
+    Corsa c2 = new Corsa(t2, m2, LocalDateTime.of(2026, 6, 24, 8, 30));
+    Corsa c3 = new Corsa(t3, m5, LocalDateTime.of(2026, 6, 24, 9, 0));
+    Corsa c4 = new Corsa(t4, m3, LocalDateTime.of(2026, 6, 24, 9, 45));
+    Corsa c5 = new Corsa(t5, m4, LocalDateTime.of(2026, 6, 24, 10, 15));
+    Corsa c6 = new Corsa(t6, m8, LocalDateTime.of(2026, 6, 24, 11, 0));
+    Corsa c7 = new Corsa(t7, m6, LocalDateTime.of(2026, 6, 24, 11, 30));
+    Corsa c8 = new Corsa(t8, m2, LocalDateTime.of(2026, 6, 24, 12, 0));
+    Corsa c9 = new Corsa(t9, m9, LocalDateTime.of(2026, 6, 24, 13, 15));
+    Corsa c10 = new Corsa(t10, m10, LocalDateTime.of(2026, 6, 24, 14, 0));
+    Corsa c11 = new Corsa(t11, m11, LocalDateTime.of(2026, 6, 24, 14, 45));
+    Corsa c12 = new Corsa(t12, m12, LocalDateTime.of(2026, 6, 24, 15, 30));
+    Corsa c13 = new Corsa(t13, m14, LocalDateTime.of(2026, 6, 24, 16, 0));
+    Corsa c14 = new Corsa(t14, m13, LocalDateTime.of(2026, 6, 24, 16, 45));
+    Corsa c15 = new Corsa(t15, m17, LocalDateTime.of(2026, 6, 24, 17, 15));
+    Corsa c16 = new Corsa(t16, m15, LocalDateTime.of(2026, 6, 24, 18, 0));
+    Corsa c17 = new Corsa(t17, m16, LocalDateTime.of(2026, 6, 24, 18, 30));
+    Corsa c18 = new Corsa(t18, m19, LocalDateTime.of(2026, 6, 24, 19, 0));
+    Corsa c19 = new Corsa(t19, m18, LocalDateTime.of(2026, 6, 24, 19, 45));
+    Corsa c20 = new Corsa(t20, m20, LocalDateTime.of(2026, 6, 24, 20, 30));
+
+    public void popolaCorse(CorsaDao corsaDao, TrattaDao trattaDao, MezzoDao mezzoDao) {
+
+        if(!corsaDao.findAll().isEmpty()){
+            System.out.println("Corse già presenti.");
+            return;
+        }
+
+
+        corsaDao.save(c1);
+        corsaDao.save(c2);
+        corsaDao.save(c3);
+        corsaDao.save(c4);
+        corsaDao.save(c5);
+        corsaDao.save(c6);
+        corsaDao.save(c7);
+        corsaDao.save(c8);
+        corsaDao.save(c9);
+        corsaDao.save(c10);
+        corsaDao.save(c11);
+        corsaDao.save(c12);
+        corsaDao.save(c13);
+        corsaDao.save(c14);
+        corsaDao.save(c15);
+        corsaDao.save(c16);
+        corsaDao.save(c17);
+        corsaDao.save(c18);
+        corsaDao.save(c19);
+        corsaDao.save(c20);
+
+        System.out.println("Corse salvate correttamente.");
+
+    }
+
+
+
+
 }
+
+
+

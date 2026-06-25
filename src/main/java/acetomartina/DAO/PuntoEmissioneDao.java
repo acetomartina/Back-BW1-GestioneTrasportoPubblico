@@ -1,7 +1,7 @@
 package acetomartina.DAO;
 
 import acetomartina.entities.*;
-import acetomartina.enums.PeriodicitàAbbonamento;
+import acetomartina.enums.PeriodicitaAbbonamento;
 import acetomartina.enums.TipoPuntoEmissione;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
@@ -121,7 +121,7 @@ public class PuntoEmissioneDao {
         }
     }
 
-    public void emettiESalvaAbbonamento(PuntoEmissione puntoEmissione, Tratta tratta, Tessera tessera, PeriodicitàAbbonamento periodicita) {
+    public void emettiESalvaAbbonamento(PuntoEmissione puntoEmissione, Tratta tratta, Tessera tessera, PeriodicitaAbbonamento periodicita) {
         try {
             entityManager.getTransaction().begin();
             entityManager.persist(puntoEmissione.creaAbbonamento(tratta, tessera, periodicita));

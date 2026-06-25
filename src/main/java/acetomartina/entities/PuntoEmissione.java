@@ -1,6 +1,6 @@
 package acetomartina.entities;
 
-import acetomartina.enums.PeriodicitàAbbonamento;
+import acetomartina.enums.PeriodicitaAbbonamento;
 import acetomartina.enums.TipoPuntoEmissione;
 import jakarta.persistence.*;
 
@@ -51,7 +51,7 @@ public class PuntoEmissione {
         return nuovoBiglietto;
     }
 
-    public Abbonamento creaAbbonamento(Tratta tratta, Tessera tessera, PeriodicitàAbbonamento periodicita) {
+    public Abbonamento creaAbbonamento(Tratta tratta, Tessera tessera, PeriodicitaAbbonamento periodicita) {
         Abbonamento nuovoAbbonamento = new Abbonamento(LocalDate.now(), this, tessera, periodicita);
         this.listaVendite.add(nuovoAbbonamento);
         counterAbbonamenti++;
