@@ -52,7 +52,7 @@ public class Application {
         TesseraDao tesseraDao = new TesseraDao(entityManager);
         TitoloViaggioDao titoloViaggioDao = new TitoloViaggioDao(entityManager);
         TrattaDao trattaDao = new TrattaDao(entityManager);
-        UtenteDao utenteDAO = new UtenteDao(entityManager);
+        UtenteDao utenteDAO = new UtenteDao(entityManager, tesseraDao,abbonamentoDAO);
 
         System.out.println("Benvenuto nella gestione del trosporto pubblico");
         System.out.println("\n--- MENU PRINCIPALE ---");

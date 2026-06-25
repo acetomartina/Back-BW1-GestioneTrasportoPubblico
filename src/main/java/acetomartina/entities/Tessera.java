@@ -112,4 +112,6 @@ public class Tessera {
                 ", tessera_attiva=" + tessera_attiva +
                 '}';
     }
+
+
 }

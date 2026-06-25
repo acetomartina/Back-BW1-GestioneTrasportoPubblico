@@ -56,6 +56,10 @@ public abstract class TitoloViaggio {
         return puntoEmissione;
     }
 
+    public void setDataEmissione(LocalDate dataEmissione) {
+        this.dataEmissione = dataEmissione;
+    }
+
     @Override
     public String toString() {
         return "TitoloViaggio{" +
