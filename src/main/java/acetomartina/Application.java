@@ -14,16 +14,17 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Scanner;
 
 public class Application {
     private static final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("gestione-trasporto-pubblico-pu");
 
     static EntityManager entityManager = entityManagerFactory.createEntityManager();
 
-     public static <T> void salvaLista(List<T> lista) {
+    public static <T> void salvaLista(List<T> lista) {
         entityManager.getTransaction().begin();
-         lista.forEach(entity -> entityManager.persist(entity));
-         entityManager.getTransaction().commit();
+        lista.forEach(entity -> entityManager.persist(entity));
+        entityManager.getTransaction().commit();
     }
 
     public static void main(String[] args) {
@@ -258,7 +259,6 @@ public class Application {
 //        utenteDAO.save(u20);
 
 
-
         Tessera ts1 = new Tessera(LocalDate.of(2026, 1, 5), u2, true);
         Tessera ts2 = new Tessera(LocalDate.of(2026, 1, 12), u3, true);
         Tessera ts3 = new Tessera(LocalDate.of(2026, 1, 20), u4, true);
@@ -422,13 +422,7 @@ public class Application {
 //        manutenzioneDAO.save(mn18);
 //        manutenzioneDAO.save(mn19);
 //        manutenzioneDAO.save(mn20);
-
-
-
-
-
-
-
+        
 
         System.out.println("Siamo connessi!");
     }
