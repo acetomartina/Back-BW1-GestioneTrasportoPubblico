@@ -33,7 +33,7 @@ public class Utente {
    @OneToOne(mappedBy = "utente")
     private Tessera tessera;
 
-  protected Utente(){}
+  public Utente(){}
     public Utente(TipoUtente tipo_utente,String nome_utente,String cognome_utente,LocalDate data_nascita, String luogo_nascita){
       this.tipo_utente= tipo_utente;
       this.nome_utente= nome_utente;

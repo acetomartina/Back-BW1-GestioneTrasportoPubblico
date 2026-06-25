@@ -1,36 +1,35 @@
 package acetomartina.DAO;
 
 import acetomartina.entities.*;
+import acetomartina.enums.PeriodicitaAbbonamento;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-
 import static acetomartina.Application.scanner;
 
 public class UtenteDao {
     private final EntityManager entityManager;
 
-
-    // Utilizziamo lo stesso entityManager del costruttore per inizializzare i DAO interni,
-    // garantendo l'allineamento della sessione di persistenza senza duplicare le Factory.
     private final TrattaDao trattaDao;
     private final CorsaDao corsaDao;
     private final TesseraDao tesseraDao;
     private final AbbonamentoDAO abbonamentoDAO;
+    private final PuntoEmissioneDao puntoEmissioneDao;
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
 
     // COSTRUTTORE
-    public UtenteDao(EntityManager entityManager, TesseraDao tesseraDao, AbbonamentoDAO abbonamentoDAO) {
+    public UtenteDao(EntityManager entityManager, TesseraDao tesseraDao, AbbonamentoDAO abbonamentoDAO, PuntoEmissioneDao puntoEmissioneDao) {
         this.entityManager = entityManager;
         this.trattaDao = new TrattaDao(entityManager);
         this.corsaDao = new CorsaDao(entityManager);
         this.tesseraDao = tesseraDao;
         this.abbonamentoDAO = abbonamentoDAO;
+        this.puntoEmissioneDao = puntoEmissioneDao;
     }
 
 
@@ -48,16 +47,19 @@ public class UtenteDao {
         }
     }
 
+    // recupero tutti gli utenti
     public List<Utente> getTuttiGliUtenti() {
         return entityManager.createQuery("from Utente", Utente.class).getResultList();
     }
 
+    // recupero chi ha la tessera
     public List<Utente> getTuttiITesserati() {
         return entityManager.createQuery("from Utente where tessera is not null", Utente.class).getResultList();
     }
 
 
     public void scannerUtente1() {
+
         System.out.println("Di cosa hai bisogno?");
         System.out.println("1 - Macchinetta digitale.");
         System.out.println("2 - Rivenditore autorizzato più vicino.");
@@ -77,19 +79,16 @@ public class UtenteDao {
         } while (!sceltaPeValida);
 
         switch (sceltaPuntoEmissione){
+
             case 1 -> {
                 System.out.println("Bene! Benvenuto. Di cosa hai bisogno?");
                 System.out.println("1 - Biglietto. ");
                 System.out.println("2 - Abbonamento.");
                 System.out.println("3 - Tessera.");
                 System.out.println("0 - Esci.");
-
-
             }
+            case 2 -> System.out.println("Bene! Puoi recarti dal rivenditore in Via Appia Nuova n.27.");
 
-            case 2 -> {
-                System.out.println("Bene! Puoi recarti al rivenditore in Via Appia Nuova n.27.");
-            }
         }
 
 
@@ -133,7 +132,7 @@ public class UtenteDao {
 
                 switch (sceltaUtente2) {
                     case 1 -> {
-                        // --- ACQUISTA BIGLIETTO ---
+
                         System.out.println("Scegli la destinazione che devi raggiungere.");
                         List<Tratta> tratte = trattaDao.findAll();
 
@@ -144,7 +143,11 @@ public class UtenteDao {
 
                         final int[] numero = {1};
                         tratte.forEach(tratta -> {
-                            System.out.println(numero[0] + " - " + "Da " + tratta.getZonaPartenza() + " a " + tratta.getCapolinea() + " (previsto " + tratta.getDurata().toHours() + "." + tratta.getDurata().toMinutesPart() + " h)");
+                            System.out.println(numero[0] + " - " +
+                                    "Da " + tratta.getZonaPartenza() +
+                                    " a " + tratta.getCapolinea() +
+                                    " (previsto " + tratta.getDurata().toHours() +
+                                    "." + tratta.getDurata().toMinutesPart() + " h)");
                             numero[0]++;
                         });
 
@@ -208,25 +211,22 @@ public class UtenteDao {
 
                         Corsa corsaSelezionata = corse.get(corsaScelta - 1);
                         System.out.println("Acquisto completato con successo per la corsa del mezzo " + corsaSelezionata.getMezzo().getTipo_mezzo());
-                        // Qui istanzierai l'oggetto Biglietto per salvarlo a DB
                     }
 
                     case 2 -> {
-                        // --- OBLITERA BIGLIETTO ---
-                        System.out.println("--- VIDIMAZIONE BIGLIETTO ---");
+                        // obliteriamo biglietto
                         System.out.println("Inserisci il codice univoco del tuo biglietto:");
                         String codiceBiglietto = scanner.nextLine();
 
                         System.out.println("Inserisci l'ID o la targa del mezzo su cui sali:");
                         String idMezzo = scanner.nextLine();
 
-                        // Qui andrà la logica del cambio di stato del biglietto a DB
                         System.out.println("Biglietto " + codiceBiglietto + " obliterato con successo sul mezzo " + idMezzo + "!");
                     }
                 }
             }
             case 2 -> {
-                // --- CASE 2: GESTIONE ABBONAMENTO ---
+                // gestiamo abbonamento
                 System.out.println("1 - Acquista un nuovo Abbonamento.");
                 System.out.println("2 - Verifica validità del tuo Abbonamento.");
 
@@ -248,12 +248,11 @@ public class UtenteDao {
 
                 switch (sceltaAbbonamento) {
                     case 1 -> {
-                        // --- ACQUISTA ABBONAMENTO ---
+                        // acquista abbonamento
                         System.out.println("Per sottoscrivere un abbonamento devi possedere una tessera.");
                         System.out.println("Inserisci il numero della tua tessera:");
                         String numTessera = scanner.nextLine();
 
-                        // Utilizziamo il metodo di ricerca del TesseraDao
                         Tessera tesseraTrovata = tesseraDao.getById(numTessera);
 
                         if (tesseraTrovata == null) {
@@ -261,7 +260,6 @@ public class UtenteDao {
                             return;
                         }
 
-                        // 1. SCELTA DELLA PERIODICITÀ
                         System.out.println("Che tipo di abbonamento desideri?");
                         System.out.println("1 - Settimanale");
                         System.out.println("2 - Mensile");
@@ -283,7 +281,6 @@ public class UtenteDao {
                         } while (!tipoAbbValido);
 
 
-                        // 2. SCELTA DELLA TRATTA
                         System.out.println("Seleziona la tratta alla quale vuoi abbonarti:");
                         List<Tratta> tratte = trattaDao.findAll();
 
@@ -323,32 +320,36 @@ public class UtenteDao {
 
                         String tipoString = (tipoAbbonamento == 1) ? "Settimanale" : "Mensile";
                         System.out.println("\nRegistrazione abbonamento " + tipoString + " sulla tratta: Da "
-                                + trattaSelezionata.getZonaPartenza() + " a " + trattaSelezionata.getCapolinea() + "...");
+                                + trattaSelezionata.getZonaPartenza() + " a " + trattaSelezionata.getCapolinea() + ".");
 
-                        try {
-                            entityManager.getTransaction().begin();
+                        try { entityManager.getTransaction().begin();
 
                             // salvo la scelta dell'utente dentro l'abbonamento che sto creando
                             // altrimenti l'abbonamento rimane senza tratta, la colonna sul DB prende null
                             // e va nel catch = errore
                             Abbonamento nuovoAbbonamento = new Abbonamento();
 
-                            // 1. GENERIAMO E IMPOSTIAMO IL CODICE UNIVOCO
                             nuovoAbbonamento.setCodiceUnivoco(java.util.UUID.randomUUID().toString());
 
-                            // 2. Impostiamo gli altri campi (Tratta e Tessera)
-                            nuovoAbbonamento.setTratta(trattaSelezionata);
+                            nuovoAbbonamento.setDataEmissione(java.time.LocalDate.now());
+
                             nuovoAbbonamento.setTessera(tesseraTrovata);
 
-                            // 3. Impostiamo le date a seconda di come calcoli la scadenza
-                            nuovoAbbonamento.setDataEmissione(java.time.LocalDate.now());
+                            nuovoAbbonamento.setTratta(trattaSelezionata);
+
+                            PuntoEmissione puntoEmissione = puntoEmissioneDao.getPunto_emissione();
+                            nuovoAbbonamento.setPuntoEmissione(puntoEmissione);
+
+
                             if (tipoAbbonamento == 1) {
-                                nuovoAbbonamento.setDataScadenza(java.time.LocalDate.now().plusDays(7)); // Settimanale
+                                nuovoAbbonamento.setPeriodicita(PeriodicitaAbbonamento.SETTIMANALE);
+                                nuovoAbbonamento.setDataScadenza(java.time.LocalDate.now().plusWeeks(1));
                             } else {
-                                nuovoAbbonamento.setDataScadenza(java.time.LocalDate.now().plusMonths(1)); // Mensile
+                                nuovoAbbonamento.setPeriodicita(PeriodicitaAbbonamento.MENSILE);
+
+                                nuovoAbbonamento.setDataScadenza(java.time.LocalDate.now().plusMonths(1));
                             }
 
-                            // Ora che tutti i campi obbligatori sono pieni, non darà più errore!
                             entityManager.persist(nuovoAbbonamento);
                             entityManager.getTransaction().commit();
                             System.out.println("Acquisto completato con successo!");
@@ -361,18 +362,16 @@ public class UtenteDao {
                             return;
                         }
 
-                        // 4. STAMPA DI TUTTI GLI ABBONAMENTI ATTIVI PER QUELLA TESSERA
-                        System.out.println("\n--- RIEPILOGO ABBONAMENTI ATTIVI PER LA TESSERA N. " + numTessera + " ---");
+                        System.out.println("\nAbbonamenti attivi per la tessera: " + numTessera);
                         abbonamentoDAO.verificaValidita(tesseraTrovata);
                     }
                     case 2 -> {
-                        // --- VERIFICA VALIDITÀ ABBONAMENTO ---
                         System.out.println("Inserisci il numero della tua tessera per verificare lo stato degli abbonamenti:");
                         String numTessera = scanner.nextLine();
 
                         Tessera tesseraTrovata = tesseraDao.getById(numTessera);
                         if (tesseraTrovata == null) {
-                            System.out.println("Nessuna tessera trouvata con questo codice.");
+                            System.out.println("Nessuna tessera trovata con questo codice.");
                             return;
                         }
 
@@ -381,7 +380,6 @@ public class UtenteDao {
                 }
             }
             case 3 -> {
-                // --- CASE 3: GESTIONE TESSERA ---
                 System.out.println("1 - Richiedi il rilascio di una nuova Tessera.");
                 System.out.println("2 - Rinnova una Tessera esistente.");
 
@@ -403,13 +401,38 @@ public class UtenteDao {
 
                 switch (sceltaTessera) {
                     case 1 -> {
-                        // --- RICHIESTA NUOVA TESSERA ---
-                        System.out.println("Stai richiedendo una nuova tessera di validità annuale.");
-                        // Logica di istanziazione e persistenza della nuova Tessera
-                        System.out.println("Nuova tessera emessa e registrata a sistema con successo!");
+                        System.out.println("Inserisci nome utente:");
+                        String nome = scanner.nextLine();
+
+                        System.out.println("Inserisci cognome utente:");
+                        String cognome = scanner.nextLine();
+
+                        Utente nuovoUtente = new Utente();
+                        nuovoUtente.setNome_utente(nome);
+                        nuovoUtente.setCognome_utente(cognome);
+
+                        Tessera nuovaTessera = new Tessera(java.time.LocalDate.now(), nuovoUtente, true);
+
+                        try {
+                            entityManager.getTransaction().begin();
+
+                            entityManager.persist(nuovoUtente);
+                            entityManager.persist(nuovaTessera);
+
+                            entityManager.getTransaction().commit();
+
+                            System.out.println("Tessera creata correttamente!");
+                            System.out.println("Numero tessera: " + nuovaTessera.getNumeroTessera());
+                            System.out.println("Valida fino al: " + nuovaTessera.getDataScadenza());
+
+                        } catch (Exception e) {
+                            if (entityManager.getTransaction().isActive()) {
+                                entityManager.getTransaction().rollback();
+                            } System.err.println("Errore durante la creazione della tessera: " + e.getMessage());
+                        }
                     }
                     case 2 -> {
-                        // --- RINNOVA TESSERA SCADUTA ---
+
                         System.out.println("Inserisci il numero della tessera che desideri rinnovare:");
                         String numTessera = scanner.nextLine();
 
@@ -418,9 +441,8 @@ public class UtenteDao {
                             System.out.println("Impossibile rinnovare: Tessera non trovata.");
                             return;
                         }
-
-                        // Aggiornamento date e merge/commit sul DB
                         System.out.println("La tessera " + numTessera + " è stata rinnovata per un ulteriore anno!");
+
                     }
                 }
             }

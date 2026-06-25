@@ -78,6 +78,15 @@ public class PuntoEmissioneDao {
         ).getResultList();
     }
 
+    public PuntoEmissione getPunto_emissione() {
+        return entityManager.createQuery(
+                        "SELECT p FROM PuntoEmissione p",
+                        PuntoEmissione.class
+                )
+                .setMaxResults(1)
+                .getSingleResult();
+    }
+
     // tessere
 
     public void emettiTessera(Tessera tessera) {

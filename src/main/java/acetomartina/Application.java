@@ -49,12 +49,11 @@ public class Application {
         TesseraDao tesseraDao = new TesseraDao(entityManager);
         TitoloViaggioDao titoloViaggioDao = new TitoloViaggioDao(entityManager);
         TrattaDao trattaDao = new TrattaDao(entityManager);
-        UtenteDao utenteDAO = new UtenteDao(entityManager, tesseraDao,abbonamentoDAO);
+        UtenteDao utenteDAO = new UtenteDao(entityManager, tesseraDao,abbonamentoDAO,puntoEmissioneDao);
 
         System.out.println("Benvenuto nella gestione del trosporto pubblico");
-        System.out.println("\n--- MENU PRINCIPALE ---");
-        System.out.println("1. Accedi come UTENTE SEMPLICE");
-        System.out.println("2. Accedi come AMMINISTRATORE");
+        System.out.println("1. Accedi come Utente semplice.");
+        System.out.println("2. Accedi come Amministratore.");
         System.out.println("0. Esci dall'applicazione");
 
         int scelta = 0;
@@ -123,8 +122,6 @@ public class Application {
 //        puntoEmissioneDao.save(pe18);
 //        puntoEmissioneDao.save(pe19);
 //        puntoEmissioneDao.save(pe20);
-
-        System.out.println("Punti emissione caricati!");
 
 
         Mezzo m1 = new Mezzo(LocalDate.of(2025, 1, 10), TipoMezzo.TRAM);
@@ -463,7 +460,7 @@ public class Application {
 //        manutenzioneDAO.save(mn20);
 
 
-        System.out.println("Siamo connessi!");
+        System.out.println("E' stato un piacere e buon viaggio!");
     }
 
 
