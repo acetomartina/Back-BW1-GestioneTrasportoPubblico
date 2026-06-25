@@ -60,6 +60,10 @@ public abstract class TitoloViaggio {
         this.dataEmissione = dataEmissione;
     }
 
+    public void setPuntoEmissione(PuntoEmissione puntoEmissione) {
+        this.puntoEmissione = puntoEmissione;
+    }
+
     @Override
     public String toString() {
         return "TitoloViaggio{" +
