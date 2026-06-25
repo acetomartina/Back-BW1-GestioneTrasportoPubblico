@@ -1,28 +1,43 @@
 package acetomartina.DAO;
 
-import acetomartina.entities.Corsa;
-import acetomartina.entities.Mezzo;
+import acetomartina.entities.*;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class AmminstratoreDAO {
     private EntityManager entityManager;
 
-    public AmminstratoreDAO(EntityManager entityManager){
+    public AmminstratoreDAO(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
+
+    private static final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("gestione-trasporto-pubblico-pu");
+
+    static EntityManager em2 = entityManagerFactory.createEntityManager();
+
+    BigliettoDAO bigliettoDAO = new BigliettoDAO(em2);
+    TesseraDao tesseraDAO = new TesseraDao(em2);
+    AbbonamentoDAO abbonamentoDAO = new AbbonamentoDAO(em2);
+    UtenteDao utenteDao = new UtenteDao(em2, tesseraDAO, abbonamentoDAO);
+    MezzoDao mezzoDao = new MezzoDao(em2);
+
+    Scanner scanner = new Scanner(System.in);
 
 
     // METODO PER CALCOLARE TEMPO EFFETTIVO DI PERCORRENZA DATA UNA TRATTA , DA PARTE DI UN MEZZO
 
-    public String getDurataCorsa (Corsa corsa){
-        Duration durataCorsa = Duration.between( corsa.getPartenza(),corsa.getArrivoEffettivo());
+    public String getDurataCorsa(Corsa corsa) {
+        Duration durataCorsa = Duration.between(corsa.getPartenza(), corsa.getArrivoEffettivo());
         long ore = durataCorsa.toHours();
         long minuti = durataCorsa.toMinutesPart();
         return "%02d:%02d".formatted(ore, minuti);
@@ -48,5 +63,106 @@ public class AmminstratoreDAO {
         } else {
             System.out.println("Nessuna corsa trovata, impossibile calcolare la media.");
         }
+    }
+
+    public void scannerAmministratore() {
+        int scelta = -1;
+        boolean sceltaValida = false;
+        do {
+            System.out.println("-------------------------------------------------");
+            System.out.println("Cosa vuoi fare ? ");
+            System.out.println("1) Vedi tutti i biglietti emessi ");
+            System.out.println("2) Vedi tutti gli abbonamenti emessi ");
+            System.out.println("3) Vedi tutti gli utenti");
+            System.out.println("4) Vedi tutti gli utenti tesserati ");
+            System.out.println("5) Vedi tempo di percorrenza effettivo di una tratta da un mezzo ");
+            System.out.println("6) Vedi manutenzioni di un mezzo");
+            System.out.println("7) Vedi i periodi di attività di un mezzo");
+            System.out.println("8) Vedi tutti i biglietti obliterati su un mezzo");
+            System.out.println("9) Vedi biglietti obliterati dato un periodo");
+            System.out.println("0) Esci");
+
+            do {
+                try {
+                    scelta = Integer.parseInt(scanner.nextLine());
+                    if (scelta == 0) break;
+                    if (scelta <= 9 && scelta >= 1) {
+                        sceltaValida = true;
+                    } else {
+                        System.out.println("Inserisci un numedo da 1  a 5 !");
+                    }
+                } catch (Exception e) {
+                    System.err.println("Opzione non valida ! Riprova !");
+                }
+            } while (!sceltaValida);
+
+            switch (scelta) {
+                case 1 -> {
+                    List<Biglietto> bigliettiValidi = bigliettoDAO.getBigliettiValidi();
+                    List<Biglietto> bigliettiScaduti = bigliettoDAO.getBigliettiScaduti();
+                    bigliettiValidi.forEach(biglietto -> System.out.println(biglietto.getId() + " " + biglietto.getCorsa().getTratta().getZonaPartenza() + " - " + biglietto.getCorsa().getTratta().getCapolinea() + " Valido"));
+                    bigliettiScaduti.forEach(biglietto -> System.out.println(biglietto.getId() + " " + biglietto.getCorsa().getTratta().getZonaPartenza() + " - " + biglietto.getCorsa().getTratta().getCapolinea() + " Scaduto"));
+                }
+                case 2 -> {
+                    List<Abbonamento> abbonamentiEmessi = abbonamentoDAO.getByData(LocalDate.now());
+                    abbonamentiEmessi.forEach(abbonamento -> System.out.println(abbonamento.getNumero_abbonamento() + " " + abbonamento.getPeriodicita() + (abbonamento.isValido() ? " Valido " : " Scaduto ")));
+                }
+                case 3 -> {
+                    List<Utente> tuttiGliUtenti = utenteDao.getTuttiGliUtenti();
+                    tuttiGliUtenti.forEach(utente -> System.out.println(utente.getNome_utente() + " " + utente.getCognome_utente() + " " + utente.getTipo_utente()));
+                }
+                case 4 -> {
+                    List<Utente> tuttiITesserati = utenteDao.getTuttiITesserati();
+                    tuttiITesserati.forEach(utente -> System.out.println(utente.getNome_utente() + " " + utente.getCognome_utente() + " " + utente.getTessera().getNumeroTessera()));
+                }
+                case 5 -> {
+                    List<Mezzo> tuttiImezzi = mezzoDao.findAll();
+                    System.out.println("Inserisci il numero del mezzo per ottenere l'informazione");
+                    for (int i = 0; i < tuttiImezzi.size(); i++) {
+                        Mezzo mezzo = tuttiImezzi.get(i);
+                        System.out.println(i + 1 + ")" + mezzo.getTipo_mezzo() + " " + mezzo.getNumero_mezzo());
+                    }
+                    int sceltaMezzo = 0;
+                    boolean sceltaMezzoValida = false;
+                    do {
+                        try {
+                            sceltaMezzo = Integer.parseInt(scanner.nextLine());
+                            if (sceltaMezzo <= tuttiImezzi.size() && sceltaMezzo >= 1) {
+                                sceltaMezzoValida = true;
+                            } else {
+                                System.err.println("Qualcosa è andato storto! Riprova");
+                            }
+                        } catch (Exception e) {
+                            System.err.println("Qualcosa è andato storto! Riprova");
+                        }
+                    } while (!sceltaMezzoValida);
+                    getNumeroCorsePercorsePiuMedia(tuttiImezzi.get(sceltaMezzo - 1));
+                }
+                case 6 -> {
+                    List<Mezzo> tuttiImezzi = mezzoDao.findAll();
+                    System.out.println("Inserisci il numero del mezzo per ottenere l'informazione");
+                    for (int i = 0; i < tuttiImezzi.size(); i++) {
+                        Mezzo mezzo = tuttiImezzi.get(i);
+                        System.out.println(i + 1 + ")" + mezzo.getTipo_mezzo() + " " + mezzo.getNumero_mezzo());
+                    }
+                    int sceltaMezzo = 0;
+                    boolean sceltaMezzoValida = false;
+                    do {
+                        try {
+                            sceltaMezzo = Integer.parseInt(scanner.nextLine());
+                            if (sceltaMezzo <= tuttiImezzi.size() && sceltaMezzo >= 1) {
+                                sceltaMezzoValida = true;
+                            } else {
+                                System.err.println("Qualcosa è andato storto! Riprova");
+                            }
+                        } catch (Exception e) {
+                            System.err.println("Qualcosa è andato storto!");
+                        }
+                    } while (!sceltaMezzoValida);
+                    List<Manutenzione> manutenzioni = mezzoDao.getManutenzioniMezzo(tuttiImezzi.get(sceltaMezzo - 1).getMezzo_di_trasporto());
+                    manutenzioni.forEach(manutenzione -> System.out.println("Manutenzione :" + " Inizio : " + manutenzione.getDataInizio() + " - Fine : " + manutenzione.getDataFine() + " Tempo di inattività : " + manutenzione.getDurata() + " giorni"));
+                }
+            }
+        } while (scelta != 0);
     }
 }

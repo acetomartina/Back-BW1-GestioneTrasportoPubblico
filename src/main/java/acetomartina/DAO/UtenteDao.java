@@ -23,6 +23,7 @@ public class UtenteDao {
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
+
     // COSTRUTTORE
     public UtenteDao(EntityManager entityManager, TesseraDao tesseraDao, AbbonamentoDAO abbonamentoDAO) {
         this.entityManager = entityManager;
@@ -32,21 +33,31 @@ public class UtenteDao {
         this.abbonamentoDAO = abbonamentoDAO;
     }
 
+
     // SALVO
-    public void save(Utente utente){
+    public void save(Utente utente) {
         EntityTransaction transazione = this.entityManager.getTransaction();
         try {
             transazione.begin();
             this.entityManager.persist(utente);
             transazione.commit();
-            System.out.println("L'utente "+ utente.getNome_utente() + " "+ utente.getCognome_utente()+ ", è stato aggiunto al DATABASE");
+            System.out.println("L'utente " + utente.getNome_utente() + " " + utente.getCognome_utente() + ", è stato aggiunto al DATABASE");
         } catch (Exception e) {
             if (transazione.isActive()) transazione.rollback();
             throw new RuntimeException("Errore durante il salvataggio dell'utente : " + e.getMessage());
         }
     }
 
-    public void scannerUtente1(){
+    public List<Utente> getTuttiGliUtenti() {
+        return entityManager.createQuery("from Utente", Utente.class).getResultList();
+    }
+
+    public List<Utente> getTuttiITesserati() {
+        return entityManager.createQuery("from Utente where tessera is not null", Utente.class).getResultList();
+    }
+
+
+    public void scannerUtente1() {
         System.out.println("Di cosa hai bisogno?");
         System.out.println("1 - Macchinetta digitale.");
         System.out.println("2 - Rivenditore autorizzato più vicino.");
@@ -85,8 +96,8 @@ public class UtenteDao {
         int sceltaUtente = 0;
         boolean sceltaUtenteValida = false;
 
-        do{
-            try{
+        do {
+            try {
                 sceltaUtente = Integer.parseInt(scanner.nextLine());
                 if (sceltaUtente >= 0 && sceltaUtente <= 3) {
                     sceltaUtenteValida = true;
@@ -107,8 +118,8 @@ public class UtenteDao {
                 int sceltaUtente2 = 0;
                 boolean sceltaUtenteValida2 = false;
 
-                do{
-                    try{
+                do {
+                    try {
                         sceltaUtente2 = Integer.parseInt(scanner.nextLine());
                         if (sceltaUtente2 == 1 || sceltaUtente2 == 2) {
                             sceltaUtenteValida2 = true;
@@ -120,20 +131,20 @@ public class UtenteDao {
                     }
                 } while (!sceltaUtenteValida2);
 
-                switch (sceltaUtente2){
+                switch (sceltaUtente2) {
                     case 1 -> {
                         // --- ACQUISTA BIGLIETTO ---
                         System.out.println("Scegli la destinazione che devi raggiungere.");
                         List<Tratta> tratte = trattaDao.findAll();
 
-                        if(tratte.isEmpty()) {
+                        if (tratte.isEmpty()) {
                             System.out.println("Nessuna tratta disponibile nel sistema.");
                             return;
                         }
 
                         final int[] numero = {1};
                         tratte.forEach(tratta -> {
-                            System.out.println(numero[0] + " - " + "Da " + tratta.getZonaPartenza() + " a " + tratta.getCapolinea() + " (previsto " + tratta.getDurata().toHours() + "." + tratta.getDurata().toMinutesPart()+ " h)");
+                            System.out.println(numero[0] + " - " + "Da " + tratta.getZonaPartenza() + " a " + tratta.getCapolinea() + " (previsto " + tratta.getDurata().toHours() + "." + tratta.getDurata().toMinutesPart() + " h)");
                             numero[0]++;
                         });
 
@@ -158,7 +169,7 @@ public class UtenteDao {
                         Tratta trattaSelezionata = tratte.get(trattaScelta - 1);
                         List<Corsa> corse = corsaDao.findAllByTratta(trattaSelezionata);
 
-                        if(corse.isEmpty()) {
+                        if (corse.isEmpty()) {
                             System.out.println("Non ci sono corse attive per questa tratta al momento.");
                             return;
                         }
@@ -276,7 +287,7 @@ public class UtenteDao {
                         System.out.println("Seleziona la tratta alla quale vuoi abbonarti:");
                         List<Tratta> tratte = trattaDao.findAll();
 
-                        if(tratte.isEmpty()) {
+                        if (tratte.isEmpty()) {
                             System.out.println("Nessuna tratta disponibile a sistema. Impossibile procedere.");
                             return;
                         }
@@ -417,3 +428,4 @@ public class UtenteDao {
         }
     }
 }
+
