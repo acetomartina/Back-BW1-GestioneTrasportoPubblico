@@ -179,8 +179,12 @@ public class AmministratoreDAO {
                 case 8 -> {
                     Mezzo mezzoScelto = sceltaMezzo();
                     List<Biglietto> bigliettiOblit = mezzoDao.getListaBigliettiOblitSuMezzo(mezzoScelto);
-                    System.out.println("Sul mezz o" + mezzoScelto.getTipo_mezzo() + " " + mezzoScelto.getNumero_mezzo() + " sono stati obliterati : ");
-                    bigliettiOblit.forEach(biglietto -> System.out.println(biglietto.getCodiceUnivoco() + "Data" + biglietto.getObliterato()));
+                    if (!bigliettiOblit.isEmpty()){
+                        System.out.println("Sul mezz o" + mezzoScelto.getTipo_mezzo() + " " + mezzoScelto.getNumero_mezzo() + " sono stati obliterati : ");
+                        bigliettiOblit.forEach(biglietto -> System.out.println(biglietto.getCodiceUnivoco() + "Data" + biglietto.getObliterato()));
+                    }else{
+                        System.out.println("Ancora nessun biglietto obliterato su questo mezzo!");
+                    }
                 }
                 case 9 -> {
                     LocalDate dataInizio = leggiData("Inserisci la prima data (gg/mm/aaaa):");
