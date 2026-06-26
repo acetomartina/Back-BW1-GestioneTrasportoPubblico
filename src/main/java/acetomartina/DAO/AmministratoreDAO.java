@@ -14,11 +14,10 @@ import java.util.stream.Collectors;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-public class AmminstratoreDAO {
-
+public class AmministratoreDAO {
     private EntityManager entityManager;
 
-    public AmminstratoreDAO(EntityManager entityManager) {
+    public AmministratoreDAO(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 

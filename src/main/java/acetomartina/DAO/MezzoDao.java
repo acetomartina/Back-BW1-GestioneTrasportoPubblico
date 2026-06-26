@@ -1,6 +1,6 @@
 package acetomartina.DAO;
 
-import acetomartina.Exceptions.NonTrovatoEccezzione;
+import acetomartina.Exceptions.NonTrovatoEccezione;
 import acetomartina.entities.*;
 import acetomartina.enums.StatoMezzo;
 
@@ -89,7 +89,7 @@ public class MezzoDao {
         try {
             mezzo.setManutenzioni(manutenzione);
             System.out.println("Manutenzione aggiunta!");
-        } catch (NonTrovatoEccezzione e) {
+        } catch (NonTrovatoEccezione e) {
             throw new RuntimeException("Errore nella programazione della manutenzione!");
         } catch (Exception e) {
             throw new RuntimeException("Errore eccezzionale!", e);
@@ -101,7 +101,7 @@ public class MezzoDao {
         try {
             mezzo.setCorse(corsa);
             System.out.println("Corsa aggiunta!");
-        } catch (NonTrovatoEccezzione e) {
+        } catch (NonTrovatoEccezione e) {
             throw new RuntimeException("Errore nell'aggiunta della corsa!");
         } catch (Exception e) {
             throw new RuntimeException("Errore eccezzionale!", e);

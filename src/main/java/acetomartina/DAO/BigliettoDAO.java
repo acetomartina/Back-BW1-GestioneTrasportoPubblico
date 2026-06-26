@@ -1,8 +1,7 @@
 package acetomartina.DAO;
 
-import acetomartina.Exceptions.NonTrovatoEccezzione;
+import acetomartina.Exceptions.ErroreSalvataggio;
 import acetomartina.entities.Biglietto;
-import acetomartina.entities.Tratta;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 
@@ -26,7 +25,10 @@ public class BigliettoDAO {
             this.entityManager.persist(biglietto);
             transazione.commit();
             System.out.println("Biglietto salvato.");
-        } catch (Exception e) {
+        } catch (ErroreSalvataggio e){
+            System.out.println("Errore nel salvataggio. Ti chiediamo di riprovare più tardi.");
+        }
+        catch (Exception e) {
             if (transazione.isActive()) transazione.rollback();
             throw new RuntimeException("Errore durante il salvataggio del biglietto.");
         }

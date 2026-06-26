@@ -1,5 +1,6 @@
 package acetomartina.DAO;
 
+import acetomartina.Exceptions.ErroreSalvataggio;
 import acetomartina.entities.Manutenzione;
 import acetomartina.entities.Mezzo;
 import jakarta.persistence.EntityManager;
@@ -19,7 +20,10 @@ public class ManutenzioneDAO {
             entityManager.persist(manutenzione);
             entityManager.getTransaction().commit();
             System.out.println("La manutenzione " + manutenzione.getId_Manutenzione() + " è stata salvata!");
-        } catch (Exception e) {
+        } catch (ErroreSalvataggio e) {
+            System.out.println("Errore nel salvataggio. Ti chiediamo di riprovare più tardi.");
+        }
+        catch (Exception e) {
             throw new RuntimeException("Errore nel salvataggio della manutanzione!", e);
         }
     }

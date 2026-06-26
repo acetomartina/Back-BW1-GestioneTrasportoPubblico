@@ -1,5 +1,6 @@
 package acetomartina.DAO;
 
+import acetomartina.Exceptions.ErroreSalvataggio;
 import acetomartina.entities.Tratta;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
@@ -23,7 +24,10 @@ public class TrattaDao {
             this.entityManager.persist(tratta);
             transazione.commit();
             System.out.println("La tratta con capolinea : "+ tratta.getCapolinea() + " è stata aggiunta al DATABASE");
-        } catch (Exception e) {
+        } catch (ErroreSalvataggio e){
+            System.out.println("Errore nel salvataggio. Ti chiediamo di riprovare più tardi.");
+        }
+        catch (Exception e) {
             if (transazione.isActive()) transazione.rollback();
             throw new RuntimeException("Errore durante il salvataggio della tratta : " + e.getMessage());
         }
