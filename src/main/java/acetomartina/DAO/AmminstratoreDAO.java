@@ -8,16 +8,14 @@ import jakarta.persistence.Persistence;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 public class AmminstratoreDAO {
+
     private EntityManager entityManager;
 
     public AmminstratoreDAO(EntityManager entityManager) {
@@ -25,7 +23,6 @@ public class AmminstratoreDAO {
     }
 
     private static final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("gestione-trasporto-pubblico-pu");
-
     static EntityManager em2 = entityManagerFactory.createEntityManager();
 
     BigliettoDAO bigliettoDAO = new BigliettoDAO(em2);
@@ -38,7 +35,6 @@ public class AmminstratoreDAO {
 
 
     // METODO PER CALCOLARE TEMPO EFFETTIVO DI PERCORRENZA DATA UNA TRATTA , DA PARTE DI UN MEZZO
-
     public String getDurataCorsa(Corsa corsa) {
         Duration durataCorsa = Duration.between(corsa.getPartenza(), corsa.getArrivoEffettivo());
         long ore = durataCorsa.toHours();
@@ -46,6 +42,7 @@ public class AmminstratoreDAO {
         return "%02d:%02d".formatted(ore, minuti);
     }
 
+    // METODO PER CALCOLARE IL NUMERO DELLE CORSE PERCORSE DA UN MEZZO PIU LA DURATA MEDIA DI ESSE
     public void getNumeroCorsePercorsePiuMedia(Mezzo mezzo) {
         List<Corsa> corseTrovate = entityManager.createQuery(
                         "SELECT c FROM Corsa c WHERE c.arrivoEffettivo < :params AND c.mezzo = :mezzo",
@@ -53,7 +50,6 @@ public class AmminstratoreDAO {
                 .setParameter("params", LocalDateTime.now())
                 .setParameter("mezzo", mezzo)
                 .getResultList();
-
         System.out.println("Le corse trovate sono : " + corseTrovate.size());
         corseTrovate.forEach(corsa -> System.out.println("La durata della corsa è stata : " + getDurataCorsa(corsa)));
         if (!corseTrovate.isEmpty()) {
@@ -61,11 +57,56 @@ public class AmminstratoreDAO {
                     .collect(Collectors.averagingLong(corsa -> {
                         return Duration.between(corsa.getPartenza(), corsa.getArrivoEffettivo()).toMinutes();
                     }));
-
             System.out.println("La media di percorrenza è: " + mediaMinuti + " minuti");
         } else {
             System.out.println("Nessuna corsa trovata, impossibile calcolare la media.");
         }
+    }
+
+    // PERMETTE DI SCEGLIERE UN MEZZO TRA TUTTI QUELLI DISPONIBILI
+    public Mezzo sceltaMezzo() {
+        List<Mezzo> tuttiImezzi = mezzoDao.findAll();
+        if (tuttiImezzi.isEmpty()) {                       // <-- mancava
+            System.out.println("Nessun mezzo disponibile a sistema.");
+            return null;
+        }
+        System.out.println("Inserisci il numero del mezzo per ottenere l'informazione");
+        for (int i = 0; i < tuttiImezzi.size(); i++) {
+            Mezzo mezzo = tuttiImezzi.get(i);
+            System.out.println(i + 1 + ")" + mezzo.getTipo_mezzo() + " " + mezzo.getNumero_mezzo());
+        }
+        int sceltaMezzo = 0;
+        boolean sceltaMezzoValida = false;
+        do {
+            try {
+                sceltaMezzo = Integer.parseInt(scanner.nextLine());
+                if (sceltaMezzo <= tuttiImezzi.size() && sceltaMezzo >= 1) {
+                    sceltaMezzoValida = true;
+                } else {
+                    System.err.println("Qualcosa è andato storto! Riprova");
+                }
+            } catch (Exception e) {
+                System.err.println("Qualcosa è andato storto! Riprova");
+            }
+        } while (!sceltaMezzoValida);
+        return tuttiImezzi.get(sceltaMezzo - 1);
+    }
+
+    // PERETTERE DI FAR INSERIRE ALL'UTENTE UNA DATA E NE RITORNA IL VALORE IN LOCALDATE
+    private LocalDate leggiData(String messaggio) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate data = null;
+        boolean valida = false;
+        do {
+            System.out.println(messaggio);
+            try {
+                data = LocalDate.parse(scanner.nextLine(), formatter);
+                valida = true;
+            } catch (DateTimeParseException e) {
+                System.err.println("Data non valida! Usa il formato gg/mm/aaaa.");
+            }
+        } while (!valida);
+        return data;
     }
 
     public void scannerAmministratore() {
@@ -119,129 +160,28 @@ public class AmminstratoreDAO {
                     tuttiITesserati.forEach(utente -> System.out.println(utente.getNome_utente() + " " + utente.getCognome_utente() + " " + utente.getTessera().getNumeroTessera()));
                 }
                 case 5 -> {
-                    List<Mezzo> tuttiImezzi = mezzoDao.findAll();
-                    System.out.println("Inserisci il numero del mezzo per ottenere l'informazione");
-                    for (int i = 0; i < tuttiImezzi.size(); i++) {
-                        Mezzo mezzo = tuttiImezzi.get(i);
-                        System.out.println(i + 1 + ")" + mezzo.getTipo_mezzo() + " " + mezzo.getNumero_mezzo());
-                    }
-                    int sceltaMezzo = 0;
-                    boolean sceltaMezzoValida = false;
-                    do {
-                        try {
-                            sceltaMezzo = Integer.parseInt(scanner.nextLine());
-                            if (sceltaMezzo <= tuttiImezzi.size() && sceltaMezzo >= 1) {
-                                sceltaMezzoValida = true;
-                            } else {
-                                System.err.println("Qualcosa è andato storto! Riprova");
-                            }
-                        } catch (Exception e) {
-                            System.err.println("Qualcosa è andato storto! Riprova");
-                        }
-                    } while (!sceltaMezzoValida);
-                    getNumeroCorsePercorsePiuMedia(tuttiImezzi.get(sceltaMezzo - 1));
+                    Mezzo mezzoScelto = sceltaMezzo();
+                    getNumeroCorsePercorsePiuMedia(mezzoScelto);
                 }
                 case 6 -> {
-                    List<Mezzo> tuttiImezzi = mezzoDao.findAll();
-                    System.out.println("Inserisci il numero del mezzo per ottenere l'informazione");
-                    for (int i = 0; i < tuttiImezzi.size(); i++) {
-                        Mezzo mezzo = tuttiImezzi.get(i);
-                        System.out.println(i + 1 + ")" + mezzo.getTipo_mezzo() + " " + mezzo.getNumero_mezzo());
-                    }
-                    int sceltaMezzo = 0;
-                    boolean sceltaMezzoValida = false;
-                    do {
-                        try {
-                            sceltaMezzo = Integer.parseInt(scanner.nextLine());
-                            if (sceltaMezzo <= tuttiImezzi.size() && sceltaMezzo >= 1) {
-                                sceltaMezzoValida = true;
-                            } else {
-                                System.err.println("Qualcosa è andato storto! Riprova");
-                            }
-                        } catch (Exception e) {
-                            System.err.println("Qualcosa è andato storto!");
-                        }
-                    } while (!sceltaMezzoValida);
-                    List<Manutenzione> manutenzioni = mezzoDao.getManutenzioniMezzo(tuttiImezzi.get(sceltaMezzo - 1).getMezzo_di_trasporto());
+                    Mezzo mezzoScelto = sceltaMezzo();
+                    List<Manutenzione> manutenzioni = mezzoDao.getManutenzioniMezzo(mezzoScelto.getMezzo_di_trasporto());
                     manutenzioni.forEach(manutenzione -> System.out.println("Manutenzione :" + " Inizio : " + manutenzione.getDataInizio() + " - Fine : " + manutenzione.getDataFine() + " Tempo di inattività : " + manutenzione.getDurata() + " giorni"));
                 }
                 case 7 -> {
-                    List<Mezzo> tuttiImezzi = mezzoDao.findAll();
-                    System.out.println("Inserisci il numero del mezzo per ottenere l'informazione");
-                    for (int i = 0; i < tuttiImezzi.size(); i++) {
-                        Mezzo mezzo = tuttiImezzi.get(i);
-                        System.out.println(i + 1 + ")" + mezzo.getTipo_mezzo() + " " + mezzo.getNumero_mezzo());
-                    }
-                    int sceltaMezzo = 0;
-                    boolean sceltaMezzoValida = false;
-                    do {
-                        try {
-                            sceltaMezzo = Integer.parseInt(scanner.nextLine());
-                            if (sceltaMezzo <= tuttiImezzi.size() && sceltaMezzo >= 1) {
-                                sceltaMezzoValida = true;
-                            } else {
-                                System.err.println("Qualcosa è andato storto! Riprova");
-                            }
-                        } catch (Exception e) {
-                            System.err.println("Qualcosa è andato storto!");
-                        }
-                    } while (!sceltaMezzoValida);
-                    Mezzo mezzoScelto = tuttiImezzi.get(sceltaMezzo - 1);
+                    Mezzo mezzoScelto = sceltaMezzo();
                     List<IntervalloDate> periodiAttivita = mezzoDao.getPeriodiAttivita(mezzoScelto);
                     periodiAttivita.forEach(intervallo -> System.out.println("Il mezzo : " + mezzoScelto.getTipo_mezzo() + " " + mezzoScelto.getNumero_mezzo() + " ha circolato dal " + intervallo.inizio() + " al " + intervallo.fine()));
                 }
                 case 8 -> {
-                    List<Mezzo> tuttiImezzi = mezzoDao.findAll();
-                    System.out.println("Inserisci il numero del mezzo per ottenere l'informazione");
-                    for (int i = 0; i < tuttiImezzi.size(); i++) {
-                        Mezzo mezzo = tuttiImezzi.get(i);
-                        System.out.println(i + 1 + ")" + mezzo.getTipo_mezzo() + " " + mezzo.getNumero_mezzo());
-                    }
-                    int sceltaMezzo = 0;
-                    boolean sceltaMezzoValida = false;
-                    do {
-                        try {
-                            sceltaMezzo = Integer.parseInt(scanner.nextLine());
-                            if (sceltaMezzo <= tuttiImezzi.size() && sceltaMezzo >= 1) {
-                                sceltaMezzoValida = true;
-                            } else {
-                                System.err.println("Qualcosa è andato storto! Riprova");
-                            }
-                        } catch (Exception e) {
-                            System.err.println("Qualcosa è andato storto!");
-                        }
-                    } while (!sceltaMezzoValida);
-                    Mezzo mezzoScelto = tuttiImezzi.get(sceltaMezzo - 1);
+                    Mezzo mezzoScelto = sceltaMezzo();
                     List<Biglietto> bigliettiOblit = mezzoDao.getListaBigliettiOblitSuMezzo(mezzoScelto);
                     System.out.println("Sul mezz o" + mezzoScelto.getTipo_mezzo() + " " + mezzoScelto.getNumero_mezzo() + " sono stati obliterati : ");
                     bigliettiOblit.forEach(biglietto -> System.out.println(biglietto.getCodiceUnivoco() + "Data" + biglietto.getObliterato()));
                 }
                 case 9 -> {
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                    LocalDate dataInizio = null;
-                    boolean dataValida = false;
-                    do {
-                        System.out.println("Inserisci la prima data (gg/mm/aaaa):");
-                        try {
-                            dataInizio = LocalDate.parse(scanner.nextLine(), formatter);
-                            dataValida = true;
-                        } catch (DateTimeParseException e) {
-                            System.err.println("Data non valida! Usa il formato gg/mm/aaaa.");
-                        }
-                    } while (!dataValida);
-
-                    LocalDate dataFine = null;
-                    boolean dataFineValida = false;
-                    do {
-                        System.out.println("Inserisci la data finale (gg/mm/aaaa):");
-                        try {
-                            dataFine = LocalDate.parse(scanner.nextLine(), formatter);
-                            dataFineValida = true;
-                        } catch (DateTimeParseException e) {
-                            System.err.println("Data non valida! Usa il formato gg/mm/aaaa.");
-                        }
-                    } while (!dataFineValida);
-
+                    LocalDate dataInizio = leggiData("Inserisci la prima data (gg/mm/aaaa):");
+                    LocalDate dataFine = leggiData("Inserisci la data finale (gg/mm/aaaa):");
                     List<Biglietto> listaBiglietti = bigliettoDAO.getBigliettiObliteratiNelPeriodo(dataInizio, dataFine);
                     listaBiglietti.forEach(biglietto -> System.out.println(biglietto.getCodiceUnivoco() + "Data" + biglietto.getObliterato()));
                 }
