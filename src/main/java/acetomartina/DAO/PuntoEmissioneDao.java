@@ -119,12 +119,14 @@ public class PuntoEmissioneDao {
         }
     }
 
-    public void emettiESalvaBiglietto(PuntoEmissione puntoEmissione, Corsa corsa) {
+    public Biglietto emettiESalvaBiglietto(PuntoEmissione puntoEmissione, Corsa corsa) {
         try {
             entityManager.getTransaction().begin();
-            entityManager.persist(puntoEmissione.creaBiglietto(corsa));
+            Biglietto bigliettoNuovo = puntoEmissione.creaBiglietto(corsa);
+            entityManager.persist(bigliettoNuovo);
             entityManager.getTransaction().commit();
             System.out.println("Biglietto emesso e salvato");
+            return bigliettoNuovo;
         } catch (Exception e) {
             throw new RuntimeException("Errore nell'emissione del biglietto ! !");
         }
@@ -143,8 +145,8 @@ public class PuntoEmissioneDao {
 
     // METODO PER TROVARE BIGLIETTI EMESSI DATO UN INTERVALLO DI TEMPO
 
-    public List<Biglietto> getBigliettiInUnIntervalloDiTempo (LocalDate inizio, LocalDate fine){
-        if (inizio == null || fine == null){
+    public List<Biglietto> getBigliettiInUnIntervalloDiTempo(LocalDate inizio, LocalDate fine) {
+        if (inizio == null || fine == null) {
             throw new IllegalArgumentException("Le date di inizio e fine non possono essere nulle.");
         }
         List<Biglietto> bigliettiTrovati = entityManager.createQuery(
@@ -161,7 +163,7 @@ public class PuntoEmissioneDao {
 
         return bigliettiTrovati;
     }
-    }
+}
 
 
 

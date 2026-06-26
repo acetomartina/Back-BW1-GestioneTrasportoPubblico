@@ -44,7 +44,7 @@ public class Application {
         TesseraDao tesseraDao = new TesseraDao(entityManager);
         TitoloViaggioDao titoloViaggioDao = new TitoloViaggioDao(entityManager);
         TrattaDao trattaDao = new TrattaDao(entityManager);
-        UtenteDao utenteDAO = new UtenteDao(entityManager, tesseraDao,abbonamentoDAO,puntoEmissioneDao);
+        UtenteDao utenteDAO = new UtenteDao(entityManager, tesseraDao, abbonamentoDAO, puntoEmissioneDao);
 
         System.out.println("Benvenuto nella gestione del trosporto pubblico");
         System.out.println("1. Accedi come Utente semplice.");
@@ -74,7 +74,7 @@ public class Application {
             case 1 -> utenteDAO.scannerUtente1();
             case 2 -> amminstratoreDAO.scannerAmministratore();
         }
-        System.out.println("Siamo connessi!");
+        System.out.println("Grazie per aver utilizzato il nostro sistema! Arrivederci!");
     }
 
 

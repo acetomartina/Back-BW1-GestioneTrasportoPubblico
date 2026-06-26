@@ -2,6 +2,7 @@ package acetomartina.DAO;
 
 import acetomartina.entities.*;
 import acetomartina.enums.PeriodicitaAbbonamento;
+import acetomartina.enums.TipoPuntoEmissione;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 
@@ -60,14 +61,15 @@ public class UtenteDao {
 
     public void scannerUtente1() {
 
+
         System.out.println("Di cosa hai bisogno?");
         System.out.println("1 - Macchinetta digitale.");
         System.out.println("2 - Rivenditore autorizzato più vicino.");
 
+
         int sceltaPuntoEmissione = 0;
         boolean sceltaPeValida = false;
-
-        do{
+        do {
             try {
                 sceltaPuntoEmissione = Integer.parseInt(scanner.nextLine());
                 if (sceltaPuntoEmissione == 1 || sceltaPuntoEmissione == 2) {
@@ -78,7 +80,7 @@ public class UtenteDao {
             }
         } while (!sceltaPeValida);
 
-        switch (sceltaPuntoEmissione){
+        switch (sceltaPuntoEmissione) {
 
             case 1 -> {
                 System.out.println("Bene! Benvenuto. Di cosa hai bisogno?");
@@ -87,8 +89,14 @@ public class UtenteDao {
                 System.out.println("3 - Tessera.");
                 System.out.println("0 - Esci.");
             }
-            case 2 -> System.out.println("Bene! Puoi recarti dal rivenditore in Via Appia Nuova n.27.");
-
+            case 2 -> {
+                System.out.println("Bene! Puoi recarti dal rivenditore in Via Appia Nuova n.27.");
+                System.out.println("Oppure utilizza la nostra macchinetta digitale");
+                System.out.println("1 - Biglietto. ");
+                System.out.println("2 - Abbonamento.");
+                System.out.println("3 - Tessera.");
+                System.out.println("0 - Esci.");
+            }
         }
 
 
@@ -198,19 +206,28 @@ public class UtenteDao {
                             try {
                                 System.out.println("Inserisci il numero della corsa per completare l'acquisto:");
                                 corsaScelta = Integer.parseInt(scanner.nextLine());
-
                                 if (corsaScelta >= 1 && corsaScelta <= corse.size()) {
                                     corsaSceltaValida = true;
                                 } else {
                                     System.err.println("Selezione fuori intervallo. Scegli un numero tra 1 e " + corse.size());
                                 }
-                            } catch (Exception e) {
+                            } catch (NumberFormatException e) {
                                 System.err.println("Scelta non valida. Inserisci un numero.");
                             }
                         } while (!corsaSceltaValida);
 
                         Corsa corsaSelezionata = corse.get(corsaScelta - 1);
-                        System.out.println("Acquisto completato con successo per la corsa del mezzo " + corsaSelezionata.getMezzo().getTipo_mezzo());
+
+                        try {
+                            PuntoEmissione puntoEmissione = puntoEmissioneDao.getPunto_emissione();
+                            Biglietto bigliettoVenduto = puntoEmissioneDao.emettiESalvaBiglietto(puntoEmissione, corsaSelezionata);
+                            System.out.println("Acquisto completato con successo per la corsa del mezzo "
+                                    + corsaSelezionata.getMezzo().getTipo_mezzo() + " "
+                                    + corsaSelezionata.getMezzo().getNumero_mezzo());
+                            System.out.println("Numero del biglietto: " + bigliettoVenduto.getCodiceUnivoco());
+                        } catch (Exception e) {
+                            System.err.println("Errore durante l'emissione del biglietto: " + e.getMessage());
+                        }
                     }
 
                     case 2 -> {
@@ -322,7 +339,8 @@ public class UtenteDao {
                         System.out.println("\nRegistrazione abbonamento " + tipoString + " sulla tratta: Da "
                                 + trattaSelezionata.getZonaPartenza() + " a " + trattaSelezionata.getCapolinea() + ".");
 
-                        try { entityManager.getTransaction().begin();
+                        try {
+                            entityManager.getTransaction().begin();
 
                             // salvo la scelta dell'utente dentro l'abbonamento che sto creando
                             // altrimenti l'abbonamento rimane senza tratta, la colonna sul DB prende null
@@ -428,20 +446,24 @@ public class UtenteDao {
                         } catch (Exception e) {
                             if (entityManager.getTransaction().isActive()) {
                                 entityManager.getTransaction().rollback();
-                            } System.err.println("Errore durante la creazione della tessera: " + e.getMessage());
+                            }
+                            System.err.println("Errore durante la creazione della tessera: " + e.getMessage());
                         }
                     }
                     case 2 -> {
 
-                        System.out.println("Inserisci il numero della tessera che desideri rinnovare:");
-                        String numTessera = scanner.nextLine();
-
-                        Tessera tesseraTrovata = tesseraDao.getById(numTessera);
-                        if (tesseraTrovata == null) {
-                            System.out.println("Impossibile rinnovare: Tessera non trovata.");
-                            return;
-                        }
-                        System.out.println("La tessera " + numTessera + " è stata rinnovata per un ulteriore anno!");
+                        boolean tesseraTrovataBoolean = false;
+                        do {
+                            System.out.println("Inserisci il numero della tessera che desideri rinnovare:");
+                            String numTessera = scanner.nextLine();
+                            Tessera tesseraTrovata = tesseraDao.getById(numTessera);
+                            if (tesseraTrovata == null) {
+                                System.out.println("Impossibile rinnovare: Tessera non trovata.");
+                            } else {
+                                System.out.println("La tessera " + numTessera + " è stata rinnovata per un ulteriore anno!");
+                                tesseraTrovataBoolean = true;
+                            }
+                        } while (!tesseraTrovataBoolean);
 
                     }
                 }
