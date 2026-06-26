@@ -1,5 +1,6 @@
 package acetomartina.DAO;
 
+import acetomartina.Exceptions.ErroreSalvataggio;
 import acetomartina.entities.*;
 import acetomartina.enums.PeriodicitaAbbonamento;
 import acetomartina.enums.TipoPuntoEmissione;
@@ -42,7 +43,11 @@ public class UtenteDao {
             this.entityManager.persist(utente);
             transazione.commit();
             System.out.println("L'utente " + utente.getNome_utente() + " " + utente.getCognome_utente() + ", è stato aggiunto al DATABASE");
-        } catch (Exception e) {
+        } catch (ErroreSalvataggio e) {
+            System.out.println("Errore nel salvataggio. Ti chiediamo di riprovare più tardi.");
+        }
+
+        catch (Exception e) {
             if (transazione.isActive()) transazione.rollback();
             throw new RuntimeException("Errore durante il salvataggio dell'utente : " + e.getMessage());
         }

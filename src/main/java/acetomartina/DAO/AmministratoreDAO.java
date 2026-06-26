@@ -8,19 +8,16 @@ import jakarta.persistence.Persistence;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-public class AmminstratoreDAO {
+public class AmministratoreDAO {
     private EntityManager entityManager;
 
-    public AmminstratoreDAO(EntityManager entityManager) {
+    public AmministratoreDAO(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 

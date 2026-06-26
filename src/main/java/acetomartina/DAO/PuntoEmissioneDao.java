@@ -1,5 +1,6 @@
 package acetomartina.DAO;
 
+import acetomartina.Exceptions.ErroreSalvataggio;
 import acetomartina.entities.*;
 import acetomartina.enums.PeriodicitaAbbonamento;
 import acetomartina.enums.TipoPuntoEmissione;
@@ -26,7 +27,10 @@ public class PuntoEmissioneDao {
             this.entityManager.persist(puntoEmissione);
             transazione.commit();
             System.out.println("Il punto di emissione : " + puntoEmissione.getPunto_emissione() + " è stato aggiunto al DATABASE.");
-        } catch (Exception e) {
+        } catch (ErroreSalvataggio e){
+            System.out.println("Errore nel salvataggio. Ti chiediamo di riprovare più tardi.");
+        }
+        catch (Exception e) {
             if (transazione.isActive()) transazione.rollback();
             throw new RuntimeException("Errore durante il salvataggio del punto di emissione : " + e.getMessage());
         }

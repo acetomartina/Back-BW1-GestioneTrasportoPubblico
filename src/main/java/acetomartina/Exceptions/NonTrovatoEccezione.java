@@ -1,11 +1,11 @@
 package acetomartina.Exceptions;
 
-public class NonTrovatoEccezzione extends RuntimeException {
+public class NonTrovatoEccezione extends RuntimeException {
 
     private static final String MESSAGGIO_STANDARD = "Elemento non trovato nel Database !";
 
-    public NonTrovatoEccezzione() {
+    public NonTrovatoEccezione() {
         super(MESSAGGIO_STANDARD);
     }
-    public NonTrovatoEccezzione(String message){super(message);}
+    public NonTrovatoEccezione(String message){super(message);}
 }

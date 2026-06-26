@@ -1,6 +1,7 @@
 package acetomartina;
 
 import acetomartina.DAO.*;
+import acetomartina.Exceptions.ValoreNonValido;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
@@ -35,7 +36,7 @@ public class Application {
         //DAO
 
         AbbonamentoDAO abbonamentoDAO = new AbbonamentoDAO(entityManager);
-        AmminstratoreDAO amminstratoreDAO = new AmminstratoreDAO(entityManager);
+        AmministratoreDAO amministratoreDAO = new AmministratoreDAO(entityManager);
         BigliettoDAO bigliettoDAO = new BigliettoDAO(entityManager);
         CorsaDao corsaDao = new CorsaDao(entityManager);
         ManutenzioneDAO manutenzioneDAO = new ManutenzioneDAO(entityManager);
@@ -64,7 +65,10 @@ public class Application {
                 } else {
                     System.err.println("valore non valido! Inserisci un numero da 1 a 2 ");
                 }
-            } catch (Exception e) {
+            } catch (ValoreNonValido e){
+                System.out.println("Errore nel valore inserito.");
+            }
+            catch (Exception e) {
                 System.err.println("Scelta non valida. Verifica di nuovo il menù.");
             }
         }
@@ -72,7 +76,7 @@ public class Application {
 
         switch (scelta) {
             case 1 -> utenteDAO.scannerUtente1();
-            case 2 -> amminstratoreDAO.scannerAmministratore();
+            case 2 -> amministratoreDAO.scannerAmministratore();
         }
         System.out.println("Grazie per aver utilizzato il nostro sistema! Arrivederci!");
     }
