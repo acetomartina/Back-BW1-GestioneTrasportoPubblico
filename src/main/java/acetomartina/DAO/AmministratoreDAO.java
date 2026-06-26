@@ -50,13 +50,17 @@ public class AmministratoreDAO {
                 .setParameter("mezzo", mezzo)
                 .getResultList();
         System.out.println("Le corse trovate sono : " + corseTrovate.size());
-        corseTrovate.forEach(corsa -> System.out.println("La durata della corsa è stata : " + getDurataCorsa(corsa)));
+        corseTrovate.forEach(corsa -> System.out.println("La durata della corsa è stata : " + getDurataCorsa(corsa)+" h"));
         if (!corseTrovate.isEmpty()) {
             double mediaMinuti = corseTrovate.stream()
                     .collect(Collectors.averagingLong(corsa -> {
                         return Duration.between(corsa.getPartenza(), corsa.getArrivoEffettivo()).toMinutes();
                     }));
-            System.out.println("La media di percorrenza è: " + mediaMinuti + " minuti");
+            long ore = (long) (mediaMinuti / 60);
+            long minuti = (long) (mediaMinuti % 60);
+
+            String formattato = String.format("%02d.%02d h", ore, minuti);
+            System.out.println("La media di percorrenza è: " + formattato);
         } else {
             System.out.println("Nessuna corsa trovata, impossibile calcolare la media.");
         }
